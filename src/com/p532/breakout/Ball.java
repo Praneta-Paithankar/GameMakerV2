@@ -1,4 +1,4 @@
-package project1;
+package com.p532.breakout;
 
 public class Ball {
 
