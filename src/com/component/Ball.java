@@ -1,4 +1,4 @@
-package com.p532.breakout;
+package com.component;
 
 public class Ball {
 

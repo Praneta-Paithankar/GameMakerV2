@@ -1,23 +1,21 @@
-package com.p532.breakout;
+package com.component;
 
-public class Paddle {
+public class Brick {
 
 	private int width;
 	private int height;
 	private int x;
 	private int y;
-	private int speed;
 
-	public Paddle(int width, int height, int x, int y, int speed) {
+	public Brick(int width, int height, int x, int y) {
 		super();
 		this.width = width;
 		this.height = height;
 		this.x = x;
 		this.y = y;
-		this.speed = speed;
 	}
 
-	public Paddle() {
+	public Brick() {
 
 	}
 
@@ -52,17 +50,4 @@ public class Paddle {
 	public void setY(int y) {
 		this.y = y;
 	}
-
-	public int getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-
-	public void move() {
-                this.x = this.x + this.speed;
-        }
-
 }
