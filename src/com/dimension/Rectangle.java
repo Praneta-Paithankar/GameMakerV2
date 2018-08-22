@@ -1,22 +1,28 @@
 package com.dimension;
 
 public class Rectangle {
-	private int topX;
-	private int topY;
+	
 	private int width;
 	private int height;
+	private Coordinates topLeft;
 	
-	public int getTopX() {
-		return topX;
+	public Rectangle(int width, int height, Coordinates topLeft) {
+		super();
+		this.width = width;
+		this.height = height;
+		this.topLeft = topLeft;
 	}
-	public void setTopX(int topX) {
-		this.topX = topX;
+	public Rectangle(int width, int height, int topLeftX,int topLeftY) {
+		super();
+		this.width = width;
+		this.height = height;
+		this.topLeft = new Coordinates(topLeftX,topLeftY);
 	}
-	public int getTopY() {
-		return topY;
+	public Coordinates getTopLeftCoordinate() {
+		return topLeft;
 	}
-	public void setTopY(int topY) {
-		this.topY = topY;
+	public void setTopLeftCoordinate(Coordinates topLeft) {
+		this.topLeft = topLeft;
 	}
 	public int getWidth() {
 		return width;

@@ -1,53 +1,44 @@
 package com.component;
 
-public class Brick {
+import java.awt.Color;
+import java.awt.Graphics;
+import com.dimension.*;
+public class Brick extends Element{
 
-	private int width;
-	private int height;
-	private int x;
-	private int y;
-
-	public Brick(int width, int height, int x, int y) {
+	private Rectangle rectangle;
+	private boolean visible;
+	private Color color;
+	public Brick(Rectangle rectangle, boolean visible,Color color) {
 		super();
-		this.width = width;
-		this.height = height;
-		this.x = x;
-		this.y = y;
+		this.setRectangle(rectangle);
+		this.setVisible(visible);
+		this.color = color;
+	}
+	
+	public boolean isVisible() {
+		return visible;
 	}
 
-	public Brick() {
-
+	public void setVisible(boolean visible) {
+		this.visible = visible;
 	}
 
-	public int getWidth() {
-		return width;
+	public Rectangle getRectangle() {
+		return rectangle;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
+	public void setRectangle(Rectangle rectangle) {
+		this.rectangle = rectangle;
 	}
 
-	public int getHeight() {
-		return height;
+	@Override
+	public void enact() {
+		
 	}
-
-	public void setHeight(int height) {
-		this.height = height;
+	@Override
+	public void draw(Graphics g){
+		g.setColor(color);
+		g.fillRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
 	}
-
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
+	
 }

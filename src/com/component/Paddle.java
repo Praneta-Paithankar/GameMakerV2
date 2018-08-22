@@ -1,68 +1,49 @@
 package com.component;
+import com.dimension.Rectangle;
+import java.awt.Color;
+import java.awt.Graphics;
 
-public class Paddle {
+public class Paddle extends Element{
 
-	private int width;
-	private int height;
-	private int x;
-	private int y;
-	private int speed;
+	private Rectangle rectangle;
+	private int deltaY;
+	private Color color;
 
-	public Paddle(int width, int height, int x, int y, int speed) {
+	
+	public Paddle(Rectangle rectangle, int deltaY, Color color) {
 		super();
-		this.width = width;
-		this.height = height;
-		this.x = x;
-		this.y = y;
-		this.speed = speed;
+		this.rectangle = rectangle;
+		this.deltaY = deltaY;
+		this.color =color;
 	}
 
-	public Paddle() {
+	public void enact() {
+		
+    }
+	
 
+	public Rectangle getRectangle() {
+		return rectangle;
 	}
 
-	public int getWidth() {
-		return width;
+	public void setRectangle(Rectangle rectangle) {
+		this.rectangle = rectangle;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
+	public int getDeltaY() {
+		return deltaY;
 	}
 
-	public int getHeight() {
-		return height;
+	public void setDeltaY(int deltaY) {
+		this.deltaY = deltaY;
 	}
 
-	public void setHeight(int height) {
-		this.height = height;
+	@Override
+	public void draw(Graphics g) {  
+	      g.setColor(color);
+	      g.fillRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
 	}
-
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getSpeed() {
-		return speed;
-	}
-
-	public void setSpeed(int speed) {
-		this.speed = speed;
-	}
-
-	public void move() {
-                this.x = this.x + this.speed;
-        }
+	
+	
 
 }
