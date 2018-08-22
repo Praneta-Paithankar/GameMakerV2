@@ -2,25 +2,29 @@ package com.dimension;
 
 public class Circle {
 	private int radius;
-	private int centerX;
-	private int centerY;
-	
+	private Coordinates center;
+
+	public Circle(int radius, Coordinates center) {
+		super();
+		this.radius = radius;
+		this.center = center;
+	}
+	public Circle(int radius, int centerX, int centerY) {
+		super();
+		this.radius = radius;
+		this.center = new Coordinates(centerX,centerY);
+	}
 	public int getRadius() {
 		return radius;
 	}
 	public void setRadius(int radius) {
 		this.radius = radius;
 	}
-	public int getCenter_x() {
-		return centerX;
+	public Coordinates getCenter() {
+		return center;
 	}
-	public void setCenter_x(int centerX) {
-		this.centerX = centerX;
+	public void setCenter(Coordinates center) {
+		this.center = center;
 	}
-	public int getCenter_y() {
-		return centerY;
-	}
-	public void setCenter_y(int centerY) {
-		this.centerY = centerY;
-	}
+	
 }
