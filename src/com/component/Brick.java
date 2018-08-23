@@ -33,7 +33,7 @@ public class Brick extends Element{
 
 	@Override
 	public void enact() {
-		
+		visible = false;
 	}
 	@Override
 	public void draw(Graphics g){

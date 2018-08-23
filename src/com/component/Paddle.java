@@ -1,4 +1,5 @@
 package com.component;
+import com.dimension.Coordinates;
 import com.dimension.Rectangle;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -18,7 +19,11 @@ public class Paddle extends Element{
 	}
 
 	public void enact() {
-		
+		//move paddle 
+		int topX = rectangle.getTopLeftCoordinate().getX();
+		int topY = rectangle.getTopLeftCoordinate().getY();
+		Coordinates newCoordinate = new Coordinates(topX, topY+deltaY);
+		rectangle.setTopLeftCoordinate(newCoordinate);
     }
 	
 

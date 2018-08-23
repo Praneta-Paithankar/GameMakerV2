@@ -2,7 +2,6 @@ package com.ui;
 
 import java.awt.Color;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -15,7 +14,20 @@ public class GUI extends JFrame{
 
 	public GUI()
 	{
-		super();
+		InitializeUI();
+		
+	}
+	private void InitializeUI() {
+        JPanel mainPanel = new JPanel();
+		GamePanel boardPanel=new GamePanel();
+		Ball b = new Ball(new Circle(20, 60, 90), new Coordinates(160, 80), Color.CYAN);
+		boardPanel.addElement(b);
+		
+		setSize(500,500);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().add(boardPanel);
+		setVisible(true);
+		
 	}
 	public static void main(String[] args) {
 		
@@ -23,12 +35,6 @@ public class GUI extends JFrame{
 		//add board
 		//add clock panel
 		GUI g =new GUI();
-		JPanel mainPanel = new JPanel();
-		GamePanel boardPanel=new GamePanel();
 		
-		g.setSize(500,500);
-		g.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		g.getContentPane().add(boardPanel);
-		g.setVisible(true);
 	}
 }
