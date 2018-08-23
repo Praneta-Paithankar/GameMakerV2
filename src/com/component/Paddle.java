@@ -24,6 +24,8 @@ public class Paddle extends Element{
 		int topY = rectangle.getTopLeftCoordinate().getY();
 		Coordinates newCoordinate = new Coordinates(topX, topY+deltaY);
 		rectangle.setTopLeftCoordinate(newCoordinate);
+		
+		//Check corner
     }
 	
 

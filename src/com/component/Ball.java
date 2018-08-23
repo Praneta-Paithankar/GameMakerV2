@@ -22,6 +22,8 @@ public class Ball extends Element{
     	    
     	    circle.setCenter(new Coordinates(newCenterX, newCenterY));
     	    
+    	    // Wall bounce
+    	    
     }
     
     public void draw(Graphics g){
