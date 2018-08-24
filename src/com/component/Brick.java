@@ -33,12 +33,13 @@ public class Brick extends Element{
 
 	@Override
 	public void enact() {
-		visible = false;
+		
 	}
 	@Override
 	public void draw(Graphics g){
+		if(visible) {
 		g.setColor(color);
 		g.fillRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
+		}
 	}
-	
 }
