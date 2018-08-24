@@ -36,35 +36,35 @@ public class Ball extends Element{
     		int top = circle.getCenter().getY() - circle.getRadius();
     		int bottom = circle.getCenter().getY() + circle.getRadius();
     		
-    		boolean hasHit = false;
+    		boolean isHit = false;
     		int newCenterX = circle.getCenter().getX();
     		int newCenterY = circle.getCenter().getY();
     		
     		if((left <=0) && (delta.getX() < 0))
     		{
-    			hasHit = true;
+    			isHit = true;
     			delta.setX(-delta.getX());
     			newCenterX = circle.getRadius(); 
     		}
     		if((right >= Constants.BOARD_PANEL_WIDTH) && (delta.getX() > 0))
     		{
-    			hasHit = true;
+    			isHit = true;
     			delta.setX(-delta.getX());
     			newCenterX = Constants.BOARD_PANEL_WIDTH - circle.getRadius(); 
     		}
     		if((top <=0) && (delta.getY() < 0))
     		{
-    			hasHit = true;
+    			isHit = true;
     			delta.setY(-delta.getY());
     			newCenterY = circle.getRadius(); 
     		}
     		if((bottom >= Constants.BOARD_PANEL_HEIGHT) && (delta.getY() > 0))
     		{
-    			hasHit = true;
+    			isHit = true;
     			delta.setY(-delta.getY());
     			newCenterY = Constants.BOARD_PANEL_HEIGHT - circle.getRadius(); 
     		}
-    		if(hasHit)
+    		if(isHit)
     		{
     			 circle.setCenter(new Coordinates(newCenterX, newCenterY));
     		}

@@ -17,12 +17,11 @@ public class GamePanel extends JPanel {
 	    
 	}
 	
-	public ArrayList<Element> getElements() {
+	public ArrayList<Element> getElements(){
 		return elements;
 	}
 	
-	public void addElement(Element element)
-	{
+	public void addElement(Element element){
 		elements.add(element);
 		
 	}
@@ -31,16 +30,14 @@ public class GamePanel extends JPanel {
 		elements.remove(element);
 	}
 	@Override
-	public void paintComponent(Graphics g)
-    {
+	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		for(Element element : elements)
 		{
 			element.draw(g);
 		}
     }
-	public void actElement()
-	{
+	public void actElement(){
 		for(Element element : elements)
 		{
 			element.enact();
