@@ -1,4 +1,4 @@
-package com.breakout;
+package com.ui;
 
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import com.component.Element;
 
+@SuppressWarnings("serial")
 public class GamePanel extends JPanel {
 	
 	private ArrayList<Element> elements;
@@ -14,7 +15,6 @@ public class GamePanel extends JPanel {
 	public GamePanel()
 	{
 	    elements = new ArrayList<Element>();
-	    
 	}
 	
 	public ArrayList<Element> getElements(){

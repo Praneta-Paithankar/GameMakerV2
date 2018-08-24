@@ -1,34 +1,25 @@
 package com.component;
-import com.dimension.Coordinates;
-import com.dimension.Rectangle;
 import java.awt.Color;
 import java.awt.Graphics;
+
+import com.dimension.Coordinates;
+import com.dimension.Rectangle;
 
 public class Paddle extends Element{
 
 	private Rectangle rectangle;
 	private int deltaY;
 	private Color color;
-
-	
+	public Paddle() {
+		super();
+	}
 	public Paddle(Rectangle rectangle, int deltaY, Color color) {
 		super();
 		this.rectangle = rectangle;
 		this.deltaY = deltaY;
-		this.color =color;
+		this.color = color;
 	}
-
-	public void enact() {
-		//move paddle 
-		int topX = rectangle.getTopLeftCoordinate().getX();
-		int topY = rectangle.getTopLeftCoordinate().getY();
-		Coordinates newCoordinate = new Coordinates(topX, topY+deltaY);
-		rectangle.setTopLeftCoordinate(newCoordinate);
-		
-		//Check corner
-    }
 	
-
 	public Rectangle getRectangle() {
 		return rectangle;
 	}
@@ -50,7 +41,14 @@ public class Paddle extends Element{
 	      g.setColor(color);
 	      g.fillRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
 	}
-	
-	
 
+	@Override
+	public void enact() {
+		int topX = rectangle.getTopLeftCoordinate().getX();
+		int topY = rectangle.getTopLeftCoordinate().getY();
+
+		Coordinates newCoordinate = new Coordinates(topX, topY + deltaY);
+		rectangle.setTopLeftCoordinate(newCoordinate);
+		
+	}
 }
