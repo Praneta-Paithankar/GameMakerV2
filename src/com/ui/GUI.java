@@ -52,7 +52,7 @@ public class GUI extends JFrame {
 		label.setSize(100,100);
 		label.setForeground(Color.WHITE);
 		timerPanel.add(label);
-		timerPanel.setBackground(Color.BLACK);
+		timerPanel.setBackground(Color.black);
 		mainPanel.add(timerPanel);
 	}
 	private void createBoardPanel() {
@@ -94,8 +94,7 @@ public class GUI extends JFrame {
 		setResizable(false);	
 		
 	}
-	public void addDriver(Driver driver)
-	{
+	public void addDriver(Driver driver){
 		this.setDriver(driver);
 		mainPanel.addKeyListener(driver);
 	}
@@ -104,7 +103,6 @@ public class GUI extends JFrame {
 		boardPanel.repaint();
 
 	}
-	
 	public Driver getDriver() {
 		return driver;
 	}

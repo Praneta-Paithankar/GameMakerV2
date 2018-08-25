@@ -20,13 +20,13 @@ public class Breakout {
 		BreakoutTimer timer  = new BreakoutTimer(6);
 		GamePanel boardPanel =new GamePanel();
 		
-		Ball ball = new Ball(new Circle(15, 0, 200), new Coordinates(20, 40), Color.CYAN);
+		Ball ball = new Ball(new Circle(15, 0, 200), new Coordinates(20, 40), new Color(128,0,128));
 		boardPanel.addElement(ball);
 
-		Paddle paddle = new Paddle(new Rectangle(50, 200, 350, 200), 30, Color.RED);
+		Paddle paddle = new Paddle(new Rectangle(50, 200, 350, 200), 30, new Color(00, 64 ,192));
 		boardPanel.addElement(paddle);
 		
-		Brick brick = new Brick(new Rectangle(50, 75, 600, 100), true, Color.BLUE);
+		Brick brick = new Brick(new Rectangle(30, 75, 600, 100), true, new Color(128,0,0));
 		boardPanel.addElement(brick);
 		
 		GUI gui = new GUI(boardPanel);
