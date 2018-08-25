@@ -11,13 +11,18 @@ public class BreakoutTimer implements Runnable {
 	private ArrayList<ClockObserver> observers;
 	private Thread thread;
 	private boolean running;
+	private int tickPerSecond;
+	private int sleepTime;
 	
-	public BreakoutTimer() {
+	public BreakoutTimer(int tickPerSecond) {
+		this.tickPerSecond =tickPerSecond;
 		setStartTime(System.currentTimeMillis());
 		observers = new ArrayList<ClockObserver>();
+		
 	}
 
 	public void startTimer() {
+		sleepTime = 1000 / tickPerSecond;
 		thread = new Thread(this);
 		running =true;
 		thread.start();
@@ -36,8 +41,9 @@ public class BreakoutTimer implements Runnable {
 	}
 
 	private void pauseThread() {
-		try {Thread.sleep(500);}
-	    catch (InterruptedException exception) {}
+		try {
+			Thread.sleep(sleepTime);
+		}catch (InterruptedException exception) {}
 	}
 		
 	public void resetTimer()
