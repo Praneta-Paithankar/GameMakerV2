@@ -1,4 +1,4 @@
-package com.common;
+package com.infrastruture;
 
 public class Constants {
 	public final static int FRAME_WIDTH =  800;

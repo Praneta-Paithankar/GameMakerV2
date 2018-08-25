@@ -2,7 +2,7 @@ package com.timer;
 
 import java.util.ArrayList;
 
-import com.component.ClockObserver;
+import com.infrastruture.ClockObserver;
 
 public class BreakoutTimer implements Runnable {
 

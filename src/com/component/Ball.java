@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import com.dimension.Circle;
 import com.dimension.Coordinates;
+import com.infrastruture.Element;
 
 public class Ball extends Element{
     private Circle circle;

@@ -1,4 +1,4 @@
-package com.component;
+package com.infrastruture;
 
 import java.awt.Graphics;
 
