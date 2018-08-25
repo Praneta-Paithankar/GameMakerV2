@@ -20,12 +20,14 @@ public class GUI extends JFrame {
 	private Driver driver;
 	private JPanel mainPanel;
 	
+	public GUI() {
+		super();
+	}
 	public GUI(GamePanel boardPanel)
 	{
 		this.boardPanel = boardPanel;
 		initializeUI();
 	}
-
 
 	public void update(long milliseconds) {
 		int seconds = (int) (milliseconds / 1000) % 60 ;
@@ -44,11 +46,11 @@ public class GUI extends JFrame {
         JPanel panel1 = new JPanel();
       
         panel1.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
-        
+        panel1.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
+
         boardPanel.setPreferredSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
 	    boardPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	    boardPanel.setMaximumSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
-	    
 		label = new JLabel("0::0::0",SwingConstants.LEFT);
 		label.setSize(100,100);
 		panel1.add(label);
@@ -59,6 +61,9 @@ public class GUI extends JFrame {
 
 		add(mainPanel);
 		
+		mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
+	    boardPanel.setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
+	    
 		mainPanel.setFocusable(true);
 		mainPanel.requestFocusInWindow();
 		setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
@@ -73,4 +78,8 @@ public class GUI extends JFrame {
 		mainPanel.addKeyListener(driver);
 	}
 	
+	public void addGameOverFrame() {
+		JLabel label1 = new JLabel("Test");
+		label1.setText("Label Text");
+	}
 }

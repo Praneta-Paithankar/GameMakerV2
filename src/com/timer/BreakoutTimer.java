@@ -64,7 +64,7 @@ public class BreakoutTimer implements Runnable {
 	public void notifyObserver(long time) {
 		for(ClockObserver observer : observers)
 		{
-			observer.update(time);;
+			observer.update(time);
 		}
 	}
 }
