@@ -2,6 +2,9 @@ package com.ui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -17,14 +20,16 @@ public class GUI extends JFrame {
 	
 	private GamePanel boardPanel;
 	private JLabel label;
+	private JLabel exitLabel;
 	private Driver driver;
 	private JPanel mainPanel;
-	
+	private JPanel timerPanel;
 	public GUI() {
 		super();
 	}
 	public GUI(GamePanel boardPanel)
 	{
+		super("Breakout Game");
 		this.boardPanel = boardPanel;
 		initializeUI();
 	}
@@ -38,32 +43,50 @@ public class GUI extends JFrame {
 		label.setText(time);
 		boardPanel.repaint();
 	}
-	
+	private void createTimerPanel() {
+		
+		timerPanel = new JPanel();
+        timerPanel.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
+        timerPanel.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
+        label = new JLabel("0::0::0",SwingConstants.LEFT);
+		label.setSize(100,100);
+		label.setForeground(Color.WHITE);
+		timerPanel.add(label);
+		timerPanel.setBackground(Color.BLACK);
+		mainPanel.add(timerPanel);
+	}
+	private void createBoardPanel() {
+
+		boardPanel.setLayout(new GridBagLayout());
+        boardPanel.setPreferredSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
+	    boardPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+	    boardPanel.setMaximumSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
+		boardPanel.setBackground(Color.black);
+		
+		exitLabel = new JLabel();
+		exitLabel.setForeground(Color.WHITE);
+		exitLabel.setAlignmentX(SwingConstants.CENTER);
+		exitLabel.setAlignmentY(SwingConstants.CENTER);
+		Font font = new Font("Helvetica", Font.BOLD,50);
+		
+		exitLabel.setFont(font);
+		boardPanel.add(exitLabel);
+		boardPanel.setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
+		mainPanel.add(boardPanel);
+		
+	}
 	private void initializeUI() {
+		
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
        
-        JPanel panel1 = new JPanel();
-      
-        panel1.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
-        panel1.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
-
-        boardPanel.setPreferredSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
-	    boardPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-	    boardPanel.setMaximumSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
-		label = new JLabel("0::0::0",SwingConstants.LEFT);
-		label.setSize(100,100);
-		panel1.add(label);
-		
-		//add(boardPanel);
-		mainPanel.add(panel1);
-        mainPanel.add(boardPanel);
+        createTimerPanel();
+        createBoardPanel();
+        
 
 		add(mainPanel);
 		
 		mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
-	    boardPanel.setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
-	    
 		mainPanel.setFocusable(true);
 		mainPanel.requestFocusInWindow();
 		setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
@@ -77,13 +100,9 @@ public class GUI extends JFrame {
 		mainPanel.addKeyListener(driver);
 	}
 	public void addGameOverPane() {
-		JLabel label = new JLabel("Game Over!", JLabel.CENTER);
-		label.setAlignmentX(0);
-		label.setAlignmentY(0);
-		JFrame window = new JFrame("Game over");
-		window.setVisible(true);
-		window.setSize(400, 200);	
-		window.add(label);
+		exitLabel.setText("Game Over");
+		boardPanel.repaint();
+
 	}
 	
 	public Driver getDriver() {

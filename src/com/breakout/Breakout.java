@@ -23,10 +23,10 @@ public class Breakout {
 		Ball ball = new Ball(new Circle(15, 0, 200), new Coordinates(20, 40), Color.CYAN);
 		boardPanel.addElement(ball);
 
-		Paddle paddle = new Paddle(new Rectangle(50, 200, 350, 200), 30, Color.BLACK);
+		Paddle paddle = new Paddle(new Rectangle(50, 200, 350, 200), 30, Color.RED);
 		boardPanel.addElement(paddle);
 		
-		Brick brick = new Brick(new Rectangle(50, 75, 600, 100), true, Color.GREEN);
+		Brick brick = new Brick(new Rectangle(50, 75, 600, 100), true, Color.BLUE);
 		boardPanel.addElement(brick);
 		
 		GUI gui = new GUI(boardPanel);
@@ -34,7 +34,7 @@ public class Breakout {
 		
 		gui.addDriver(driver);
 		timer.addObserver(driver);
-    	    timer.startTimer();
+    	timer.startTimer();
        	gui.pack();
 		gui.setVisible(true);
 			

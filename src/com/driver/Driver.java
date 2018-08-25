@@ -30,6 +30,7 @@ public class Driver implements ClockObserver, KeyListener{
 		this.gui = gui;
 		this.timer = timer;
     }
+
 	@Override
 	public void update(long milliseconds) {
 		ball.enact();
