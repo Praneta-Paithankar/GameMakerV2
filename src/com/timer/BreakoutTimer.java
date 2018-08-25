@@ -1,6 +1,8 @@
 package com.timer;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.infrastruture.ClockObserver;
@@ -9,7 +11,7 @@ public class BreakoutTimer implements Runnable {
 
 	private long startTime;
 	private long counter;
-	private ArrayList<ClockObserver> observers;
+	private List<ClockObserver> observers;
 	private Thread thread;
 	private AtomicBoolean running;
 	private int tickPerSecond;
@@ -18,7 +20,7 @@ public class BreakoutTimer implements Runnable {
 	public BreakoutTimer(int tickPerSecond) {
 		this.tickPerSecond =tickPerSecond;
 		setStartTime(System.currentTimeMillis());
-		observers = new ArrayList<ClockObserver>();
+		observers =  Collections.synchronizedList(new ArrayList<ClockObserver>());
 		
 	}
 
@@ -31,6 +33,7 @@ public class BreakoutTimer implements Runnable {
 	}
 	public void stopTimer(){
 		running.set(false);
+			
 	}
 	@Override
 	public void run() {
@@ -39,12 +42,17 @@ public class BreakoutTimer implements Runnable {
 		notifyObserver(counter);
 		pauseThread();
 		}
+		if(!running.get()) {
+			observers.removeAll(observers);
+		}	
+		
 	}
 
 	private void pauseThread() {
 		try {
 			Thread.sleep(sleepTime);
-		}catch (InterruptedException exception) {}
+		}catch (InterruptedException exception) {
+		}
 	}
 		
 	public void resetTimer()
@@ -61,17 +69,24 @@ public class BreakoutTimer implements Runnable {
 	}
 
 	public void addObserver(ClockObserver observer){
-		observers.add(observer);
+		synchronized (observer) {
+			observers.add(observer);
+		}
 	}
 	
 	public void removeObserver(ClockObserver observer){
-		observers.remove(observer);
+		synchronized (observer) {
+			observers.remove(observer);
+		}
 	}
 	
 	public void notifyObserver(long time) {
-		for(ClockObserver observer : observers)
-		{
-			observer.update(time);
+		synchronized (observers) {
+			for(ClockObserver observer : observers)
+			{
+				observer.update(time);
+			}
 		}
+		
 	}
 }
