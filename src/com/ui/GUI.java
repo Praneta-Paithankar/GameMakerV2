@@ -71,15 +71,39 @@ public class GUI extends JFrame {
 		setResizable(false);	
 		
 	}
-	
 	public void addDriver(Driver driver)
 	{
-		this.driver = driver;
+		this.setDriver(driver);
 		mainPanel.addKeyListener(driver);
 	}
+	public void addGameOverPane() {
+		JLabel label = new JLabel("Game Over!", JLabel.CENTER);
+		label.setAlignmentX(0);
+		label.setAlignmentY(0);
+		JFrame window = new JFrame("Game over");
+		window.setVisible(true);
+		window.setSize(400, 200);	
+		window.add(label);
+	}
 	
-	public void addGameOverFrame() {
-		JLabel label1 = new JLabel("Test");
-		label1.setText("Label Text");
+	public Driver getDriver() {
+		return driver;
+	}
+	public void setDriver(Driver driver) {
+		this.driver = driver;
+	}
+	
+	public GamePanel getBoardPanel() {
+		return boardPanel;
+	}
+	public void setBoardPanel(GamePanel boardPanel) {
+		this.boardPanel = boardPanel;
+	}
+
+	public JPanel getMainPanel() {
+		return mainPanel;
+	}
+	public void setMainPanel(JPanel mainPanel) {
+		this.mainPanel = mainPanel;
 	}
 }

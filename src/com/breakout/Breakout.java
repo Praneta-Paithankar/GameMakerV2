@@ -30,7 +30,7 @@ public class Breakout {
 		boardPanel.addElement(brick);
 		
 		GUI gui = new GUI(boardPanel);
-		Driver driver = new Driver(ball, paddle, brick, gui);
+		Driver driver = new Driver(ball, paddle, brick, gui,timer);
 		
 		gui.addDriver(driver);
 		timer.addObserver(driver);

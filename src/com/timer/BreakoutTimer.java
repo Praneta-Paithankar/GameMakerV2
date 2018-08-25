@@ -1,6 +1,7 @@
 package com.timer;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.infrastruture.ClockObserver;
 
@@ -10,7 +11,7 @@ public class BreakoutTimer implements Runnable {
 	private long counter;
 	private ArrayList<ClockObserver> observers;
 	private Thread thread;
-	private boolean running;
+	private AtomicBoolean running;
 	private int tickPerSecond;
 	private int sleepTime;
 	
@@ -24,16 +25,16 @@ public class BreakoutTimer implements Runnable {
 	public void startTimer() {
 		sleepTime = 1000 / tickPerSecond;
 		thread = new Thread(this);
-		running =true;
+		running = new AtomicBoolean(true);
 		thread.start();
 		
 	}
 	public void stopTimer(){
-		running = false;
+		running.set(false);
 	}
 	@Override
 	public void run() {
-		while(running) {
+		while(running.get()) {
 		counter = System.currentTimeMillis() - startTime;
 		notifyObserver(counter);
 		pauseThread();

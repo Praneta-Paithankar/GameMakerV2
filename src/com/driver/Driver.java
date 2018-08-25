@@ -11,6 +11,7 @@ import com.dimension.Coordinates;
 import com.dimension.Rectangle;
 import com.infrastruture.ClockObserver;
 import com.infrastruture.Constants;
+import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
 public class Driver implements ClockObserver, KeyListener{
@@ -19,23 +20,29 @@ public class Driver implements ClockObserver, KeyListener{
 	private Paddle paddle;
 	private Brick brick;
     private GUI gui;
+    private BreakoutTimer timer;
     
-    
-	public Driver(Ball ball, Paddle paddle, Brick brick, GUI gui) {
+	public Driver(Ball ball, Paddle paddle, Brick brick, GUI gui,BreakoutTimer timer) {
 		super();
 		this.ball = ball;
 		this.paddle = paddle;
 		this.brick = brick;
 		this.gui = gui;
+		this.timer = timer;
     }
 	@Override
 	public void update(long milliseconds) {
 		ball.enact();
-		checkCollisionBetweenBallAndPaddle();
-		checkCollisionBetweenBallAndWalls();
 		if(checkCollisionBetweenBallAndBrick()) {
 			brick.enact();
+			timer.stopTimer();
+			gui.getMainPanel().removeKeyListener(this);
+  			gui.getBoardPanel().repaint();
+  			gui.addGameOverPane();
+ 			return ;
 		}
+		checkCollisionBetweenBallAndPaddle();
+		checkCollisionBetweenBallAndWalls();
 		gui.update(milliseconds);
 		
 	}
