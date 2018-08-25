@@ -132,54 +132,46 @@ public class Driver implements ClockObserver, KeyListener{
 			int newCenterX = centerX;
 			int newCenterY = centerY;
 			Coordinates delta = ball.getDelta();
-			
-			// left side 
+			 
 			if(centerX  <= topLeftRectangleX && centerY > topLeftRectangleY  && centerY < bottomLeftRectangleY ) {
-				System.out.println("Left");
+				// left side
 				delta.setX(-delta.getX());
 				newCenterX = topRectangleX - circle.getRadius();
 			}else if(centerX > topLeftRectangleX && centerX < topRightRectangleX && centerY<= topLeftRectangleY) {
 				//top
-				System.out.println("Top");
 				delta.setY(-delta.getY());
 				newCenterY = topRectangleY - circle.getRadius();
 			}else if(centerX> bottomLeftRectangleX && centerX< bottomRightRectangleX && centerY>=bottomLeftRectangleY) {
 				//bottom
-				System.out.println("Bottom");
 				delta.setY(-delta.getY());
 				newCenterY = topRectangleY + rectangle.getHeight() + circle.getRadius();
 			}else if(centerX >= topRightRectangleX && centerY> topRightRectangleY && centerY < bottomRightRectangleY) {
 				//right
-				System.out.println("Right");
 				delta.setX(-delta.getX());
 				newCenterX = topRectangleX + rectangle.getWidth() + circle.getRadius();
-			}else if( centerX <= topLeftRectangleX && centerY <= topLeftRectangleY) {
+			}else if( centerX <= topLeftRectangleX && centerY <= topLeftRectangleY && centerX >= (topRectangleX - circle.getRadius())) {
 				// left top
-				System.out.println("Left Top");
 				delta.setX(-delta.getX());
 				delta.setY(-delta.getY());
-				newCenterX = topRectangleX - circle.getRadius();
-				newCenterY = topRectangleY - circle.getRadius();
+				newCenterX =(int) (topRectangleX - (circle.getRadius()/1.41));
+				newCenterY =(int) (topRectangleY - (circle.getRadius()/1.41));
 			}else if(centerX <= bottomLeftRectangleX && centerY >= bottomLeftRectangleY) {
-				System.out.println("Left bottom");
 				delta.setX(-delta.getX());
 				delta.setY(-delta.getY());
-				newCenterX = topRectangleX+ rectangle.getHeight() - circle.getRadius();
-				newCenterY = topRectangleY+ rectangle.getHeight() + circle.getRadius();
+				newCenterX = (int)(topRectangleX - (circle.getRadius()/1.41));
+				newCenterY = (int)(topRectangleY+ rectangle.getHeight() + (circle.getRadius()/1.41));
 			}else if(centerX >= topRightRectangleX && centerY <= topRightRectangleY) {
 				// right top
-				System.out.println("Right top");
 				delta.setX(-delta.getX());
 				delta.setY(-delta.getY());
-				newCenterX = topRectangleX + rectangle.getWidth() + circle.getRadius();
-				newCenterY = topRectangleY - circle.getRadius();
+				newCenterX = (int)(topRectangleX + rectangle.getWidth() + (circle.getRadius()/1.41));
+				newCenterY = (int)(topRectangleY - (circle.getRadius()/1.41));
 			}else if (centerX >= topRightRectangleX && centerY >= bottomRightRectangleY) {
 				// right bottom
-				System.out.println("Right bottom");
 				delta.setX(-delta.getX());
 				delta.setY(-delta.getY());
-				newCenterX = topRectangleX+ rectangle.getWidth() + circle.getRadius();
-				newCenterY = topRectangleY+  rectangle.getHeight() + circle.getRadius();
+				newCenterX = (int)(topRectangleX+ rectangle.getWidth() + (circle.getRadius()/1.41));
+				newCenterY =  (int)(topRectangleY+  rectangle.getHeight() + (circle.getRadius()/1.41));
 			}
 			circle.setCenter(new Coordinates(newCenterX, newCenterY));
 		}
