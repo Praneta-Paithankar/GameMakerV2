@@ -2,7 +2,8 @@ package com.component;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import com.dimension.*;
+
+import com.dimension.Rectangle;
 import com.infrastruture.Element;
 
 public class Brick extends Element{
@@ -36,8 +37,6 @@ public class Brick extends Element{
 	@Override
 	public void enact() {
 		this.setVisible(false);
-		//GUI gui = new GUI();
-		//gui.addGameOverFrame();
 	}
 	@Override
 	public void draw(Graphics g){

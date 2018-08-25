@@ -17,7 +17,7 @@ public class Breakout {
 	
 	public static void main(String[] args){
 		
-		BreakoutTimer timer  = new BreakoutTimer();;
+		BreakoutTimer timer  = new BreakoutTimer(6);
 		GamePanel boardPanel =new GamePanel();
 		
 		Ball ball = new Ball(new Circle(15, 0, 200), new Coordinates(20, 40), Color.CYAN);
