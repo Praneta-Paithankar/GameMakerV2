@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
-import com.component.Element;
+import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel {
@@ -37,11 +37,4 @@ public class GamePanel extends JPanel {
 			element.draw(g);
 		}
     }
-	public void actElement(){
-		for(Element element : elements)
-		{
-			element.enact();
-		} 
-	}
-	
 }

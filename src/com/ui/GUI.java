@@ -10,8 +10,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import com.common.Constants;
 import com.driver.Driver;
+import com.infrastruture.Constants;
 
 public class GUI extends JFrame {
 	

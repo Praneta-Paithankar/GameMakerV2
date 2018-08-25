@@ -5,6 +5,7 @@ import java.awt.Graphics;
 
 import com.dimension.Circle;
 import com.dimension.Coordinates;
+import com.infrastruture.Element;
 
 public class Ball extends Element{
     private Circle circle;
@@ -19,7 +20,6 @@ public class Ball extends Element{
     
     public void enact(){
     		// Move ball 
-    	
     	    int newCenterX = circle.getCenter().getX() + delta.getX() ;
     	    int newCenterY = circle.getCenter().getY() + delta.getY() ;
     	    

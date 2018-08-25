@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import com.dimension.Coordinates;
 import com.dimension.Rectangle;
+import com.infrastruture.Element;
 
 public class Paddle extends Element{
 
