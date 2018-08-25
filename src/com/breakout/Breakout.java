@@ -13,8 +13,6 @@ import com.timer.BreakoutTimer;
 import com.ui.GUI;
 import com.ui.GamePanel;
 
-
-
 public class Breakout {
 	
 	public static void main(String[] args){
@@ -36,7 +34,8 @@ public class Breakout {
 		
 		gui.addDriver(driver);
 		timer.addObserver(driver);
-    		timer.startTimer();
+    	timer.startTimer();
+    	gui.pack();
 		gui.setVisible(true);
 			
 	}

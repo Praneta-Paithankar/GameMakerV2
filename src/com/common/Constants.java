@@ -1,8 +1,8 @@
 package com.common;
 
 public class Constants {
-	public final static int FRAME_WIDTH =  820;
-	public final static int FRAME_HEIGHT =  820;
+	public final static int FRAME_WIDTH =  800;
+	public final static int FRAME_HEIGHT =  800;
 	public final static int TIMER_PANEL_WIDTH =  50;
 	public final static int TIMER_PANEL_HEIGHT =  800;
 	public final static int BOARD_PANEL_WIDTH =  750;

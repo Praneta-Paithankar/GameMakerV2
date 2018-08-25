@@ -1,5 +1,5 @@
 package com.component;
 
 public interface ClockObserver {
-	public  void update(long milliseconds);
+	public void update(long milliseconds);
 }

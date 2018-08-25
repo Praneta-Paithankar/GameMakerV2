@@ -9,7 +9,7 @@ import com.component.Element;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel {
-	
+
 	private ArrayList<Element> elements;
 	
 	public GamePanel()

@@ -33,9 +33,47 @@ public class Driver implements ClockObserver, KeyListener{
 		ball.enact();
 		checkCollisionBetweenBallAndPaddle();
 		checkCollisionBetweenBallAndWalls();
+		if(checkCollisionBetweenBallAndBrick()) {
+			brick.enact();
+		}
 		gui.update(milliseconds);
 		
 	}
+	private boolean checkCollisionBetweenBallAndBrick() {
+		// TODO Auto-generated method stub
+		int nearestX = ball.getCircle().getCenter().getX();
+		int nearestY = ball.getCircle().getCenter().getY();
+		
+		Circle circle = ball.getCircle();
+		Rectangle rectangle = brick.getRectangle();
+		
+		int centerX = circle.getCenter().getX();
+		int centerY = circle.getCenter().getY();
+		
+		int topRectangleX= rectangle.getTopLeftCoordinate().getX();
+		int topRectangleY = rectangle.getTopLeftCoordinate().getY();
+			
+		if (centerX < topRectangleX) {
+			nearestX = topRectangleX;
+		} else if (centerX > topRectangleX + rectangle.getWidth()) {
+			nearestX = topRectangleX + rectangle.getWidth();
+		}
+		
+		if (centerY < topRectangleY) {
+			nearestY = topRectangleY;
+		} else if (centerY > topRectangleY + rectangle.getHeight()) {
+			nearestY = topRectangleY + rectangle.getHeight(); //changed getwidth to getheight()
+		}
+		
+		//find distance
+		int distance = (int) Math.sqrt(Math.pow(centerX-nearestX, 2) + Math.pow(centerY-nearestY, 2));
+		if(distance <= circle.getRadius())
+		{
+			return true;
+		}
+		return false;
+	}
+	
 	private void checkCollisionBetweenBallAndPaddle(){
 		
 		int nearestX = ball.getCircle().getCenter().getX();
@@ -62,7 +100,7 @@ public class Driver implements ClockObserver, KeyListener{
 		if (centerY < topRectangleY) {
 			nearestY = topRectangleY;
 		} else if (centerY > topRectangleY + rectangle.getHeight()) {
-			nearestY = topRectangleY + rectangle.getWidth();
+			nearestY = topRectangleY + rectangle.getHeight();
 		}
 		Coordinates ballDelta = ball.getDelta(); 
 		
@@ -142,9 +180,13 @@ public class Driver implements ClockObserver, KeyListener{
  		}
  		if((bottom >= Constants.BOARD_PANEL_HEIGHT) && (delta.getY() > 0))
  		{
+ 			System.out.print("bottom :: " + bottom);
+ 			System.out.print("BOARD_PANEL_HEIGHT :: " + Constants.BOARD_PANEL_HEIGHT);
+
  			isHit = true;
  			delta.setY(-delta.getY());
  			newCenterY = Constants.BOARD_PANEL_HEIGHT - circle.getRadius(); 
+ 			System.out.print("newCenterY :: " + newCenterY);
  		}
  		if(isHit)
  		{
