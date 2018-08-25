@@ -31,7 +31,7 @@ public class Driver implements ClockObserver, KeyListener{
 	@Override
 	public void update(long milliseconds) {
 		ball.enact();
-		collision();
+		checkCollisionBetweenBallAndPaddle();
 		checkCollisionBetweenBallAndWalls();
 		if(checkCollisionBetweenBallAndBrick()) {
 			brick.enact();
@@ -106,7 +106,7 @@ public class Driver implements ClockObserver, KeyListener{
 		return false;
 		
 	}
-	private void collision()
+	private void checkCollisionBetweenBallAndPaddle()
 	{
 		Circle circle = ball.getCircle();
 		Rectangle rectangle = paddle.getRectangle();
@@ -121,13 +121,8 @@ public class Driver implements ClockObserver, KeyListener{
 			int topLeftRectangleX = rectangle.getTopLeftCoordinate().getX() + circle.getRadius();
 			int topLeftRectangleY = rectangle.getTopLeftCoordinate().getY() + circle.getRadius();
 			int topRightRectangleX = rectangle.getTopLeftCoordinate().getX() + rectangle.getWidth() - circle.getRadius();
-			int topRightRectangleY = topLeftRectangleY;
-			
-			
-			int bottomLeftRectangleX = topLeftRectangleX ;
 			int bottomLeftRectangleY = rectangle.getTopLeftCoordinate().getY() + rectangle.getHeight() - circle.getRadius();
-			int bottomRightRectangleX =  topRightRectangleX;
-			int bottomRightRectangleY = bottomLeftRectangleY;
+			
 			
 			int newCenterX = centerX;
 			int newCenterY = centerY;
@@ -141,11 +136,11 @@ public class Driver implements ClockObserver, KeyListener{
 				//top
 				delta.setY(-delta.getY());
 				newCenterY = topRectangleY - circle.getRadius();
-			}else if(centerX> bottomLeftRectangleX && centerX< bottomRightRectangleX && centerY>=bottomLeftRectangleY) {
+			}else if(centerX> topLeftRectangleX && centerX< topRightRectangleX && centerY>=bottomLeftRectangleY) {
 				//bottom
 				delta.setY(-delta.getY());
 				newCenterY = topRectangleY + rectangle.getHeight() + circle.getRadius();
-			}else if(centerX >= topRightRectangleX && centerY> topRightRectangleY && centerY < bottomRightRectangleY) {
+			}else if(centerX >= topRightRectangleX && centerY> topLeftRectangleY && centerY < bottomLeftRectangleY) {
 				//right
 				delta.setX(-delta.getX());
 				newCenterX = topRectangleX + rectangle.getWidth() + circle.getRadius();
@@ -155,18 +150,19 @@ public class Driver implements ClockObserver, KeyListener{
 				delta.setY(-delta.getY());
 				newCenterX =(int) (topRectangleX - (circle.getRadius()/1.41));
 				newCenterY =(int) (topRectangleY - (circle.getRadius()/1.41));
-			}else if(centerX <= bottomLeftRectangleX && centerY >= bottomLeftRectangleY) {
+			}else if(centerX <= topLeftRectangleX && centerY >= bottomLeftRectangleY) {
+				//left bottom
 				delta.setX(-delta.getX());
 				delta.setY(-delta.getY());
 				newCenterX = (int)(topRectangleX - (circle.getRadius()/1.41));
 				newCenterY = (int)(topRectangleY+ rectangle.getHeight() + (circle.getRadius()/1.41));
-			}else if(centerX >= topRightRectangleX && centerY <= topRightRectangleY) {
+			}else if(centerX >= topRightRectangleX && centerY <= topLeftRectangleY) {
 				// right top
 				delta.setX(-delta.getX());
 				delta.setY(-delta.getY());
 				newCenterX = (int)(topRectangleX + rectangle.getWidth() + (circle.getRadius()/1.41));
 				newCenterY = (int)(topRectangleY - (circle.getRadius()/1.41));
-			}else if (centerX >= topRightRectangleX && centerY >= bottomRightRectangleY) {
+			}else if (centerX >= topRightRectangleX && centerY >= bottomLeftRectangleY) {
 				// right bottom
 				delta.setX(-delta.getX());
 				delta.setY(-delta.getY());
@@ -175,82 +171,6 @@ public class Driver implements ClockObserver, KeyListener{
 			}
 			circle.setCenter(new Coordinates(newCenterX, newCenterY));
 		}
-	}
-	private void checkCollisionBetweenBallAndPaddle(){
-		
-		Circle circle = ball.getCircle();
-		Rectangle rectangle = paddle.getRectangle();
-		boolean isHit = checkCollisionBetweenCircleAndRectangle(circle,rectangle);
-		if(isHit) {
-			int centerX = circle.getCenter().getX();
-			int centerY = circle.getCenter().getY();
-			int topRectangleX = rectangle.getTopLeftCoordinate().getX();
-			int topRectangleY = rectangle.getTopLeftCoordinate().getY();
-			int newCenterX = centerX;
-			int newCenterY = centerY;
-			Coordinates delta = ball.getDelta();
-			
-			if(centerX <= topRectangleX + circle.getRadius() && centerY >= topRectangleY && centerY <= topRectangleY+ rectangle.getHeight()) {
-				//left side of rectangle
-				if(centerY > topRectangleY && centerY < topRectangleY+ rectangle.getHeight()) {
-					//left side
-					System.out.println("Left");
-					delta.setX(-delta.getX());
-					newCenterX = topRectangleX - circle.getRadius();
-				}else if(centerY >= topRectangleY + circle.getRadius()) {
-					// left top corner
-					System.out.println("Left Top");
-					delta.setX(-delta.getX());
-					delta.setY(-delta.getY());
-					newCenterX = topRectangleX - circle.getRadius();
-					newCenterY = topRectangleY - circle.getRadius();
-				}else if( centerY <= topRectangleY + rectangle.getHeight()+circle.getRadius()) {
-					// bottom left corner
-					System.out.println("Left bottom");
-					delta.setX(-delta.getX());
-					delta.setY(-delta.getY());
-					newCenterX = topRectangleX+ rectangle.getHeight() + circle.getRadius();
-					newCenterY = topRectangleY+ rectangle.getHeight() + circle.getRadius();
-				}	
-			}else if(centerX >= topRectangleX + rectangle.getWidth()) {
-				// right side of rectangle
-				if(centerY > topRectangleY && centerY < topRectangleY+ rectangle.getHeight()) {
-					//right side 
-					System.out.println("Right");
-					delta.setX(-delta.getX());
-					newCenterX = topRectangleX + rectangle.getWidth() + circle.getRadius();
-				}else if(centerY >= topRectangleY + circle.getRadius()) {
-					// right top corner
-					System.out.println("Right top");
-					delta.setX(-delta.getX());
-					delta.setY(-delta.getY());
-					newCenterX = topRectangleX + rectangle.getWidth() + circle.getRadius();
-					newCenterY = topRectangleY + rectangle.getWidth() + circle.getRadius();
-				}else if( centerY <= topRectangleY + rectangle.getHeight() + circle.getRadius()) {
-					// right bottom corner
-					System.out.println("Right bottom");
-					delta.setX(-delta.getX());
-					delta.setY(-delta.getY());
-					newCenterX = topRectangleX+ rectangle.getWidth()+ rectangle.getHeight() + circle.getRadius();
-					newCenterY = topRectangleY+ rectangle.getWidth() + rectangle.getHeight() + circle.getRadius();
-				}	
-			}else if(centerY <= topRectangleY + circle.getRadius()) {
-				//top side
-				System.out.println("Top");
-				delta.setY(-delta.getY());
-				newCenterY = topRectangleY - circle.getRadius();
-			}else if(centerY >= topRectangleY+ rectangle.getHeight() - circle.getRadius()) {
-				System.out.println("Bottom");
-				delta.setY(-delta.getY());
-				newCenterY = topRectangleY + rectangle.getHeight() + circle.getRadius();
-			}else {
-				System.out.println("Not covered");
-			}
-			
-			circle.setCenter(new Coordinates(newCenterX, newCenterY));
-			
-		}
-		
 	}
 	
 	private void checkCollisionBetweenBallAndWalls() {

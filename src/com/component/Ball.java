@@ -20,7 +20,6 @@ public class Ball extends Element{
     
     public void enact(){
     		// Move ball 
-    	
     	    int newCenterX = circle.getCenter().getX() + delta.getX() ;
     	    int newCenterY = circle.getCenter().getY() + delta.getY() ;
     	    
