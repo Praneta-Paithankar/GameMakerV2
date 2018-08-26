@@ -36,7 +36,7 @@ public class Brick extends Element{
 
 	@Override
 	public void enact() {
-		this.setVisible(false);
+		setVisible(false);
 	}
 	@Override
 	public void draw(Graphics g){

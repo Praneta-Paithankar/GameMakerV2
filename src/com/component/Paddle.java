@@ -9,7 +9,7 @@ import com.infrastruture.Element;
 public class Paddle extends Element{
 
 	private Rectangle rectangle;
-	private int deltaY;
+	private int deltaX;
 	private Color color;
 	public Paddle() {
 		super();
@@ -17,7 +17,7 @@ public class Paddle extends Element{
 	public Paddle(Rectangle rectangle, int deltaY, Color color) {
 		super();
 		this.rectangle = rectangle;
-		this.deltaY = deltaY;
+		this.deltaX = deltaY;
 		this.color = color;
 	}
 	
@@ -29,12 +29,12 @@ public class Paddle extends Element{
 		this.rectangle = rectangle;
 	}
 
-	public int getDeltaY() {
-		return deltaY;
+	public int getDeltaX() {
+		return deltaX;
 	}
 
-	public void setDeltaY(int deltaY) {
-		this.deltaY = deltaY;
+	public void setDeltaX(int deltaX) {
+		this.deltaX = deltaX;
 	}
 
 	@Override
@@ -48,7 +48,7 @@ public class Paddle extends Element{
 		int topX = rectangle.getTopLeftCoordinate().getX();
 		int topY = rectangle.getTopLeftCoordinate().getY();
 
-		Coordinates newCoordinate = new Coordinates(topX, topY + deltaY);
+		Coordinates newCoordinate = new Coordinates(topX+ deltaX, topY);
 		rectangle.setTopLeftCoordinate(newCoordinate);
 		
 	}

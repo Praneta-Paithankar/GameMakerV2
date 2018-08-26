@@ -34,13 +34,17 @@ public class GUI extends JFrame {
 		initializeUI();
 	}
 
-	public void update(long milliseconds) {
+	public void updateTime(long milliseconds) {
 		int seconds = (int) (milliseconds / 1000) % 60 ;
 		int minutes = (int) ((milliseconds / (1000*60)) % 60);
 		int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
 		 
 		String time = String.format("%d::%d::%d", hours,minutes,seconds);
 		label.setText(time);
+		
+	}
+	public void changeUI()
+	{
 		boardPanel.repaint();
 	}
 	private void createTimerPanel() {
@@ -83,7 +87,6 @@ public class GUI extends JFrame {
         createTimerPanel();
         createBoardPanel();
         
-
 		add(mainPanel);
 		
 		mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
@@ -94,33 +97,15 @@ public class GUI extends JFrame {
 		setResizable(false);	
 		
 	}
+	public void removeKeyListner() {
+		mainPanel.removeKeyListener(driver);
+	}
 	public void addDriver(Driver driver){
-		this.setDriver(driver);
+		this.driver = driver;
 		mainPanel.addKeyListener(driver);
 	}
 	public void addGameOverPane() {
 		exitLabel.setText("Game Over");
 		boardPanel.repaint();
-
-	}
-	public Driver getDriver() {
-		return driver;
-	}
-	public void setDriver(Driver driver) {
-		this.driver = driver;
-	}
-	
-	public GamePanel getBoardPanel() {
-		return boardPanel;
-	}
-	public void setBoardPanel(GamePanel boardPanel) {
-		this.boardPanel = boardPanel;
-	}
-
-	public JPanel getMainPanel() {
-		return mainPanel;
-	}
-	public void setMainPanel(JPanel mainPanel) {
-		this.mainPanel = mainPanel;
 	}
 }

@@ -21,7 +21,7 @@ public class Driver implements ClockObserver, KeyListener{
 	private Brick brick;
     private GUI gui;
     private BreakoutTimer timer;
-    
+    private static int counter ;
 	public Driver(Ball ball, Paddle paddle, Brick brick, GUI gui,BreakoutTimer timer) {
 		super();
 		this.ball = ball;
@@ -29,22 +29,30 @@ public class Driver implements ClockObserver, KeyListener{
 		this.brick = brick;
 		this.gui = gui;
 		this.timer = timer;
+		counter =0;
     }
 
 	@Override
 	public void update(long milliseconds) {
 		ball.enact();
+		counter +=1;
 		if(checkCollisionBetweenBallAndBrick()) {
 			brick.enact();
 			timer.stopTimer();
-			gui.getMainPanel().removeKeyListener(this);
-  			gui.getBoardPanel().repaint();
+			gui.updateTime(milliseconds);
+			gui.removeKeyListner();
+  			gui.changeUI();;
   			gui.addGameOverPane();
  			return ;
 		}
 		checkCollisionBetweenBallAndPaddle();
 		checkCollisionBetweenBallAndWalls();
-		gui.update(milliseconds);
+		if( counter == Constants.tickPerSecond) {
+			counter = 0;
+			gui.updateTime(milliseconds);
+		}
+		gui.changeUI();
+		
 		
 	}
 	@Override
@@ -56,14 +64,14 @@ public class Driver implements ClockObserver, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		
-		if(e.getKeyCode() == KeyEvent.VK_UP) {
-			if(paddle.getDeltaY()>0)
-				paddle.setDeltaY(-paddle.getDeltaY());
+		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+			if(paddle.getDeltaX()>0)
+				paddle.setDeltaX(-paddle.getDeltaX());
 			paddle.enact();
 			checkCollisionBetweenPaddleAndWalls();
-		}else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-			if(paddle.getDeltaY()<0)
-				paddle.setDeltaY(-paddle.getDeltaY());
+		}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			if(paddle.getDeltaX()<0)
+				paddle.setDeltaX(-paddle.getDeltaX());
 			paddle.enact();
 			checkCollisionBetweenPaddleAndWalls();
 		}
@@ -228,13 +236,13 @@ public class Driver implements ClockObserver, KeyListener{
  
 	private void checkCollisionBetweenPaddleAndWalls() {
 		Rectangle rectangle = paddle.getRectangle();
-		int top = rectangle.getTopLeftCoordinate().getY();
-		int bottom = rectangle.getTopLeftCoordinate().getY() + rectangle.getHeight();
-				
-		if(top <= 0) {
-			rectangle.setTopLeftCoordinate(new Coordinates(rectangle.getTopLeftCoordinate().getX(),0));
-		}else if(bottom >= Constants.BOARD_PANEL_HEIGHT) {
-			rectangle.setTopLeftCoordinate(new Coordinates(rectangle.getTopLeftCoordinate().getX(),Constants.BOARD_PANEL_HEIGHT-Constants.PADDLE_HEIGHT));
+		int left = rectangle.getTopLeftCoordinate().getX();
+		int right = rectangle.getTopLeftCoordinate().getX() + rectangle.getWidth();
+		
+		if(left <= 0) {
+			rectangle.setTopLeftCoordinate(new Coordinates(0,rectangle.getTopLeftCoordinate().getY()));
+		}else if(right >= Constants.BOARD_PANEL_WIDTH) {
+			rectangle.setTopLeftCoordinate(new Coordinates(Constants.BOARD_PANEL_WIDTH - rectangle.getWidth(),rectangle.getTopLeftCoordinate().getY()));
 		}
 			
 	}

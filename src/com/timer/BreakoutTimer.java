@@ -9,7 +9,6 @@ import com.infrastruture.ClockObserver;
 
 public class BreakoutTimer implements Runnable {
 
-	private long startTime;
 	private long counter;
 	private List<ClockObserver> observers;
 	private Thread thread;
@@ -19,12 +18,12 @@ public class BreakoutTimer implements Runnable {
 	
 	public BreakoutTimer(int tickPerSecond) {
 		this.tickPerSecond =tickPerSecond;
-		setStartTime(System.currentTimeMillis());
 		observers =  Collections.synchronizedList(new ArrayList<ClockObserver>());
 		
 	}
 
 	public void startTimer() {
+		counter =0;
 		sleepTime = 1000 / tickPerSecond;
 		thread = new Thread(this);
 		running = new AtomicBoolean(true);
@@ -38,9 +37,9 @@ public class BreakoutTimer implements Runnable {
 	@Override
 	public void run() {
 		while(running.get()) {
-		counter = System.currentTimeMillis() - startTime;
-		notifyObserver(counter);
-		pauseThread();
+			counter += sleepTime; 
+			notifyObserver(counter);
+			pauseThread();
 		}
 		if(!running.get()) {
 			observers.removeAll(observers);
@@ -57,17 +56,9 @@ public class BreakoutTimer implements Runnable {
 		
 	public void resetTimer()
 	{
-		setStartTime(System.currentTimeMillis());
+		counter =0;
 	}
-
-	public long getStartTime() {
-		return startTime;
-	}
-
-	public void setStartTime(long startTime) {
-		this.startTime = startTime;
-	}
-
+	
 	public void addObserver(ClockObserver observer){
 		synchronized (observer) {
 			observers.add(observer);
