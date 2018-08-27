@@ -1,10 +1,10 @@
 package com.dimension;
 
-public class Coordinates {
+public class Coordinate {
 	private int x;
 	private int y;
 	
-	public Coordinates(int x, int y) {
+	public Coordinate(int x, int y) {
 		super();
 		this.x = x;
 		this.y = y;

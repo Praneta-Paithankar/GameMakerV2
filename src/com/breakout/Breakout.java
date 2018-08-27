@@ -6,7 +6,7 @@ import com.component.Ball;
 import com.component.Brick;
 import com.component.Paddle;
 import com.dimension.Circle;
-import com.dimension.Coordinates;
+import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.driver.Driver;
 import com.infrastruture.Constants;
@@ -21,7 +21,7 @@ public class Breakout {
 		BreakoutTimer timer  = new BreakoutTimer(Constants.tickPerSecond);
 		GamePanel boardPanel =new GamePanel();
 		
-		Ball ball = new Ball(new Circle(15, 0, 200), new Coordinates(20, 40), new Color(128,0,128));
+		Ball ball = new Ball(new Circle(15, 0, 200), new Coordinate(20, 40), new Color(128,0,128));
 		boardPanel.addElement(ball);
 
 		Paddle paddle = new Paddle(new Rectangle(200, 40, 350, 600), 30, new Color(00, 64 ,192));

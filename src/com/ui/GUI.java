@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -41,7 +40,6 @@ public class GUI extends JFrame {
 		 
 		String time = String.format("%d::%d::%d", hours,minutes,seconds);
 		label.setText(time);
-		
 	}
 	public void changeUI()
 	{
@@ -55,6 +53,8 @@ public class GUI extends JFrame {
         label = new JLabel("0::0::0",SwingConstants.LEFT);
 		label.setSize(100,100);
 		label.setForeground(Color.WHITE);
+		Font font = new Font("Helvetica", Font.BOLD,30);
+		label.setFont(font);
 		timerPanel.add(label);
 		timerPanel.setBackground(Color.black);
 		mainPanel.add(timerPanel);

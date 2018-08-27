@@ -4,9 +4,9 @@ public class Rectangle {
 	
 	private int width;
 	private int height;
-	private Coordinates topLeft;
+	private Coordinate topLeft;
 	
-	public Rectangle(int width, int height, Coordinates topLeft) {
+	public Rectangle(int width, int height, Coordinate topLeft) {
 		super();
 		this.width = width;
 		this.height = height;
@@ -16,12 +16,12 @@ public class Rectangle {
 		super();
 		this.width = width;
 		this.height = height;
-		this.topLeft = new Coordinates(topLeftX,topLeftY);
+		this.topLeft = new Coordinate(topLeftX,topLeftY);
 	}
-	public Coordinates getTopLeftCoordinate() {
+	public Coordinate getTopLeftCoordinate() {
 		return topLeft;
 	}
-	public void setTopLeftCoordinate(Coordinates topLeft) {
+	public void setTopLeftCoordinate(Coordinate topLeft) {
 		this.topLeft = topLeft;
 	}
 	public int getWidth() {

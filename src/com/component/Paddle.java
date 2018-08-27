@@ -2,7 +2,7 @@ package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import com.dimension.Coordinates;
+import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.Element;
 
@@ -48,7 +48,7 @@ public class Paddle extends Element{
 		int topX = rectangle.getTopLeftCoordinate().getX();
 		int topY = rectangle.getTopLeftCoordinate().getY();
 
-		Coordinates newCoordinate = new Coordinates(topX+ deltaX, topY);
+		Coordinate newCoordinate = new Coordinate(topX+ deltaX, topY);
 		rectangle.setTopLeftCoordinate(newCoordinate);
 		
 	}

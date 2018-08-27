@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import com.dimension.Circle;
-import com.dimension.Coordinates;
+import com.dimension.Coordinate;
 import com.infrastruture.Element;
 
 public class Ball extends Element{
     private Circle circle;
-    private Coordinates delta;
+    private Coordinate delta;
     private Color color;
-	public Ball(Circle circle, Coordinates delta,Color color) {
+	public Ball(Circle circle, Coordinate delta,Color color) {
 		super();
 		this.setCircle(circle); 
 		this.setDelta(delta);
@@ -23,7 +23,7 @@ public class Ball extends Element{
     	    int newCenterX = circle.getCenter().getX() + delta.getX() ;
     	    int newCenterY = circle.getCenter().getY() + delta.getY() ;
     	    
-    	    circle.setCenter(new Coordinates(newCenterX, newCenterY));
+    	    circle.setCenter(new Coordinate(newCenterX, newCenterY));
     }
     
 	public void draw(Graphics g){
@@ -44,11 +44,11 @@ public class Ball extends Element{
 		this.circle = circle;
 	}
 
-	public Coordinates getDelta() {
+	public Coordinate getDelta() {
 		return delta;
 	}
 
-	public void setDelta(Coordinates delta) {
+	public void setDelta(Coordinate delta) {
 		this.delta = delta;
 	}
 

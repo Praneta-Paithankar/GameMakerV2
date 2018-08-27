@@ -7,7 +7,7 @@ import com.component.Ball;
 import com.component.Brick;
 import com.component.Paddle;
 import com.dimension.Circle;
-import com.dimension.Coordinates;
+import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.ClockObserver;
 import com.infrastruture.Constants;
@@ -142,7 +142,7 @@ public class Driver implements ClockObserver, KeyListener{
 			
 			int newCenterX = centerX;
 			int newCenterY = centerY;
-			Coordinates delta = ball.getDelta();
+			Coordinate delta = ball.getDelta();
 			 
 			if(centerX  <= topLeftRectangleX && centerY > topLeftRectangleY  && centerY < bottomLeftRectangleY ) {
 				// left side
@@ -185,14 +185,14 @@ public class Driver implements ClockObserver, KeyListener{
 				newCenterX = (int)(topRectangleX+ rectangle.getWidth() + (circle.getRadius()/1.41));
 				newCenterY =  (int)(topRectangleY+  rectangle.getHeight() + (circle.getRadius()/1.41));
 			}
-			circle.setCenter(new Coordinates(newCenterX, newCenterY));
+			circle.setCenter(new Coordinate(newCenterX, newCenterY));
 		}
 	}
 	
 	private void checkCollisionBetweenBallAndWalls() {
 		
 		Circle circle = ball.getCircle();
-		Coordinates delta = ball.getDelta();
+		Coordinate delta = ball.getDelta();
 		
  		//get current position of ball
  		int left =  circle.getCenter().getX() - circle.getRadius();
@@ -230,7 +230,7 @@ public class Driver implements ClockObserver, KeyListener{
  		}
  		if(isHit)
  		{
- 			 circle.setCenter(new Coordinates(newCenterX, newCenterY));
+ 			 circle.setCenter(new Coordinate(newCenterX, newCenterY));
  		}
 	}
  
@@ -240,9 +240,9 @@ public class Driver implements ClockObserver, KeyListener{
 		int right = rectangle.getTopLeftCoordinate().getX() + rectangle.getWidth();
 		
 		if(left <= 0) {
-			rectangle.setTopLeftCoordinate(new Coordinates(0,rectangle.getTopLeftCoordinate().getY()));
+			rectangle.setTopLeftCoordinate(new Coordinate(0,rectangle.getTopLeftCoordinate().getY()));
 		}else if(right >= Constants.BOARD_PANEL_WIDTH) {
-			rectangle.setTopLeftCoordinate(new Coordinates(Constants.BOARD_PANEL_WIDTH - rectangle.getWidth(),rectangle.getTopLeftCoordinate().getY()));
+			rectangle.setTopLeftCoordinate(new Coordinate(Constants.BOARD_PANEL_WIDTH - rectangle.getWidth(),rectangle.getTopLeftCoordinate().getY()));
 		}
 			
 	}

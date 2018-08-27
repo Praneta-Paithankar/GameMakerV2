@@ -1,8 +1,5 @@
 package com.timer;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -39,7 +36,7 @@ public class BreakoutTimer implements Runnable {
 	public void run() {
 		while(running.get()) {
 			counter += sleepTime; 
-			notifyObserver(counter);
+			notifyObservers(counter);
 			pauseThread();
 		}
 		if(!running.get()) {
@@ -69,7 +66,7 @@ public class BreakoutTimer implements Runnable {
 			observers.remove(observer);
 	}
 	
-	public void notifyObserver(long time) {
+	public void notifyObservers(long time) {
 		synchronized (observers) {
 			for(ClockObserver observer : observers)
 			{
