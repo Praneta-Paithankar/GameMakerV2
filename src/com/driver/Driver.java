@@ -2,6 +2,7 @@ package com.driver;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import com.component.Ball;
 import com.component.Brick;
@@ -18,36 +19,49 @@ public class Driver implements ClockObserver, KeyListener{
 	
 	private Ball ball;
 	private Paddle paddle;
-	private Brick brick;
+	private ArrayList<Brick> bricks;
     private GUI gui;
     private BreakoutTimer timer;
     private static int counter ;
-	public Driver(Ball ball, Paddle paddle, Brick brick, GUI gui,BreakoutTimer timer) {
+    private static int noOfBricks;
+	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer timer) {
 		super();
 		this.ball = ball;
 		this.paddle = paddle;
-		this.brick = brick;
+		this.bricks = bricks;
 		this.gui = gui;
 		this.timer = timer;
-		counter =0;
+		this.noOfBricks = bricks.size();
+		counter = 0;
     }
 
 	@Override
 	public void update(long milliseconds) {
 		ball.enact();
 		counter +=1;
-		if(checkCollisionBetweenBallAndBrick()) {
-			brick.enact();
-			timer.stopTimer();
+		for(Brick b : bricks) {
+			if(b.isVisible())
+			{
+				if(checkCollision(b.getRectangle(),false)){
+					b.enact();
+					noOfBricks--;
+				}
+			}	
+		}
+		if(noOfBricks ==0)
+		{
 			gui.updateTime(milliseconds);
 			gui.removeKeyListner();
   			gui.changeUI();;
   			gui.addGameOverPane();
- 			return ;
+  			return;
 		}
-		checkCollisionBetweenBallAndPaddle();
+		//Check collision between ball and paddle
+		checkCollision(paddle.getRectangle(), false);
+		
+		//check collision between ball and paddle 
 		checkCollisionBetweenBallAndWalls();
-		if( counter == Constants.tickPerSecond) {
+		if( counter == Constants.TICK_PER_SECOND) {
 			counter = 0;
 			gui.updateTime(milliseconds);
 		}
@@ -84,109 +98,44 @@ public class Driver implements ClockObserver, KeyListener{
 		
 	}
 	
-	private boolean checkCollisionBetweenBallAndBrick() {
-		Circle circle = ball.getCircle();
-		Rectangle rectangle = brick.getRectangle();
-		return checkCollisionBetweenCircleAndRectangle(circle, rectangle);
-	}
-	
-	private boolean checkCollisionBetweenCircleAndRectangle(Circle circle, Rectangle rectangle)
+	private boolean checkCollision(Rectangle rectangle, boolean isPaddle)
 	{
+		//ball and rectangle
+		Circle circle = ball.getCircle();
+		
+		
 		int centerX = circle.getCenter().getX();
 		int centerY = circle.getCenter().getY();
 		
-		int nearestX = circle.getCenter().getX();
-		int nearestY = circle.getCenter().getY();
-		
-		int topRectangleX= rectangle.getTopLeftCoordinate().getX();
-		int topRectangleY = rectangle.getTopLeftCoordinate().getY();
-		
-		if (centerX < topRectangleX) {
-			nearestX = topRectangleX;
-		} else if (centerX > topRectangleX + rectangle.getWidth()) {
-			nearestX = topRectangleX + rectangle.getWidth();
-		}
-		
-		if (centerY < topRectangleY) {
-			nearestY = topRectangleY;
-		} else if (centerY > topRectangleY + rectangle.getHeight()) {
-			nearestY = topRectangleY + rectangle.getHeight();
-		}
-		
-		//find distance
+
+		float nearestX = Math.max(rectangle.getTopLeftCoordinate().getX(), Math.min(centerX, rectangle.getTopLeftCoordinate().getX() + rectangle.getWidth()));
+		float nearestY = Math.max(rectangle.getTopLeftCoordinate().getY(), Math.min(centerY, rectangle.getTopLeftCoordinate().getY() + rectangle.getHeight()));
+
 		int distance = (int) Math.sqrt(Math.pow(centerX-nearestX, 2) + Math.pow(centerY-nearestY, 2));
 		if(distance <= circle.getRadius())
 		{
-			return true;
-		}
-		return false;
-		
-	}
-	private void checkCollisionBetweenBallAndPaddle()
-	{
-		Circle circle = ball.getCircle();
-		Rectangle rectangle = paddle.getRectangle();
-		boolean isHit = checkCollisionBetweenCircleAndRectangle(circle,rectangle);
-		if(isHit) {
-			int centerX = circle.getCenter().getX();
-			int centerY = circle.getCenter().getY();
-			
-			int topRectangleX = rectangle.getTopLeftCoordinate().getX();
-			int topRectangleY = rectangle.getTopLeftCoordinate().getY();
-			
-			int topLeftRectangleX = rectangle.getTopLeftCoordinate().getX() + circle.getRadius();
-			int topLeftRectangleY = rectangle.getTopLeftCoordinate().getY() + circle.getRadius();
-			int topRightRectangleX = rectangle.getTopLeftCoordinate().getX() + rectangle.getWidth() - circle.getRadius();
-			int bottomLeftRectangleY = rectangle.getTopLeftCoordinate().getY() + rectangle.getHeight() - circle.getRadius();
-			
-			
-			int newCenterX = centerX;
-			int newCenterY = centerY;
-			Coordinate delta = ball.getDelta();
-			 
-			if(centerX  <= topLeftRectangleX && centerY > topLeftRectangleY  && centerY < bottomLeftRectangleY ) {
-				// left side
-				delta.setX(-delta.getX());
-				newCenterX = topRectangleX - circle.getRadius();
-			}else if(centerX > topLeftRectangleX && centerX < topRightRectangleX && centerY<= topLeftRectangleY) {
-				//top
-				delta.setY(-delta.getY());
-				newCenterY = topRectangleY - circle.getRadius();
-			}else if(centerX> topLeftRectangleX && centerX< topRightRectangleX && centerY>=bottomLeftRectangleY) {
-				//bottom
-				delta.setY(-delta.getY());
-				newCenterY = topRectangleY + rectangle.getHeight() + circle.getRadius();
-			}else if(centerX >= topRightRectangleX && centerY> topLeftRectangleY && centerY < bottomLeftRectangleY) {
-				//right
-				delta.setX(-delta.getX());
-				newCenterX = topRectangleX + rectangle.getWidth() + circle.getRadius();
-			}else if( centerX <= topLeftRectangleX && centerY <= topLeftRectangleY && centerX >= (topRectangleX - circle.getRadius())) {
-				// left top
-				delta.setX(-delta.getX());
-				delta.setY(-delta.getY());
-				newCenterX =(int) (topRectangleX - (circle.getRadius()/1.41));
-				newCenterY =(int) (topRectangleY - (circle.getRadius()/1.41));
-			}else if(centerX <= topLeftRectangleX && centerY >= bottomLeftRectangleY) {
-				//left bottom
-				delta.setX(-delta.getX());
-				delta.setY(-delta.getY());
-				newCenterX = (int)(topRectangleX - (circle.getRadius()/1.41));
-				newCenterY = (int)(topRectangleY+ rectangle.getHeight() + (circle.getRadius()/1.41));
-			}else if(centerX >= topRightRectangleX && centerY <= topLeftRectangleY) {
-				// right top
-				delta.setX(-delta.getX());
-				delta.setY(-delta.getY());
-				newCenterX = (int)(topRectangleX + rectangle.getWidth() + (circle.getRadius()/1.41));
-				newCenterY = (int)(topRectangleY - (circle.getRadius()/1.41));
-			}else if (centerX >= topRightRectangleX && centerY >= bottomLeftRectangleY) {
-				// right bottom
-				delta.setX(-delta.getX());
-				delta.setY(-delta.getY());
-				newCenterX = (int)(topRectangleX+ rectangle.getWidth() + (circle.getRadius()/1.41));
-				newCenterY =  (int)(topRectangleY+  rectangle.getHeight() + (circle.getRadius()/1.41));
+			if(distance == 0 && isPaddle) {
+				centerX = centerX + 2 * paddle.getDeltaX();
 			}
-			circle.setCenter(new Coordinate(newCenterX, newCenterY));
-		}
+			float ux = nearestX - centerX;
+			float uy = -nearestY + centerY;
+			
+			float vx = ball.getDelta().getX();
+			float vy = -ball.getDelta().getY();
+			double theta = Math.asin((ux * vy - vx * uy) / (Math.sqrt(ux * ux + uy * uy) * Math.sqrt(vx * vx + vy * vy)));
+
+			double nDx = -Math.cos(2 * theta) * ball.getDelta().getX() - Math.sin(2 * theta) * (-ball.getDelta().getY());
+			double nDy = Math.sin(2 * theta) * ball.getDelta().getX() - Math.cos(2 * theta) * (-ball.getDelta().getY());
+			
+			int newDeltaX = (int) Math.round(nDx);
+			int newDeltaY = (int) Math.round(-nDy);
+			
+			ball.getDelta().setX(newDeltaX);
+			ball.getDelta().setY(newDeltaY);
+			ball.enact();
+			return true;
+        }
+		return false;
 	}
 	
 	private void checkCollisionBetweenBallAndWalls() {

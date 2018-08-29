@@ -5,14 +5,13 @@ import java.awt.Graphics;
 
 import com.dimension.Circle;
 import com.dimension.Coordinate;
-import com.infrastruture.Element;
+import com.infrastruture.Sprite;
 
-public class Ball extends Element{
+public class Ball implements Sprite{
     private Circle circle;
     private Coordinate delta;
     private Color color;
 	public Ball(Circle circle, Coordinate delta,Color color) {
-		super();
 		this.setCircle(circle); 
 		this.setDelta(delta);
 		this.color= color;
@@ -20,14 +19,13 @@ public class Ball extends Element{
     
     public void enact(){
     		// Move ball 
-    	    int newCenterX = circle.getCenter().getX() + delta.getX() ;
-    	    int newCenterY = circle.getCenter().getY() + delta.getY() ;
-    	    
-    	    circle.setCenter(new Coordinate(newCenterX, newCenterY));
+    	 int newCenterX = circle.getCenter().getX() + delta.getX() ;
+         int newCenterY = circle.getCenter().getY() + delta.getY() ;
+   	     circle.setCenter(new Coordinate(newCenterX, newCenterY));
     }
     
 	public void draw(Graphics g){
-    	    int radius =  circle.getRadius();
+    	int radius =  circle.getRadius();
         int upperLeftX = circle.getCenter().getX() - radius;
         int upperLeftY = circle.getCenter().getY() - radius;
         int diameter = 2 * radius;
