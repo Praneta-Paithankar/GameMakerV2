@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import com.commands.BrickActCommand;
 import com.component.Ball;
 import com.component.Brick;
 import com.component.Paddle;
@@ -24,6 +25,8 @@ public class Driver implements ClockObserver, KeyListener{
     private BreakoutTimer timer;
     private static int counter ;
     private static int noOfBricks;
+    private BrickActCommand[] brickActCommands;
+    
 	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer timer) {
 		super();
 		this.ball = ball;
@@ -32,24 +35,40 @@ public class Driver implements ClockObserver, KeyListener{
 		this.gui = gui;
 		this.timer = timer;
 		this.noOfBricks = bricks.size();
+		this.brickActCommands = new BrickActCommand [noOfBricks];
 		counter = 0;
+		
+		initCommands();
     }
+	private void initCommands()
+	{
+		int i=0;
+		for(Brick b : bricks)
+		{
+			brickActCommands[i] = new BrickActCommand(b);
+			i++;
+		}
+	}
 
 	@Override
 	public void update(long milliseconds) {
 		ball.enact();
 		counter +=1;
+		int i= 0;
+		
 		for(Brick b : bricks) {
 			if(b.isVisible())
 			{
 				if(checkCollision(b.getRectangle(),false)){
-					b.enact();
+					brickActCommands[i].execute();
 					noOfBricks--;
 				}
-			}	
+			}
+			i++;
 		}
 		if(noOfBricks ==0)
 		{   
+			timer.stopTimer();
 			gui.updateTime(milliseconds);
 			gui.removeKeyListner();
   			gui.changeUI();;
@@ -83,10 +102,12 @@ public class Driver implements ClockObserver, KeyListener{
 				paddle.setDeltaX(-paddle.getDeltaX());
 			paddle.enact();
 			checkCollisionBetweenPaddleAndWalls();
+			checkCollision(paddle.getRectangle(), true);
 		}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			if(paddle.getDeltaX()<0)
 				paddle.setDeltaX(-paddle.getDeltaX());
 			paddle.enact();
+			checkCollision(paddle.getRectangle(), true);
 			checkCollisionBetweenPaddleAndWalls();
 		}
 	}
@@ -112,10 +133,10 @@ public class Driver implements ClockObserver, KeyListener{
 		float nearestY = Math.max(rectangle.getTopLeftCoordinate().getY(), Math.min(centerY, rectangle.getTopLeftCoordinate().getY() + rectangle.getHeight()));
 
 		int distance = (int) Math.sqrt(Math.pow(centerX-nearestX, 2) + Math.pow(centerY-nearestY, 2));
-		if(distance <= circle.getRadius())
+		if(distance < circle.getRadius())
 		{
 			if(distance == 0 && isPaddle) {
-				centerX = centerX + 2 * paddle.getDeltaX();
+				centerX = rectangle.getTopLeftCoordinate().getX() + circle.getRadius();
 			}
 			float ux = nearestX - centerX;
 			float uy = -nearestY + centerY;
@@ -137,6 +158,7 @@ public class Driver implements ClockObserver, KeyListener{
         }
 		return false;
 	}
+	
 	
 	private void checkCollisionBetweenBallAndWalls() {
 		

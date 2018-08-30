@@ -10,7 +10,7 @@ public class Constants {
 	public final static int BOARD_PANEL_WIDTH =  750;
 	public final static int BOARD_PANEL_HEIGHT =  750;
 
-	public final static int TICK_PER_SECOND = 100;
+	public final static int TICK_PER_SECOND = 200;
 	
 	public final static int BRICK_NO =10;
 	public final static int BRICK_WIDTH = 75;
