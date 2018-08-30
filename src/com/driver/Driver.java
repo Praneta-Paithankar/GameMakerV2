@@ -29,6 +29,7 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
     private static int noOfBricks;
     private BrickActCommand[] brickActCommands;
     private BallActCommand ballActCommand;
+    private PaddleActCommand paddleActCommand;
     
 	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer timer) {
 		super();
@@ -53,6 +54,7 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 			i++;
 		}
 		ballActCommand = new BallActCommand(ball);
+		paddleActCommand = new PaddleActCommand(paddle);
 	}
 
 	@Override
@@ -103,15 +105,17 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 			if(paddle.getDeltaX()>0)
 				paddle.setDeltaX(-paddle.getDeltaX());
-			paddle.enact();
-			checkCollisionBetweenPaddleAndWalls();
+			//paddle.enact();
+			paddleActCommand.execute();
+			
 			checkCollision(paddle.getRectangle(), true);
 		}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			if(paddle.getDeltaX()<0)
 				paddle.setDeltaX(-paddle.getDeltaX());
-			paddle.enact();
+			//paddle.enact();
+			paddleActCommand.execute();
 			checkCollision(paddle.getRectangle(), true);
-			checkCollisionBetweenPaddleAndWalls();
+			
 		}
 	}
 
@@ -161,22 +165,12 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 		return false;
 	}	
  
-	private void checkCollisionBetweenPaddleAndWalls() {
-		Rectangle rectangle = paddle.getRectangle();
-		int left = rectangle.getTopLeftCoordinate().getX();
-		int right = rectangle.getTopLeftCoordinate().getX() + rectangle.getWidth();
-		
-		if(left <= 0) {
-			rectangle.setTopLeftCoordinate(new Coordinate(0,rectangle.getTopLeftCoordinate().getY()));
-		}else if(right >= Constants.BOARD_PANEL_WIDTH) {
-			rectangle.setTopLeftCoordinate(new Coordinate(Constants.BOARD_PANEL_WIDTH - rectangle.getWidth(),rectangle.getTopLeftCoordinate().getY()));
-		}
-			
-	}
+
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		ballActCommand.undo();
+		paddleActCommand.undo();
 		gui.changeFocus();
 		gui.changeUI();
 	}
