@@ -49,7 +49,7 @@ public class Driver implements ClockObserver, KeyListener{
 			}	
 		}
 		if(noOfBricks ==0)
-		{
+		{   
 			gui.updateTime(milliseconds);
 			gui.removeKeyListner();
   			gui.changeUI();;
@@ -57,7 +57,7 @@ public class Driver implements ClockObserver, KeyListener{
   			return;
 		}
 		//Check collision between ball and paddle
-		checkCollision(paddle.getRectangle(), false);
+		checkCollision(paddle.getRectangle(), true);
 		
 		//check collision between ball and paddle 
 		checkCollisionBetweenBallAndWalls();
