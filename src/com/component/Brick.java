@@ -34,10 +34,6 @@ public class Brick implements Sprite{
 	}
 
 	@Override
-	public void enact() {
-		setVisible(false);
-	}
-	@Override
 	public void draw(Graphics g){
 		if(visible) {
 		g.setColor(color);

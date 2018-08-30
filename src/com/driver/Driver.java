@@ -1,10 +1,12 @@
 package com.driver;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
-import com.commands.BrickActCommand;
+import com.commands.*;
 import com.component.Ball;
 import com.component.Brick;
 import com.component.Paddle;
@@ -16,7 +18,7 @@ import com.infrastruture.Constants;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
-public class Driver implements ClockObserver, KeyListener{
+public class Driver implements ClockObserver, KeyListener,ActionListener{
 	
 	private Ball ball;
 	private Paddle paddle;
@@ -26,6 +28,7 @@ public class Driver implements ClockObserver, KeyListener{
     private static int counter ;
     private static int noOfBricks;
     private BrickActCommand[] brickActCommands;
+    private BallActCommand ballActCommand;
     
 	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer timer) {
 		super();
@@ -35,24 +38,27 @@ public class Driver implements ClockObserver, KeyListener{
 		this.gui = gui;
 		this.timer = timer;
 		this.noOfBricks = bricks.size();
-		this.brickActCommands = new BrickActCommand [noOfBricks];
+		
 		counter = 0;
 		
 		initCommands();
     }
 	private void initCommands()
 	{
+		brickActCommands = new BrickActCommand [noOfBricks];
 		int i=0;
 		for(Brick b : bricks)
 		{
 			brickActCommands[i] = new BrickActCommand(b);
 			i++;
 		}
+		ballActCommand = new BallActCommand(ball);
 	}
 
 	@Override
 	public void update(long milliseconds) {
-		ball.enact();
+		//ball.enact();
+		ballActCommand.execute();
 		counter +=1;
 		int i= 0;
 		
@@ -78,8 +84,6 @@ public class Driver implements ClockObserver, KeyListener{
 		//Check collision between ball and paddle
 		checkCollision(paddle.getRectangle(), true);
 		
-		//check collision between ball and paddle 
-		checkCollisionBetweenBallAndWalls();
 		if( counter == Constants.TICK_PER_SECOND) {
 			counter = 0;
 			gui.updateTime(milliseconds);
@@ -96,7 +100,6 @@ public class Driver implements ClockObserver, KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 			if(paddle.getDeltaX()>0)
 				paddle.setDeltaX(-paddle.getDeltaX());
@@ -111,7 +114,6 @@ public class Driver implements ClockObserver, KeyListener{
 			checkCollisionBetweenPaddleAndWalls();
 		}
 	}
-
 
 	@Override
 	public void keyReleased(KeyEvent e) {
@@ -153,57 +155,11 @@ public class Driver implements ClockObserver, KeyListener{
 			
 			ball.getDelta().setX(newDeltaX);
 			ball.getDelta().setY(newDeltaY);
-			ball.enact();
+			ballActCommand.execute();
 			return true;
         }
 		return false;
-	}
-	
-	
-	private void checkCollisionBetweenBallAndWalls() {
-		
-		Circle circle = ball.getCircle();
-		Coordinate delta = ball.getDelta();
-		
- 		//get current position of ball
- 		int left =  circle.getCenter().getX() - circle.getRadius();
- 		int right = circle.getCenter().getX() + circle.getRadius();
- 		int top = circle.getCenter().getY() - circle.getRadius();
- 		int bottom = circle.getCenter().getY() + circle.getRadius();
- 		
- 		boolean isHit = false;
- 		int newCenterX = circle.getCenter().getX();
- 		int newCenterY = circle.getCenter().getY();
- 		
- 		if((left <=0) && (delta.getX() < 0))
- 		{
- 			isHit = true;
- 			delta.setX(-delta.getX());
- 			newCenterX = circle.getRadius(); 
- 		}
- 		if((right >= Constants.BOARD_PANEL_WIDTH) && (delta.getX() > 0))
- 		{
- 			isHit = true;
- 			delta.setX(-delta.getX());
- 			newCenterX = Constants.BOARD_PANEL_WIDTH - circle.getRadius(); 
- 		}
- 		if((top <=0) && (delta.getY() < 0))
- 		{
- 			isHit = true;
- 			delta.setY(-delta.getY());
- 			newCenterY = circle.getRadius(); 
- 		}
- 		if((bottom >= Constants.BOARD_PANEL_HEIGHT) && (delta.getY() > 0))
- 		{
- 			isHit = true;
- 			delta.setY(-delta.getY());
- 			newCenterY = Constants.BOARD_PANEL_HEIGHT - circle.getRadius(); 
- 		}
- 		if(isHit)
- 		{
- 			 circle.setCenter(new Coordinate(newCenterX, newCenterY));
- 		}
-	}
+	}	
  
 	private void checkCollisionBetweenPaddleAndWalls() {
 		Rectangle rectangle = paddle.getRectangle();
@@ -216,6 +172,13 @@ public class Driver implements ClockObserver, KeyListener{
 			rectangle.setTopLeftCoordinate(new Coordinate(Constants.BOARD_PANEL_WIDTH - rectangle.getWidth(),rectangle.getTopLeftCoordinate().getY()));
 		}
 			
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		ballActCommand.undo();
+		gui.changeFocus();
+		gui.changeUI();
 	}
 
 }

@@ -14,15 +14,8 @@ public class Ball implements Sprite{
 	public Ball(Circle circle, Coordinate delta,Color color) {
 		this.setCircle(circle); 
 		this.setDelta(delta);
-		this.color= color;
+		this.color = color;
 	}
-    
-    public void enact(){
-    		// Move ball 
-    	 int newCenterX = circle.getCenter().getX() + delta.getX() ;
-         int newCenterY = circle.getCenter().getY() + delta.getY() ;
-   	     circle.setCenter(new Coordinate(newCenterX, newCenterY));
-    }
     
 	public void draw(Graphics g){
     	int radius =  circle.getRadius();
