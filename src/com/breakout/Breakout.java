@@ -1,6 +1,7 @@
 package com.breakout;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import com.component.Ball;
 import com.component.Brick;
@@ -18,20 +19,33 @@ public class Breakout {
 	
 	public static void main(String[] args){
 		
-		BreakoutTimer timer  = new BreakoutTimer(Constants.tickPerSecond);
+		BreakoutTimer timer  = new BreakoutTimer(Constants.TICK_PER_SECOND);
 		GamePanel boardPanel =new GamePanel();
 		
-		Ball ball = new Ball(new Circle(15, 0, 200), new Coordinate(20, 40), new Color(128,0,128));
+		Circle c = new Circle(Constants.BALL_RADIUS, Constants.BALL_POS_X,Constants.BALL_POS_Y);
+		Ball ball = new Ball(c, new Coordinate(Constants.BALL_DELTA_X, Constants.BALL_DELTA_Y), Constants.BALL_COLOR);
 		boardPanel.addElement(ball);
 
-		Paddle paddle = new Paddle(new Rectangle(200, 40, 350, 600), 30, new Color(00, 64 ,192));
+		Rectangle r =new Rectangle(Constants.PADDLE_WIDTH,Constants.PADDLE_HEIGHT,Constants.PADDLE_POS_X, Constants.PADDLE_POS_Y);
+		Paddle paddle = new Paddle(r,Constants.PADDLE_DELTA_X,Constants.PADDLE_COLOR);
 		boardPanel.addElement(paddle);
 		
-		Brick brick = new Brick(new Rectangle(75, 30, 600, 100), true, new Color(128,0,0));
-		boardPanel.addElement(brick);
+
 		
 		GUI gui = new GUI(boardPanel);
-		Driver driver = new Driver(ball, paddle, brick, gui,timer);
+		ArrayList<Brick> bricks = new ArrayList<>();
+		int brickPosX = Constants.BRICK_START_X; 
+		
+		for(int i=0; i< Constants.BRICK_NO; i++) {
+			r = new Rectangle(Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT, brickPosX, Constants.BRICK_START_Y);
+			Brick brick = new Brick(r , true,Constants.BRICK_COLOR);
+			bricks.add(brick);
+			boardPanel.addElement(brick);
+			brickPosX += Constants.BRICK_WIDTH ;
+		}
+		
+		
+		Driver driver = new Driver(ball, paddle, bricks, gui,timer);
 		
 		gui.addDriver(driver);
 		timer.addObserver(driver);

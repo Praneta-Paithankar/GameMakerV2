@@ -4,20 +4,17 @@ import java.awt.Graphics;
 
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
-import com.infrastruture.Element;
+import com.infrastruture.Sprite;
 
-public class Paddle extends Element{
+public class Paddle implements Sprite{
 
 	private Rectangle rectangle;
 	private int deltaX;
 	private Color color;
-	public Paddle() {
-		super();
-	}
-	public Paddle(Rectangle rectangle, int deltaY, Color color) {
-		super();
+	
+	public Paddle(Rectangle rectangle, int deltaX, Color color) {
 		this.rectangle = rectangle;
-		this.deltaX = deltaY;
+		this.deltaX = deltaX;
 		this.color = color;
 	}
 	

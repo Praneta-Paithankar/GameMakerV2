@@ -4,8 +4,9 @@ import java.util.Vector;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.infrastruture.ClockObserver;
+import com.infrastruture.Observable;
 
-public class BreakoutTimer implements Runnable {
+public class BreakoutTimer implements Runnable,  Observable{
 
 	private long counter;
 	private Vector<ClockObserver> observers;
@@ -21,7 +22,7 @@ public class BreakoutTimer implements Runnable {
 	}
 
 	public void startTimer() {
-		counter =0;
+		counter = 0;
 		sleepTime = 1000 / tickPerSecond;
 		thread = new Thread(this);
 		running = new AtomicBoolean(true);
