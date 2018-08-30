@@ -1,12 +1,16 @@
 package com.ui;
 
+import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,7 +19,7 @@ import javax.swing.SwingConstants;
 import com.driver.Driver;
 import com.infrastruture.Constants;
 
-public class GUI extends JFrame {
+public class GUI extends JFrame{
 	
 	private GamePanel boardPanel;
 	private JLabel label;
@@ -23,6 +27,7 @@ public class GUI extends JFrame {
 	private Driver driver;
 	private JPanel mainPanel;
 	private JPanel timerPanel;
+	private JButton button;
 	public GUI() {
 		super();
 	}
@@ -57,6 +62,11 @@ public class GUI extends JFrame {
 		label.setFont(font);
 		timerPanel.add(label);
 		timerPanel.setBackground(Color.black);
+	    button = new JButton("press");
+		
+		button.setActionCommand("undo");
+		button.setVisible(true);
+		timerPanel.add(button);
 		mainPanel.add(timerPanel);
 	}
 	private void createBoardPanel() {
@@ -103,9 +113,15 @@ public class GUI extends JFrame {
 	public void addDriver(Driver driver){
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
+		button.addActionListener(driver);
+	}
+	public void changeFocus()
+	{
+		mainPanel.requestFocus();
 	}
 	public void addGameOverPane() {
 		exitLabel.setText("Game Over");
 		boardPanel.repaint();
 	}
+		
 }

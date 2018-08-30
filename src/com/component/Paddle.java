@@ -40,7 +40,7 @@ public class Paddle implements Sprite{
 	      g.fillRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
 	}
 
-	@Override
+	
 	public void enact() {
 		int topX = rectangle.getTopLeftCoordinate().getX();
 		int topY = rectangle.getTopLeftCoordinate().getY();
