@@ -39,7 +39,6 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 		this.gui = gui;
 		this.timer = timer;
 		this.noOfBricks = bricks.size();
-		
 		counter = 0;
 		
 		initCommands();
@@ -67,7 +66,7 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 		for(Brick b : bricks) {
 			if(b.isVisible())
 			{
-				if(checkCollision(b.getRectangle(),false)){
+				if(checkCollision(b.getRectangle())){
 					brickActCommands[i].execute();
 					noOfBricks--;
 				}
@@ -84,7 +83,7 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
   			return;
 		}
 		//Check collision between ball and paddle
-		checkCollision(paddle.getRectangle(), true);
+		checkCollision(paddle.getRectangle());
 		
 		if( counter == Constants.TICK_PER_SECOND) {
 			counter = 0;
@@ -108,13 +107,13 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 			//paddle.enact();
 			paddleActCommand.execute();
 			
-			checkCollision(paddle.getRectangle(), true);
+			checkCollision(paddle.getRectangle());
 		}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			if(paddle.getDeltaX()<0)
 				paddle.setDeltaX(-paddle.getDeltaX());
 			//paddle.enact();
 			paddleActCommand.execute();
-			checkCollision(paddle.getRectangle(), true);
+			checkCollision(paddle.getRectangle());
 			
 		}
 	}
@@ -124,48 +123,81 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
-	
-	private boolean checkCollision(Rectangle rectangle, boolean isPaddle)
+	private boolean checkCollision( Rectangle rectangle)
 	{
-		//ball and rectangle
 		Circle circle = ball.getCircle();
-		
-		
 		int centerX = circle.getCenter().getX();
 		int centerY = circle.getCenter().getY();
 		
-
 		float nearestX = Math.max(rectangle.getTopLeftCoordinate().getX(), Math.min(centerX, rectangle.getTopLeftCoordinate().getX() + rectangle.getWidth()));
 		float nearestY = Math.max(rectangle.getTopLeftCoordinate().getY(), Math.min(centerY, rectangle.getTopLeftCoordinate().getY() + rectangle.getHeight()));
 
 		int distance = (int) Math.sqrt(Math.pow(centerX-nearestX, 2) + Math.pow(centerY-nearestY, 2));
 		if(distance < circle.getRadius())
-		{
-			if(distance == 0 && isPaddle) {
-				centerX = rectangle.getTopLeftCoordinate().getX() + circle.getRadius();
+		{			
+			int topRectangleX = rectangle.getTopLeftCoordinate().getX();
+			int topRectangleY = rectangle.getTopLeftCoordinate().getY();
+			
+			int topLeftRectangleX = rectangle.getTopLeftCoordinate().getX() + circle.getRadius();
+			int topLeftRectangleY = rectangle.getTopLeftCoordinate().getY() + circle.getRadius();
+			int topRightRectangleX = rectangle.getTopLeftCoordinate().getX() + rectangle.getWidth() - circle.getRadius();
+			int bottomLeftRectangleY = rectangle.getTopLeftCoordinate().getY() + rectangle.getHeight() - circle.getRadius();
+			
+			int newCenterX = centerX;
+			int newCenterY = centerY;
+			Coordinate delta = ball.getDelta();
+			 
+			int deltaX = delta.getX();
+			int deltaY = delta.getY();
+			
+			if(centerX  <= topLeftRectangleX && centerY > topLeftRectangleY  && centerY < bottomLeftRectangleY ) {
+				// left side
+				deltaX= -delta.getX();
+				newCenterX = topRectangleX - circle.getRadius();
+			}else if(centerX > topLeftRectangleX && centerX < topRightRectangleX && centerY<= topLeftRectangleY) {
+				//top
+				deltaY = -delta.getY();
+				newCenterY = topRectangleY - circle.getRadius();
+			}else if(centerX> topLeftRectangleX && centerX< topRightRectangleX && centerY>=bottomLeftRectangleY) {
+				//bottom
+				deltaY = -delta.getY() ;
+				newCenterY = topRectangleY + rectangle.getHeight() + circle.getRadius();
+			}else if(centerX >= topRightRectangleX && centerY> topLeftRectangleY && centerY < bottomLeftRectangleY) {
+				//right
+				deltaX = -delta.getX();
+				newCenterX = topRectangleX + rectangle.getWidth() + circle.getRadius();
+			}else if( centerX <= topLeftRectangleX && centerY <= topLeftRectangleY && centerX >= (topRectangleX - circle.getRadius())) {
+				// left top
+				deltaX = -delta.getX();
+				deltaY = -delta.getY();
+				newCenterX =(int) (topRectangleX - (circle.getRadius()/1.41));
+				newCenterY =(int) (topRectangleY - (circle.getRadius()/1.41));
+			}else if(centerX <= topLeftRectangleX && centerY >= bottomLeftRectangleY) {
+				//left bottom
+				deltaX = -delta.getX();
+				deltaY =-delta.getY();
+				newCenterX = (int)(topRectangleX - (circle.getRadius()/1.41));
+				newCenterY = (int)(topRectangleY+ rectangle.getHeight() + (circle.getRadius()/1.41));
+			}else if(centerX >= topRightRectangleX && centerY <= topLeftRectangleY) {
+				// right top
+				deltaX = -delta.getX();
+				deltaY = -delta.getY();
+				newCenterX = (int)(topRectangleX + rectangle.getWidth() + (circle.getRadius()/1.41));
+				newCenterY = (int)(topRectangleY - (circle.getRadius()/1.41));
+			}else if (centerX >= topRightRectangleX && centerY >= bottomLeftRectangleY) {
+				// right bottom
+				deltaX = -delta.getX();
+				deltaY = -delta.getY();
+				newCenterX = (int)(topRectangleX+ rectangle.getWidth() + (circle.getRadius()/1.41));
+				newCenterY =  (int)(topRectangleY+  rectangle.getHeight() + (circle.getRadius()/1.41));
 			}
-			float ux = nearestX - centerX;
-			float uy = -nearestY + centerY;
-			
-			float vx = ball.getDelta().getX();
-			float vy = -ball.getDelta().getY();
-			double theta = Math.asin((ux * vy - vx * uy) / (Math.sqrt(ux * ux + uy * uy) * Math.sqrt(vx * vx + vy * vy)));
-
-			double nDx = -Math.cos(2 * theta) * ball.getDelta().getX() - Math.sin(2 * theta) * (-ball.getDelta().getY());
-			double nDy = Math.sin(2 * theta) * ball.getDelta().getX() - Math.cos(2 * theta) * (-ball.getDelta().getY());
-			
-			int newDeltaX = (int) Math.round(nDx);
-			int newDeltaY = (int) Math.round(-nDy);
-			
-			ball.getDelta().setX(newDeltaX);
-			ball.getDelta().setY(newDeltaY);
-			ballActCommand.execute();
+			ballActCommand.execute(newCenterX, newCenterY, deltaX, deltaY);
 			return true;
-        }
+		}
 		return false;
-	}	
- 
-
+		
+	}
+	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {

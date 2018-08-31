@@ -30,8 +30,19 @@ public class BallActCommand implements Command {
   	    circle.setCenter(new Coordinate(newCenterX, newCenterY));
 		checkBounds();
 	}
-   
+    public void execute(int newCenterX,int newCenterY, int deltaX, int deltaY)
+    {
+    	Circle circle = ball.getCircle();
+		
+		prevCenter = circle.getCenter();
+		prevDelta = ball.getDelta();
+		
+		ball.setDelta(new Coordinate(deltaX, deltaY));
+		circle.setCenter(new Coordinate(newCenterX, newCenterY));
+		checkBounds();
+    }
 	private void checkBounds() {
+		//Collision between ball and wall
 		
 		Circle circle = ball.getCircle();
 		Coordinate delta = ball.getDelta();
