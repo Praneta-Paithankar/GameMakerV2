@@ -31,6 +31,7 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
     private BallActCommand ballActCommand;
     private PaddleActCommand paddleActCommand;
     
+    
 	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer timer) {
 		super();
 		this.ball = ball;
@@ -195,16 +196,18 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 			return true;
 		}
 		return false;
-		
 	}
 	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		ballActCommand.undo();
-		paddleActCommand.undo();
-		gui.changeFocus();
-		gui.changeUI();
+	
+		String commandText= e.getActionCommand();
+		if(commandText.equals("undo")) {
+			ballActCommand.undo();
+			paddleActCommand.undo();
+			gui.changeFocus();
+			gui.changeUI();
+		}
 	}
-
 }
