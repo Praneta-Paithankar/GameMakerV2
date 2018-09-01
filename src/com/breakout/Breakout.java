@@ -17,9 +17,9 @@ import com.ui.GamePanel;
 
 public class Breakout {
 	
-	public static void main(String[] args){
+	public static void startGame(){
 		
-		BreakoutTimer timer  = new BreakoutTimer(Constants.TICK_PER_SECOND);
+		BreakoutTimer timer  = new BreakoutTimer();
 		GamePanel boardPanel =new GamePanel();
 		
 		Circle c = new Circle(Constants.BALL_RADIUS, Constants.BALL_POS_X,Constants.BALL_POS_Y);
@@ -48,8 +48,8 @@ public class Breakout {
 		Driver driver = new Driver(ball, paddle, bricks, gui,timer);
 		
 		gui.addDriver(driver);
-		timer.addObserver(driver);
-    	timer.startTimer();
+		timer.registerObserver(driver);
+    	    timer.startTimer();
        	gui.pack();
 		gui.setVisible(true);
 			

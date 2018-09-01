@@ -1,79 +1,59 @@
 package com.timer;
 
-import java.util.Vector;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
-import com.infrastruture.ClockObserver;
+import javax.swing.Timer;
+
+import com.infrastruture.Observer;
+import com.infrastruture.Constants;
 import com.infrastruture.Observable;
 
-public class BreakoutTimer implements Runnable,  Observable{
 
-	private long counter;
-	private Vector<ClockObserver> observers;
-	private Thread thread;
-	private AtomicBoolean running;
-	private int tickPerSecond;
-	private int sleepTime;
+public class BreakoutTimer implements Observable{
+
+	private Timer timer;
+	ArrayList<Observer> observers = new ArrayList<>();
+
+	public BreakoutTimer(){
+				
+        ActionListener actionPerformer = new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+               notifyObservers();
+            }
+        };
+         
+        timer = new Timer(Constants.TIMER_COUNT ,(ActionListener) actionPerformer);
+        startTimer();
+	}
 	
-	public BreakoutTimer(int tickPerSecond) {
-		this.tickPerSecond =tickPerSecond;
-		observers = new Vector<ClockObserver>();
-		
-	}
-
-	public void startTimer() {
-		counter = 0;
-		sleepTime = 1000 / tickPerSecond;
-		thread = new Thread(this);
-		running = new AtomicBoolean(true);
-		thread.start();
-		
-	}
-	public void stopTimer(){
-		running.set(false);
-			
-	}
 	@Override
-	public void run() {
-		while(running.get()) {
-			counter += sleepTime; 
-			notifyObservers(counter);
-			pauseThread();
-		}
-		if(!running.get()) {
-			observers.removeAllElements();
-		}	
+	public void registerObserver(Observer o) {
 		
+		// TODO Auto-generated method stub
+		observers.add(o);
 	}
 
-	private void pauseThread() {
-		try {
-			Thread.sleep(sleepTime);
-		}catch (InterruptedException exception) {
+	@Override
+	public void removeObserver(Observer o) {
+		// TODO Auto-generated method stub
+		observers.remove(observers.indexOf(o));
+	}
+
+	@Override
+	public void notifyObservers() {
+		// TODO Auto-generated method stub
+		for(Observer observer: observers) {
+			observer.update();
 		}
 	}
-		
-	public void resetTimer()
-	{
-		counter = 0;
+	
+	public void startTimer() {
+		timer.start();
 	}
 	
-	public void addObserver(ClockObserver observer){
-		observers.addElement(observer);
-		
-	}
-	
-	public void removeObserver(ClockObserver observer){
-			observers.remove(observer);
-	}
-	
-	public void notifyObservers(long time) {
-		synchronized (observers) {
-			for(ClockObserver observer : observers)
-			{
-				observer.update(time);
-			}
-		}
-		
+	public void stopTimer() {
+		timer.stop();
 	}
 }

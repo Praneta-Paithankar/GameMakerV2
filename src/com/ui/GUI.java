@@ -38,14 +38,6 @@ public class GUI extends JFrame{
 		initializeUI();
 	}
 
-	public void updateTime(long milliseconds) {
-		int seconds = (int) (milliseconds / 1000) % 60 ;
-		int minutes = (int) ((milliseconds / (1000*60)) % 60);
-		int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
-		 
-		String time = String.format("%d::%d::%d", hours,minutes,seconds);
-		label.setText(time);
-	}
 	public void changeUI()
 	{
 		boardPanel.repaint();

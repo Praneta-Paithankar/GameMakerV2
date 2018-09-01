@@ -13,12 +13,12 @@ import com.component.Paddle;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
-import com.infrastruture.ClockObserver;
+import com.infrastruture.Observer;
 import com.infrastruture.Constants;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
-public class Driver implements ClockObserver, KeyListener,ActionListener{
+public class Driver implements Observer, KeyListener,ActionListener{
 	
 	private Ball ball;
 	private Paddle paddle;
@@ -58,7 +58,7 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 	}
 
 	@Override
-	public void update(long milliseconds) {
+	public void update() {
 		//ball.enact();
 		ballActCommand.execute();
 		counter +=1;
@@ -77,7 +77,7 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 		if(noOfBricks ==0)
 		{   
 			timer.stopTimer();
-			gui.updateTime(milliseconds);
+			
 			gui.removeKeyListner();
   			gui.changeUI();;
   			gui.addGameOverPane();
@@ -86,9 +86,9 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 		//Check collision between ball and paddle
 		checkCollision(paddle.getRectangle());
 		
-		if( counter == Constants.TICK_PER_SECOND) {
+		if( counter == Constants.TIMER_COUNT) {
 			counter = 0;
-			gui.updateTime(milliseconds);
+
 		}
 		gui.changeUI();
 		
@@ -210,4 +210,5 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 			gui.changeUI();
 		}
 	}
+
 }
