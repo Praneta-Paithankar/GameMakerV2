@@ -205,8 +205,9 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		if(commandText.equals("undo")) {
 			ballActCommand.undo();
 			paddleActCommand.undo();
+			timerCommand.undo();
 			gui.changeFocus();
-			gui.changeUI();
+			gui.changeUI(timerCommand.getCurrTime());
 		}
 	}
 
