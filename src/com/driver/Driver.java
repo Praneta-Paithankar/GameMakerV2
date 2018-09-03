@@ -14,7 +14,6 @@ import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.Observer;
-import com.infrastruture.Constants;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
@@ -24,21 +23,22 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	private Paddle paddle;
 	private ArrayList<Brick> bricks;
     private GUI gui;
-    private BreakoutTimer timer;
+    private BreakoutTimer observable;
     private static int counter ;
     private static int noOfBricks;
     private BrickActCommand[] brickActCommands;
     private BallActCommand ballActCommand;
     private PaddleActCommand paddleActCommand;
+    private TimerCommand timerCommand;
     
     
-	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer timer) {
+	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable) {
 		super();
 		this.ball = ball;
 		this.paddle = paddle;
 		this.bricks = bricks;
 		this.gui = gui;
-		this.timer = timer;
+		this.observable = observable;
 		this.noOfBricks = bricks.size();
 		counter = 0;
 		
@@ -55,13 +55,14 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		}
 		ballActCommand = new BallActCommand(ball);
 		paddleActCommand = new PaddleActCommand(paddle);
+		timerCommand = new TimerCommand(gui.getStaticPanel());
 	}
 
 	@Override
 	public void update() {
-		//ball.enact();
 		ballActCommand.execute();
-		counter +=1;
+		timerCommand.execute();
+//		counter +=1;
 		int i= 0;
 		
 		for(Brick b : bricks) {
@@ -76,22 +77,20 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		}
 		if(noOfBricks ==0)
 		{   
-			timer.stopTimer();
-			
+			// Stopping the observable
+			observable.stopTimer();
 			gui.removeKeyListner();
-  			gui.changeUI();;
+  			gui.changeUI(timerCommand.getCurrTime());
   			gui.addGameOverPane();
   			return;
 		}
 		//Check collision between ball and paddle
 		checkCollision(paddle.getRectangle());
 		
-		if( counter == Constants.TIMER_COUNT) {
-			counter = 0;
-
-		}
-		gui.changeUI();
-		
+//		if( counter == Constants.TIMER_COUNT) {
+//			counter = 0;
+//		}
+		gui.changeUI(timerCommand.getCurrTime());
 		
 	}
 	@Override

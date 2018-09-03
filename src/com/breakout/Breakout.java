@@ -19,7 +19,7 @@ public class Breakout {
 	
 	public static void startGame(){
 		
-		BreakoutTimer timer  = new BreakoutTimer();
+		BreakoutTimer observable  = new BreakoutTimer();
 		GamePanel boardPanel =new GamePanel();
 		
 		Circle c = new Circle(Constants.BALL_RADIUS, Constants.BALL_POS_X,Constants.BALL_POS_Y);
@@ -45,11 +45,11 @@ public class Breakout {
 		}
 		
 		
-		Driver driver = new Driver(ball, paddle, bricks, gui,timer);
+		Driver driver = new Driver(ball, paddle, bricks, gui,observable);
 		
 		gui.addDriver(driver);
-		timer.registerObserver(driver);
-    	    timer.startTimer();
+		observable.registerObserver(driver);
+    	    observable.startTimer();
        	gui.pack();
 		gui.setVisible(true);
 			
