@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 
 import com.commands.*;
 import com.component.Ball;
@@ -13,6 +15,7 @@ import com.component.Paddle;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
+import com.infrastruture.Command;
 import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
@@ -24,13 +27,13 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	private ArrayList<Brick> bricks;
     private GUI gui;
     private BreakoutTimer observable;
-    private static int counter ;
     private static int noOfBricks;
     private BrickActCommand[] brickActCommands;
     private BallActCommand ballActCommand;
     private PaddleActCommand paddleActCommand;
     private TimerCommand timerCommand;
     
+    private Deque<Command> commandQueue;
     
 	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable) {
 		super();
@@ -40,8 +43,8 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		this.gui = gui;
 		this.observable = observable;
 		this.noOfBricks = bricks.size();
-		counter = 0;
 		
+		commandQueue = new ArrayDeque<Command>();
 		initCommands();
     }
 	private void initCommands()
@@ -55,14 +58,17 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		}
 		ballActCommand = new BallActCommand(ball);
 		paddleActCommand = new PaddleActCommand(paddle);
-		timerCommand = new TimerCommand(gui.getStaticPanel());
+		timerCommand = new TimerCommand();
 	}
 
 	@Override
 	public void update() {
+		
 		ballActCommand.execute();
 		timerCommand.execute();
-//		counter +=1;
+//		commandQueue.addLast(timerCommand);
+//		commandQueue.addLast(ballActCommand);
+		
 		int i= 0;
 		
 		for(Brick b : bricks) {
@@ -70,6 +76,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			{
 				if(checkCollision(b.getRectangle())){
 					brickActCommands[i].execute();
+					commandQueue.addLast(brickActCommands[i]);
 					noOfBricks--;
 				}
 			}
@@ -87,9 +94,6 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		//Check collision between ball and paddle
 		checkCollision(paddle.getRectangle());
 		
-//		if( counter == Constants.TIMER_COUNT) {
-//			counter = 0;
-//		}
 		gui.changeUI(timerCommand.getCurrTime());
 		
 	}
@@ -104,17 +108,15 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 			if(paddle.getDeltaX()>0)
 				paddle.setDeltaX(-paddle.getDeltaX());
-			//paddle.enact();
 			paddleActCommand.execute();
-			
+			commandQueue.addLast(paddleActCommand);
 			checkCollision(paddle.getRectangle());
 		}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			if(paddle.getDeltaX()<0)
 				paddle.setDeltaX(-paddle.getDeltaX());
-			//paddle.enact();
 			paddleActCommand.execute();
-			checkCollision(paddle.getRectangle());
-			
+			commandQueue.addLast(paddleActCommand);
+			checkCollision(paddle.getRectangle());	
 		}
 	}
 
@@ -200,12 +202,23 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	
 		String commandText= e.getActionCommand();
 		if(commandText.equals("undo")) {
-			ballActCommand.undo();
-			paddleActCommand.undo();
-			timerCommand.undo();
+//			ballActCommand.undo();
+//			paddleActCommand.undo();
+//			timerCommand.undo();
+			int i =0;
+			while(i != 10) {
+				System.out.println(i);
+				Command val=commandQueue.pollLast();
+//				if(val instanceof TimerCommand)
+//				{
+//					System.out.println(commandText);
+//					break;
+//				}
+				val.undo();
+				i++;
+			}
 			gui.changeFocus();
 			gui.changeUI(timerCommand.getCurrTime());
 		}

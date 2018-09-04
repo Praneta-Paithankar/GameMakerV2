@@ -9,21 +9,29 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import com.driver.Driver;
 import com.infrastruture.Constants;
 
 @SuppressWarnings("serial")
 public class StaticPanel extends JPanel{
 	private JLabel timerlabel;
 	private JLabel score;
+	private Driver driver;
+
 	
 	public StaticPanel() {
 		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
         this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
-        this.createTimerLabel();
-        this.createReplay();
-        this.createUndo();
+        createTimerLabel();
 	}
 
+	public void createButtons(Driver driver)
+	{
+		this.driver = driver;
+	    createReplay();
+	    createUndo();
+	    createStart();
+	}
 	public void createTimerLabel() {
         timerlabel = new JLabel("0::0::0",SwingConstants.LEFT);
 		timerlabel.setSize(100,100);
@@ -32,11 +40,6 @@ public class StaticPanel extends JPanel{
 		timerlabel.setFont(font);
 		this.add(timerlabel);
 		this.setBackground(Color.black);
-	    JButton button = new JButton("press");
-		
-		button.setActionCommand("undo");
-		button.setVisible(true);
-		this.add(button);
 	}
 	
 	public void updateTime(long milliseconds) {
@@ -50,21 +53,24 @@ public class StaticPanel extends JPanel{
 	
 	public void createReplay() {
 		JButton replayButton = new JButton("Replay");
-//		replayButton.setActionCommand("replay");
+		replayButton.setActionCommand("replay");
+		replayButton.addActionListener(driver);
 		replayButton.setVisible(true);
 		this.add(replayButton);
 	}
 	
 	public void createUndo() {
 		JButton undoButton = new JButton("Undo");
-//		replayButton.setActionCommand("replay");
+		undoButton.setActionCommand("undo");
+		undoButton.addActionListener(driver);
 		undoButton.setVisible(true);
 		this.add(undoButton);
 	}
 	
 	public void createStart() {
-		JButton startButton = new JButton("Undo");
-//		replayButton.setActionCommand("replay");
+		JButton startButton = new JButton("Start");
+     	startButton.setActionCommand("start");
+     	startButton.addActionListener(driver);
 		startButton.setVisible(true);
 		this.add(startButton);
 	}

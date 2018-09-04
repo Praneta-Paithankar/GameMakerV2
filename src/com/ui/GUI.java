@@ -1,16 +1,13 @@
 package com.ui;
 
-//import java.awt.Button;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
-//import java.awt.event.ActionEvent;
-//import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-//import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,15 +20,15 @@ import com.infrastruture.Constants;
 public class GUI extends JFrame{
 	
 	private GamePanel boardPanel;
-//	private JLabel label;
 	private JLabel exitLabel;
 	private Driver driver;
 	private JPanel mainPanel;
 	private StaticPanel timerPanel;
-//	private JButton button;
+	
 	public GUI() {
 		super();
 	}
+	
 	public GUI(GamePanel boardPanel)
 	{
 		super("Breakout Game");
@@ -45,7 +42,6 @@ public class GUI extends JFrame{
 
 	public void changeUI(long milliseconds)
 	{
-		System.out.println(milliseconds);
 		boardPanel.repaint();
 		timerPanel.updateTime(milliseconds);
 	}
@@ -95,8 +91,8 @@ public class GUI extends JFrame{
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
        
         timerPanel = new StaticPanel();
+
         mainPanel.add(timerPanel);
-//        createTimerPanel();
         createBoardPanel();
         
 		add(mainPanel);
@@ -115,7 +111,8 @@ public class GUI extends JFrame{
 	public void addDriver(Driver driver){
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
-		//button.addActionListener(driver);
+        timerPanel.createButtons(driver);
+	
 	}
 	public void changeFocus()
 	{

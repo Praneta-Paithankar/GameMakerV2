@@ -18,7 +18,6 @@ public class BrickActCommand implements Command {
 	public void execute() {
 		prevState = brick.isVisible();
 		brick.setVisible(false);
-		//queue.add(this);
 	}
 
 	@Override

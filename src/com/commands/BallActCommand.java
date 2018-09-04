@@ -88,8 +88,7 @@ public class BallActCommand implements Command {
 	}
 
 	@Override
-	public void undo() {
-		 
+	public void undo() { 
 		Circle circle  = ball.getCircle();
 		circle.setCenter(prevCenter);
 		ball.setDelta(prevDelta);

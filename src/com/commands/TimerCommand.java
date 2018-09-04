@@ -7,14 +7,13 @@ import com.ui.StaticPanel;
 
 public class TimerCommand implements Command {
 
-//	public StaticPanel staticPanel;
+
 	private static int counter;
 	private static long prevTime;
 	private static long currTime;
 	
-	public TimerCommand(StaticPanel staticPanel) {
+	public TimerCommand() {
 		super();
-//		this.staticPanel = staticPanel;
 		this.counter = 0;
 		this.prevTime = 0;
 		this.currTime = 0;
@@ -24,7 +23,6 @@ public class TimerCommand implements Command {
 	public void execute() {
 		// run  
 		counter+=1;
-//		System.out.println(currTime);
 		if( counter == Constants.TIMER_COUNT) {
 			prevTime = currTime;
 			currTime = currTime + 60;

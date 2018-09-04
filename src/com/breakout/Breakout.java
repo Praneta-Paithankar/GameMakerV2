@@ -1,6 +1,5 @@
 package com.breakout;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import com.component.Ball;
@@ -30,7 +29,6 @@ public class Breakout {
 		Paddle paddle = new Paddle(r,Constants.PADDLE_DELTA_X,Constants.PADDLE_COLOR);
 		boardPanel.addElement(paddle);
 		
-
 		
 		GUI gui = new GUI(boardPanel);
 		ArrayList<Brick> bricks = new ArrayList<>();
@@ -48,8 +46,10 @@ public class Breakout {
 		Driver driver = new Driver(ball, paddle, bricks, gui,observable);
 		
 		gui.addDriver(driver);
+		
 		observable.registerObserver(driver);
-    	    observable.startTimer();
+    	
+		observable.startTimer();
        	gui.pack();
 		gui.setVisible(true);
 			
