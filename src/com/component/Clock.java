@@ -9,19 +9,27 @@ import com.infrastruture.Observer;
 import com.infrastruture.Sprite;
 
 
-public class Clock implements Observer, Sprite{
+public class Clock implements Sprite{
 
 
 	private int minutes;
 	private int seconds;
-	private int count;
 
 
-	public Clock(Color fillColor, int x, int y, int width, int height) {
-	
-			count = 1000/Constants.TIMER_COUNT; //number of frames that should be skipped, to update a second.
+	public int getMinutes() {
+		return minutes;
+	}
 
-		// TODO Auto-generated constructor stub
+	public int getSeconds() {
+		return seconds;
+	}
+
+	public void setMinutes(int minutes) {
+		this.minutes = minutes;
+	}
+
+	public void setSeconds(int seconds) {
+		this.seconds = seconds;
 	}
 
 	@Override
@@ -29,30 +37,13 @@ public class Clock implements Observer, Sprite{
 		//		
 		// TODO center box around the time 
 //		g.drawRect(getX(), getY(), getWidth(), getHeight());
-		g.drawRect(0, 0, 250, 250);
-		g.setColor(Color.WHITE);
+		g.drawRect(0, 150, 250, 100);
+//		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 40));
-		g.drawString((minutes+" : "+ seconds), 0+ 5, 0 +50);
+		g.drawString((minutes+" : "+ seconds), 10+ 5, 200);
 	}
 
 
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		if(count>0) {
-			count--;
-		}
-		else {
-			secondPerformed();
-			count = 1000/Constants.TIMER_COUNT;
-		}
-	}
-
-	public void secondPerformed() {
-		// TODO Auto-generated method stub
-		if(seconds == 59) {seconds =0; minutes++;}
-		else if(seconds <60) seconds++;
-	}
 
 
 }

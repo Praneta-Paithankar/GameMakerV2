@@ -3,6 +3,8 @@ package com.ui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -11,20 +13,33 @@ import javax.swing.SwingConstants;
 
 import com.driver.Driver;
 import com.infrastruture.Constants;
+import com.infrastruture.Sprite;
 
 @SuppressWarnings("serial")
 public class StaticPanel extends JPanel{
-	private JLabel timerlabel;
+	//private JLabel timerlabel;
 	private JLabel score;
 	private Driver driver;
-
+	private ArrayList<Sprite> elements;
 	
 	public StaticPanel() {
 		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
         this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
-        createTimerLabel();
+        elements = new ArrayList<>();
 	}
-
+	public ArrayList<Sprite> getElements(){
+		return elements;
+	}
+	
+	public void addElement(Sprite element){
+		elements.add(element);
+		
+	}
+	public void removeElement(Sprite element)
+	{
+		elements.remove(element);
+	}
+	
 	public void createButtons(Driver driver)
 	{
 		this.driver = driver;
@@ -32,24 +47,7 @@ public class StaticPanel extends JPanel{
 	    createUndo();
 	    createStart();
 	}
-	public void createTimerLabel() {
-        timerlabel = new JLabel("0::0::0",SwingConstants.LEFT);
-		timerlabel.setSize(100,100);
-		timerlabel.setForeground(Color.WHITE);
-		Font font = new Font("Helvetica", Font.BOLD,30);
-		timerlabel.setFont(font);
-		this.add(timerlabel);
-		this.setBackground(Color.black);
-	}
 	
-	public void updateTime(long milliseconds) {
-		int seconds = (int) (milliseconds/60)  ;
-		int minutes = (int) (seconds/60);
-		int hours   = (int) (minutes/60);
-		 
-		String time = String.format("%d::%d::%d", hours,minutes,seconds);
-		timerlabel.setText(time);
-	}
 	
 	public void createReplay() {
 		JButton replayButton = new JButton("Replay");
@@ -74,5 +72,13 @@ public class StaticPanel extends JPanel{
 		startButton.setVisible(true);
 		this.add(startButton);
 	}
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		for(Sprite element : elements)
+		{
+			element.draw(g);
+		}
+    }
 	
 }

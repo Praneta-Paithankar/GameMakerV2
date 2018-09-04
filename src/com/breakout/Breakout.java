@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.component.Ball;
 import com.component.Brick;
+import com.component.Clock;
 import com.component.Paddle;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
@@ -13,6 +14,7 @@ import com.infrastruture.Constants;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 import com.ui.GamePanel;
+import com.ui.StaticPanel;
 
 public class Breakout {
 	
@@ -29,8 +31,12 @@ public class Breakout {
 		Paddle paddle = new Paddle(r,Constants.PADDLE_DELTA_X,Constants.PADDLE_COLOR);
 		boardPanel.addElement(paddle);
 		
+		Clock clock = new Clock();
+		StaticPanel timerPanel = new StaticPanel();
+		timerPanel.addElement(clock);
 		
-		GUI gui = new GUI(boardPanel);
+		GUI gui = new GUI(boardPanel,timerPanel);
+		
 		ArrayList<Brick> bricks = new ArrayList<>();
 		int brickPosX = Constants.BRICK_START_X; 
 		
@@ -43,7 +49,7 @@ public class Breakout {
 		}
 		
 		
-		Driver driver = new Driver(ball, paddle, bricks, gui,observable);
+		Driver driver = new Driver(ball, paddle, bricks, gui,observable, clock);
 		
 		gui.addDriver(driver);
 		

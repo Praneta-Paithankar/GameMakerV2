@@ -25,14 +25,12 @@ public class GUI extends JFrame{
 	private JPanel mainPanel;
 	private StaticPanel timerPanel;
 	
-	public GUI() {
-		super();
-	}
-	
-	public GUI(GamePanel boardPanel)
+
+	public GUI(GamePanel boardPanel,StaticPanel timerPanel)
 	{
 		super("Breakout Game");
 		this.boardPanel = boardPanel;
+		this.timerPanel = timerPanel;
 		initializeUI();
 	}
 	
@@ -40,30 +38,12 @@ public class GUI extends JFrame{
 		return (timerPanel);
 	}
 
-	public void changeUI(long milliseconds)
+	public void changeUI()
 	{
 		boardPanel.repaint();
-		timerPanel.updateTime(milliseconds);
+		timerPanel.repaint();
 	}
-//	private void createTimerPanel() {
-//		
-//		timerPanel = new JPanel();
-//        timerPanel.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
-//        timerPanel.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
-//        label = new JLabel("0::0::0",SwingConstants.LEFT);
-//		label.setSize(100,100);
-//		label.setForeground(Color.WHITE);
-//		Font font = new Font("Helvetica", Font.BOLD,30);
-//		label.setFont(font);
-//		timerPanel.add(label);
-//		timerPanel.setBackground(Color.black);
-//	    button = new JButton("press");
-//		
-//		button.setActionCommand("undo");
-//		button.setVisible(true);
-//		timerPanel.add(button);
-//		mainPanel.add(timerPanel);
-//	}
+
 
 	private void createBoardPanel() {
 
@@ -90,8 +70,6 @@ public class GUI extends JFrame{
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
        
-        timerPanel = new StaticPanel();
-
         mainPanel.add(timerPanel);
         createBoardPanel();
         

@@ -11,6 +11,7 @@ import java.util.Deque;
 import com.commands.*;
 import com.component.Ball;
 import com.component.Brick;
+import com.component.Clock;
 import com.component.Paddle;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
@@ -27,21 +28,23 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	private ArrayList<Brick> bricks;
     private GUI gui;
     private BreakoutTimer observable;
-    private static int noOfBricks;
+    private int noOfBricks;
     private BrickActCommand[] brickActCommands;
     private BallActCommand ballActCommand;
     private PaddleActCommand paddleActCommand;
     private TimerCommand timerCommand;
+    private Clock clock;
     
     private Deque<Command> commandQueue;
     
-	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable) {
-		super();
+	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock) {
+		
 		this.ball = ball;
 		this.paddle = paddle;
 		this.bricks = bricks;
 		this.gui = gui;
 		this.observable = observable;
+		this.clock = clock;
 		this.noOfBricks = bricks.size();
 		
 		commandQueue = new ArrayDeque<Command>();
@@ -58,7 +61,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		}
 		ballActCommand = new BallActCommand(ball);
 		paddleActCommand = new PaddleActCommand(paddle);
-		timerCommand = new TimerCommand();
+		timerCommand = new TimerCommand(clock);
 	}
 
 	@Override
@@ -82,19 +85,19 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			}
 			i++;
 		}
-		if(noOfBricks ==0)
+		if(noOfBricks == 0)
 		{   
 			// Stopping the observable
 			observable.stopTimer();
 			gui.removeKeyListner();
-  			gui.changeUI(timerCommand.getCurrTime());
+  			gui.changeUI();
   			gui.addGameOverPane();
   			return;
 		}
 		//Check collision between ball and paddle
 		checkCollision(paddle.getRectangle());
 		
-		gui.changeUI(timerCommand.getCurrTime());
+		gui.changeUI();
 		
 	}
 	@Override
@@ -220,7 +223,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 				i++;
 			}
 			gui.changeFocus();
-			gui.changeUI(timerCommand.getCurrTime());
+			gui.changeUI();
 		}
 	}
 
