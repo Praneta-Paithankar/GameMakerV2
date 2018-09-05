@@ -62,6 +62,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			brickActCommands[i] = new BrickActCommand(b);
 			i++;
 		}
+		timerCommand = new TimerCommand(clock);
 		ballActCommand = new BallActCommand(ball);
 		paddleActCommand = new PaddleActCommand(paddle);
 		
@@ -71,10 +72,10 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	public void update() {
 		
 		initCommands();
-		count ++;
-		if(count == Constants.TIMER_COUNT) {
-			timerCommand = new TimerCommand(clock);
-		}
+//		count ++;
+//		if(count == Constants.TIMER_COUNT) {
+//			timerCommand = new TimerCommand(clock);
+//		}
 		ballActCommand.execute();
 		timerCommand.execute();
 		commandQueue.addLast(timerCommand);
