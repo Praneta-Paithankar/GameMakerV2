@@ -21,7 +21,6 @@ public class TimerCommand implements Command {
 
 	@Override
 	public void execute() {
-	
 		if(count>0) {
 			count--;
 		}
@@ -31,6 +30,7 @@ public class TimerCommand implements Command {
 			if(clock.getSeconds() == 59) {clock.setSeconds(0); clock.setMinutes(clock.getMinutes()+1);}
 			else if(clock.getSeconds() < 60) clock.setSeconds(clock.getSeconds()+1);
 			count = 1000/Constants.TIMER_COUNT;
+			System.out.println("printing :"+clock.getSeconds());
 		}
 	}
 

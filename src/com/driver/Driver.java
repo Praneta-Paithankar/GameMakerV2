@@ -17,6 +17,7 @@ import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.Command;
+import com.infrastruture.Constants;
 import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
@@ -34,7 +35,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
     private PaddleActCommand paddleActCommand;
     private TimerCommand timerCommand;
     private Clock clock;
-    
+    private int count;
     private Deque<Command> commandQueue;
     
 	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock) {
@@ -46,13 +47,15 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		this.observable = observable;
 		this.clock = clock;
 		this.noOfBricks = bricks.size();
-		
+		brickActCommands = new BrickActCommand [noOfBricks];
 		commandQueue = new ArrayDeque<Command>();
+		timerCommand = new TimerCommand(clock);
+		count = 0;
 		initCommands();
     }
 	private void initCommands()
 	{
-		brickActCommands = new BrickActCommand [noOfBricks];
+		
 		int i=0;
 		for(Brick b : bricks)
 		{
@@ -61,16 +64,21 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		}
 		ballActCommand = new BallActCommand(ball);
 		paddleActCommand = new PaddleActCommand(paddle);
-		timerCommand = new TimerCommand(clock);
+		
 	}
 
 	@Override
 	public void update() {
 		
+		initCommands();
+		count ++;
+		if(count == Constants.TIMER_COUNT) {
+			timerCommand = new TimerCommand(clock);
+		}
 		ballActCommand.execute();
 		timerCommand.execute();
-//		commandQueue.addLast(timerCommand);
-//		commandQueue.addLast(ballActCommand);
+		commandQueue.addLast(timerCommand);
+		commandQueue.addLast(ballActCommand);
 		
 		int i= 0;
 		
@@ -96,6 +104,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		}
 		//Check collision between ball and paddle
 		checkCollision(paddle.getRectangle());
+		
 		
 		gui.changeUI();
 		
@@ -202,29 +211,35 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		return false;
 	}
 	
+	private void undoAction() {
+
+		int count = 0;
+		while(count != Constants.TIMER_COUNT) {
+			Command val=commandQueue.pollLast();
+			if(val == null)
+				break;
+			if(val instanceof TimerCommand)
+			{
+				count++;
+			}
+			if(val instanceof BrickActCommand)
+			{
+				noOfBricks++;
+			}
+			val.undo();
+		}
+	  
+	}
+	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String commandText= e.getActionCommand();
 		if(commandText.equals("undo")) {
-//			ballActCommand.undo();
-//			paddleActCommand.undo();
-//			timerCommand.undo();
-			int i =0;
-			while(i != 10) {
-				System.out.println(i);
-				Command val=commandQueue.pollLast();
-//				if(val instanceof TimerCommand)
-//				{
-//					System.out.println(commandText);
-//					break;
-//				}
-				val.undo();
-				i++;
-			}
-			gui.changeFocus();
-			gui.changeUI();
+			undoAction();
 		}
+		gui.changeFocus();
+		gui.changeUI();
 	}
 
 }
