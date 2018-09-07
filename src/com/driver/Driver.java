@@ -241,21 +241,23 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	
 	private void replayAction() {
 		// TODO Auto-generated method stub
-//		Circle circle =  new Circle(Constants.BALL_RADIUS, Constants.BALL_POS_X,Constants.BALL_POS_Y);
-//		clock.setSeconds(0);
-//		clock.setMinutes(0);
-//		ball.setCircle(circle);
 		observable.removeObserver(this);
-		System.out.println("in replay");
 		this.gameReset();
-		System.out.println("in replay");
 		gui.changeUI();
-		System.out.println("in replay");
 		Iterator<Command> itr = commandQueue.iterator();
-	
+		
 		
 		new Thread(){
 			public void run(){
+				GUI replayWindow = new GUI();
+				replayWindow.setTitle("Replay");
+				replayWindow.getBoardPanel().addElement(ball);
+				replayWindow.getBoardPanel().addElement(paddle);
+				replayWindow.getTimerPanel().addElement(clock);
+				for (Brick b : bricks) {	
+					replayWindow.getBoardPanel().addElement(b);
+				}
+				replayWindow.setVisible(true);
 				while(itr.hasNext()){
 					try {
 						SwingUtilities.invokeAndWait(new Runnable(){
@@ -264,7 +266,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 							public void run() {
 								// TODO Auto-generated method stub
 								val.execute();
-								gui.changeUI();
+								replayWindow.changeUI();
 								try {
 									currentThread();
 									Thread.sleep(10);
@@ -278,45 +280,25 @@ public class Driver implements Observer, KeyListener,ActionListener{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					
 				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				replayWindow.dispose();
+				addObserver();
 			}
 		}.start();
 		
+	}
+
+	protected void addObserver() {
+		// TODO Auto-generated method stub
 		observable.registerObserver(this);
 	}
-		
-
-
-////	    JFrame replayWindow = new GUI(null, null);
-//	    
-//////		new Thread(){
-//////			public void run(){
-//				Iterator<Command> itr = commandQueue.iterator();
-//				while(itr.hasNext()){
-//					Command val = itr.next();
-//					val.execute();	
-//					gui.changeUI();
-//					System.out.println("GameReset");
-//				}
-//
-//		System.out.println("done: "+ clock.getSeconds());
-
-		//		while(itr.hasNext()) {
-		//			itr.next().execute();
-		//		}
-//		System.out.println(itr.toString());
-//		  while(itr.hasNext()) {
-////			  System.out.println(itr.toString());
-////			  itr.next();
-////			  System.out.println(itr);
-//			  Command val = (Command) itr.next();
-//////			  
-//////			  val.execute();
-//		  }
-//		  
-
-//	}
-//	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -335,7 +317,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	}
 	
 	public void gameReset() {
-	
+		
 		ball.reset();
 		paddle.reset();
 		clock.reset();

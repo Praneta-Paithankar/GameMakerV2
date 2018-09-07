@@ -20,11 +20,17 @@ import com.infrastruture.Constants;
 public class GUI extends JFrame{
 	
 	private GamePanel boardPanel;
+	
 	private JLabel exitLabel;
 	private Driver driver;
 	private JPanel mainPanel;
 	private StaticPanel timerPanel;
 	
+	public GUI() {
+		boardPanel = new GamePanel();
+		timerPanel = new StaticPanel();
+		initializeUI();
+	}
 
 	public GUI(GamePanel boardPanel,StaticPanel timerPanel)
 	{
@@ -100,5 +106,19 @@ public class GUI extends JFrame{
 		exitLabel.setText("Game Over");
 		boardPanel.repaint();
 	}
-		
+	public GamePanel getBoardPanel() {
+		return boardPanel;
+	}
+
+	public void setBoardPanel(GamePanel boardPanel) {
+		this.boardPanel = boardPanel;
+	}
+
+	public StaticPanel getTimerPanel() {
+		return timerPanel;
+	}
+
+	public void setTimerPanel(StaticPanel timerPanel) {
+		this.timerPanel = timerPanel;
+	}	
 }
