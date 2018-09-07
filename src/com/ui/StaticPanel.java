@@ -46,6 +46,7 @@ public class StaticPanel extends JPanel{
 	    createReplay();
 	    createUndo();
 	    createStart();
+	    createPause();
 	}
 	
 	
@@ -72,6 +73,15 @@ public class StaticPanel extends JPanel{
 		startButton.setVisible(true);
 		this.add(startButton);
 	}
+	
+	public void createPause() {
+		JButton startButton = new JButton("Pause");
+     	startButton.setActionCommand("pause");
+     	startButton.addActionListener(driver);
+		startButton.setVisible(true);
+		this.add(startButton);
+	}
+	
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);

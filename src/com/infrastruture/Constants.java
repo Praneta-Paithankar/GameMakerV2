@@ -12,7 +12,7 @@ public class Constants {
 
 	public final static int TIMER_COUNT = 25;
 	
-	public final static int BRICK_NO =10;
+	public final static int BRICK_NO =1;
 	public final static int BRICK_WIDTH = 75;
 	public final static int BRICK_HEIGHT = 30;
 	public final static int BRICK_START_Y = 100;

@@ -11,8 +11,10 @@ import java.util.Deque;
 import java.util.Iterator;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import com.breakout.Breakout;
 import com.commands.*;
 import com.component.Ball;
 import com.component.Brick;
@@ -105,7 +107,8 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			observable.stopTimer();
 			gui.removeKeyListner();
   			gui.changeUI();
-  			gui.addGameOverPane();
+  			this.gameOver();
+  			
   			return;
 		}
 		//Check collision between ball and paddle
@@ -241,7 +244,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	
 	private void replayAction() {
 		// TODO Auto-generated method stub
-		observable.removeObserver(this);
+		pause();
 		this.gameReset();
 		gui.changeUI();
 		Iterator<Command> itr = commandQueue.iterator();
@@ -289,16 +292,23 @@ public class Driver implements Observer, KeyListener,ActionListener{
 					e.printStackTrace();
 				}
 				replayWindow.dispose();
-				addObserver();
+				unPause();
 			}
 		}.start();
 		
 	}
+	
+	
+	protected void pause() {
+		observable.removeObserver(this);
+	}
 
-	protected void addObserver() {
+	protected void unPause() {
 		// TODO Auto-generated method stub
 		observable.registerObserver(this);
 	}
+	
+	//Switch between actions when a button is pressed
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -312,6 +322,15 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		else if(commandText.equals("replay")) {
 			replayAction();
 		}
+		
+		else if(commandText.equals("start")) {
+			unPause();
+		}
+		
+		else if(commandText.equals("pause")) {
+			pause();
+		}
+		
 		gui.changeFocus();
 		gui.changeUI();
 	}
@@ -321,10 +340,33 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		ball.reset();
 		paddle.reset();
 		clock.reset();
-		noOfBricks = 10;
+		noOfBricks = Constants.BRICK_NO;
 		for (Brick b : bricks) {
 			b.reset();	
 		}
+	}
+	
+	public void gameOver() {
+		pause();
+		Object[] options = {  "Reset", "Exit", "Replay"}; 
+		int a = JOptionPane.showOptionDialog(gui.getBoardPanel(),"Game has ended","Game Over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+				, null, options, null);
+		
+		if(a == JOptionPane.YES_OPTION) {
+			gui.dispose();
+			commandQueue = new ArrayDeque<Command>();
+			gameReset();
+			gui.revalidate();
+			Breakout.startGame();			
+		}
+		else if(a == JOptionPane.CANCEL_OPTION) {
+			System.out.println("Replay");
+			replayAction();
+			
+		}
+		else
+			System.exit(0);
+		
 	}
 
 }
