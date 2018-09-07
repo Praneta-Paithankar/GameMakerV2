@@ -244,7 +244,9 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	
 	private void replayAction() {
 		// TODO Auto-generated method stub
-		pause();
+		if(!observable.isObserverListEmpty()) {
+			pause();
+		}
 		this.gameReset();
 		gui.changeUI();
 		Iterator<Command> itr = commandQueue.iterator();

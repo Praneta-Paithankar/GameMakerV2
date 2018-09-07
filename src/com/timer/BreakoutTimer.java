@@ -49,6 +49,11 @@ public class BreakoutTimer implements Observable{
 		}
 	}
 	
+	public boolean isObserverListEmpty() {
+		if(this.observers.isEmpty()) return true;
+		return false;
+	}
+	
 	public void startTimer() {
 		timer.start();
 	}
