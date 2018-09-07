@@ -4,9 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 
 import com.commands.*;
 import com.component.Ball;
@@ -35,7 +40,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
     private PaddleActCommand paddleActCommand;
     private TimerCommand timerCommand;
     private Clock clock;
-    private int count;
+//    private int count;
     private Deque<Command> commandQueue;
     
 	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock) {
@@ -50,7 +55,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		brickActCommands = new BrickActCommand [noOfBricks];
 		commandQueue = new ArrayDeque<Command>();
 		timerCommand = new TimerCommand(clock);
-		count = 0;
+//		count = 0;
 		initCommands();
     }
 	private void initCommands()
@@ -138,6 +143,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
+	
 	private boolean checkCollision( Rectangle rectangle)
 	{
 		Circle circle = ball.getCircle();
@@ -206,6 +212,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 				newCenterX = (int)(topRectangleX+ rectangle.getWidth() + (circle.getRadius()/1.41));
 				newCenterY =  (int)(topRectangleY+  rectangle.getHeight() + (circle.getRadius()/1.41));
 			}
+			ballActCommand =  new BallActCommand(ball);
 			ballActCommand.execute(newCenterX, newCenterY, deltaX, deltaY);
 			return true;
 		}
@@ -232,15 +239,108 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	  
 	}
 	
+	private void replayAction() {
+		// TODO Auto-generated method stub
+//		Circle circle =  new Circle(Constants.BALL_RADIUS, Constants.BALL_POS_X,Constants.BALL_POS_Y);
+//		clock.setSeconds(0);
+//		clock.setMinutes(0);
+//		ball.setCircle(circle);
+		observable.removeObserver(this);
+		System.out.println("in replay");
+		this.gameReset();
+		System.out.println("in replay");
+		gui.changeUI();
+		System.out.println("in replay");
+		Iterator<Command> itr = commandQueue.iterator();
+	
+		
+		new Thread(){
+			public void run(){
+				while(itr.hasNext()){
+					try {
+						SwingUtilities.invokeAndWait(new Runnable(){
+							Command val = (Command) itr.next();
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								val.execute();
+								gui.changeUI();
+								try {
+									currentThread();
+									Thread.sleep(10);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						});
+					} catch (InvocationTargetException | InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}.start();
+	}
+		
+
+
+////	    JFrame replayWindow = new GUI(null, null);
+//	    
+//////		new Thread(){
+//////			public void run(){
+//				Iterator<Command> itr = commandQueue.iterator();
+//				while(itr.hasNext()){
+//					Command val = itr.next();
+//					val.execute();	
+//					gui.changeUI();
+//					System.out.println("GameReset");
+//				}
+//
+//		System.out.println("done: "+ clock.getSeconds());
+
+		//		while(itr.hasNext()) {
+		//			itr.next().execute();
+		//		}
+//		System.out.println(itr.toString());
+//		  while(itr.hasNext()) {
+////			  System.out.println(itr.toString());
+////			  itr.next();
+////			  System.out.println(itr);
+//			  Command val = (Command) itr.next();
+//////			  
+//////			  val.execute();
+//		  }
+//		  
+
+//	}
+//	
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String commandText= e.getActionCommand();
 		if(commandText.equals("undo")) {
+			observable.removeObserver(this);
 			undoAction();
+			observable.registerObserver(this);
+		}
+		
+		else if(commandText.equals("replay")) {
+			replayAction();
 		}
 		gui.changeFocus();
 		gui.changeUI();
+	}
+	
+	public void gameReset() {
+	
+		ball.reset();
+		paddle.reset();
+		clock.reset();
+
+		for (Brick b : bricks) {
+			b.reset();	
+		}
 	}
 
 }

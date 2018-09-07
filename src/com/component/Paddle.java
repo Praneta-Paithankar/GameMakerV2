@@ -4,6 +4,7 @@ import java.awt.Graphics;
 
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
+import com.infrastruture.Constants;
 import com.infrastruture.Sprite;
 
 public class Paddle implements Sprite{
@@ -48,5 +49,13 @@ public class Paddle implements Sprite{
 		Coordinate newCoordinate = new Coordinate(topX+ deltaX, topY);
 		rectangle.setTopLeftCoordinate(newCoordinate);
 		
+	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		Coordinate newCoordinate = new Coordinate(Constants.PADDLE_POS_X, Constants.PADDLE_POS_Y);
+		rectangle.setTopLeftCoordinate(newCoordinate);
+		 
 	}
 }

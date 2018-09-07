@@ -10,7 +10,7 @@ public class Constants {
 	public final static int BOARD_PANEL_WIDTH =  750;
 	public final static int BOARD_PANEL_HEIGHT =  750;
 
-	public final static int TIMER_COUNT = 30;
+	public final static int TIMER_COUNT = 25;
 	
 	public final static int BRICK_NO =10;
 	public final static int BRICK_WIDTH = 75;
@@ -20,8 +20,8 @@ public class Constants {
 	public final static Color BRICK_COLOR =  new Color(128,0,0);
 	
 	public final static int BALL_POS_X = 0;
-	public final static int  BALL_DELTA_X = 10;
-	public final static int BALL_DELTA_Y =10;
+	public final static int  BALL_DELTA_X = 5;
+	public final static int BALL_DELTA_Y =5;
 	public final static int BALL_POS_Y = 200;
 	public final static int BALL_RADIUS = 15;
 	public final static Color BALL_COLOR = new Color(128,0,128);

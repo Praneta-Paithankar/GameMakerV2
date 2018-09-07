@@ -9,7 +9,6 @@ public class BrickActCommand implements Command {
 	boolean prevState;
 	
 	public BrickActCommand(Brick brick) {
-		super();
 		this.brick = brick;
 		this.prevState = false;
 	}
@@ -23,7 +22,7 @@ public class BrickActCommand implements Command {
 	@Override
 	public void undo() {
 		brick.setVisible(prevState);
-		System.out.println(brick.isVisible() +"undo");
+
 	}
 
 }

@@ -5,12 +5,15 @@ import java.awt.Graphics;
 
 import com.dimension.Circle;
 import com.dimension.Coordinate;
+import com.infrastruture.Constants;
 import com.infrastruture.Sprite;
 
 public class Ball implements Sprite{
+	
     private Circle circle;
     private Coordinate delta;
     private Color color;
+    
 	public Ball(Circle circle, Coordinate delta,Color color) {
 		this.setCircle(circle); 
 		this.setDelta(delta);
@@ -41,6 +44,11 @@ public class Ball implements Sprite{
 
 	public void setDelta(Coordinate delta) {
 		this.delta = delta;
+	}
+	
+	public void reset(){
+		circle.setCenter(new Coordinate(Constants.BALL_POS_X,Constants.BALL_POS_Y));
+		this.setDelta(delta);
 	}
 
 }

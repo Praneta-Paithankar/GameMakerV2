@@ -42,4 +42,11 @@ public class Brick implements Sprite{
 		g.drawRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
 		}
 	}
+
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		this.setVisible(true);
+		
+	}
 }

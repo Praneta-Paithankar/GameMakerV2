@@ -43,6 +43,14 @@ public class Clock implements Sprite{
 		g.drawString((minutes+" : "+ seconds), 10+ 5, 200);
 	}
 
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		this.minutes = 0;
+		this.seconds = 0;
+		
+	}
+
 
 
 

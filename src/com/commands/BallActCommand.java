@@ -23,13 +23,14 @@ public class BallActCommand implements Command {
 		Circle circle = ball.getCircle();
 		
 		prevCenter = circle.getCenter();
-		prevDelta = ball.getDelta();
+		prevDelta = new Coordinate(ball.getDelta().getX(), ball.getDelta().getY());
 		
    	    int newCenterX = circle.getCenter().getX() + ball.getDelta().getX() ;
         int newCenterY = circle.getCenter().getY() + ball.getDelta().getY() ;
   	    circle.setCenter(new Coordinate(newCenterX, newCenterY));
 		checkBounds();
 	}
+	
     public void execute(int newCenterX,int newCenterY, int deltaX, int deltaY)
     {
     	Circle circle = ball.getCircle();
