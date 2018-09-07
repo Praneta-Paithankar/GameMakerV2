@@ -7,15 +7,18 @@ public class BrickActCommand implements Command {
 
 	Brick brick;
 	boolean prevState;
+
 	
 	public BrickActCommand(Brick brick) {
 		this.brick = brick;
 		this.prevState = false;
+
 	}
 
 	@Override
 	public void execute() {
 		prevState = brick.isVisible();
+		
 		brick.setVisible(false);
 	}
 

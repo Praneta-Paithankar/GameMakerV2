@@ -281,6 +281,8 @@ public class Driver implements Observer, KeyListener,ActionListener{
 				}
 			}
 		}.start();
+		
+		observable.registerObserver(this);
 	}
 		
 
@@ -337,7 +339,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		ball.reset();
 		paddle.reset();
 		clock.reset();
-
+		noOfBricks = 10;
 		for (Brick b : bricks) {
 			b.reset();	
 		}

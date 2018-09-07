@@ -11,25 +11,34 @@ public class PaddleActCommand implements Command{
 	
 	Paddle paddle;
 	Coordinate prevTopleft;
+	Coordinate currentTopLeft;
 	int prevDeltaX;
 
 	public PaddleActCommand(Paddle paddle) {
-		super();
 		this.paddle = paddle;
+		currentTopLeft = null;
 	}
 
 	@Override
 	public void execute() {
-		
+		System.out.println("Executed");
 		Rectangle rectangle = paddle.getRectangle();
+		if(currentTopLeft != null) {
+			rectangle.setTopLeftCoordinate(currentTopLeft);
+			
+		}else {
+		
 		int topX = rectangle.getTopLeftCoordinate().getX();
 		int topY = rectangle.getTopLeftCoordinate().getY();
 
 		prevTopleft = rectangle.getTopLeftCoordinate();
 		prevDeltaX= paddle.getDeltaX();
-		Coordinate newCoordinate = new Coordinate(topX+ prevDeltaX, topY);
-		rectangle.setTopLeftCoordinate(newCoordinate);
+	    currentTopLeft = new Coordinate(topX+ prevDeltaX, topY);
+		rectangle.setTopLeftCoordinate(currentTopLeft);
+		
 		checkBounds();
+		}
+		
 	}
 
 	@Override
@@ -47,9 +56,11 @@ public class PaddleActCommand implements Command{
 		int right = rectangle.getTopLeftCoordinate().getX() + rectangle.getWidth();
 		
 		if(left <= 0) {
-			rectangle.setTopLeftCoordinate(new Coordinate(0,rectangle.getTopLeftCoordinate().getY()));
+			currentTopLeft =new Coordinate(0,rectangle.getTopLeftCoordinate().getY());
+			rectangle.setTopLeftCoordinate(currentTopLeft);
 		}else if(right >= Constants.BOARD_PANEL_WIDTH) {
-			rectangle.setTopLeftCoordinate(new Coordinate(Constants.BOARD_PANEL_WIDTH - rectangle.getWidth(),rectangle.getTopLeftCoordinate().getY()));
+			currentTopLeft = new Coordinate(Constants.BOARD_PANEL_WIDTH - rectangle.getWidth(),rectangle.getTopLeftCoordinate().getY());
+			rectangle.setTopLeftCoordinate(currentTopLeft);
 		}
 			
 	}

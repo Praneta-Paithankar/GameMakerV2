@@ -48,7 +48,8 @@ public class Ball implements Sprite{
 	
 	public void reset(){
 		circle.setCenter(new Coordinate(Constants.BALL_POS_X,Constants.BALL_POS_Y));
-		this.setDelta(delta);
+		this.setDelta(new Coordinate(Constants.BALL_DELTA_X, Constants.BALL_DELTA_Y));
+		System.out.println("Reset ball");
 	}
 
 }
