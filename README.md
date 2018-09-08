@@ -1,5 +1,7 @@
 # Breakout Game
 
+*A version of classic Atari Game : Breakout
+
 ## Functions
 * Start
 * Pause
