@@ -21,7 +21,6 @@ public class PaddleActCommand implements Command{
 
 	@Override
 	public void execute() {
-		System.out.println("Executed");
 		Rectangle rectangle = paddle.getRectangle();
 		if(currentTopLeft != null) {
 			rectangle.setTopLeftCoordinate(currentTopLeft);

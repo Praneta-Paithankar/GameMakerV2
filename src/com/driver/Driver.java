@@ -42,7 +42,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
     private PaddleActCommand paddleActCommand;
     private TimerCommand timerCommand;
     private Clock clock;
-//    private int count;
+
     private Deque<Command> commandQueue;
     
 	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock) {
@@ -57,7 +57,6 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		brickActCommands = new BrickActCommand [noOfBricks];
 		commandQueue = new ArrayDeque<Command>();
 		timerCommand = new TimerCommand(clock);
-//		count = 0;
 		initCommands();
     }
 	private void initCommands()
@@ -79,10 +78,8 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	public void update() {
 		
 		initCommands();
-//		count ++;
-//		if(count == Constants.TIMER_COUNT) {
-//			timerCommand = new TimerCommand(clock);
-//		}
+		
+
 		ballActCommand.execute();
 		timerCommand.execute();
 		commandQueue.addLast(timerCommand);
@@ -107,8 +104,15 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			observable.stopTimer();
 			gui.removeKeyListner();
   			gui.changeUI();
-  			this.gameOver();
-  			
+  			SwingUtilities.invokeLater(
+  					new Runnable() {
+
+  						@Override
+  						public void run() {
+  						
+  							gameOver();	
+  						}
+			});
   			return;
 		}
 		//Check collision between ball and paddle
@@ -244,13 +248,10 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	
 	private void replayAction() {
 		// TODO Auto-generated method stub
-		if(!observable.isObserverListEmpty()) {
-			pause();
-		}
-		this.gameReset();
-		gui.changeUI();
-		Iterator<Command> itr = commandQueue.iterator();
 		
+		pause();
+		Iterator<Command> itr = commandQueue.iterator();
+		this.gameReset();
 		
 		new Thread(){
 			public void run(){
@@ -294,7 +295,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 					e.printStackTrace();
 				}
 				replayWindow.dispose();
-				unPause();
+				
 			}
 		}.start();
 		
@@ -302,11 +303,12 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	
 	
 	protected void pause() {
+		if(!observable.isObserverListEmpty()) {
 		observable.removeObserver(this);
+		}
 	}
 
 	protected void unPause() {
-		// TODO Auto-generated method stub
 		observable.registerObserver(this);
 	}
 	
@@ -316,25 +318,33 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String commandText= e.getActionCommand();
 		if(commandText.equals("undo")) {
-			observable.removeObserver(this);
+			pause();
 			undoAction();
-			observable.registerObserver(this);
+			unPause();
+			gui.changeFocus();
+			gui.changeUI();
+
 		}
 		
 		else if(commandText.equals("replay")) {
 			replayAction();
+			gui.changeFocus();
 		}
 		
 		else if(commandText.equals("start")) {
 			unPause();
+			gui.changeFocus();
+			gui.changeUI();
 		}
 		
 		else if(commandText.equals("pause")) {
 			pause();
+			gui.changeFocus();
+			gui.changeUI();
 		}
 		
-		gui.changeFocus();
-		gui.changeUI();
+//		gui.changeFocus();
+//		gui.changeUI();
 	}
 	
 	public void gameReset() {
@@ -362,9 +372,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			Breakout.startGame();			
 		}
 		else if(a == JOptionPane.CANCEL_OPTION) {
-			System.out.println("Replay");
 			replayAction();
-			
 		}
 		else
 			System.exit(0);

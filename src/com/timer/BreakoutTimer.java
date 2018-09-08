@@ -43,7 +43,6 @@ public class BreakoutTimer implements Observable{
 
 	@Override
 	public void notifyObservers() {
-		// TODO Auto-generated method stub
 		for(Observer observer: observers) {
 			observer.update();
 		}
