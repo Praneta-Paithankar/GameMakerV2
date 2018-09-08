@@ -361,7 +361,11 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	public void gameOver() {
 		pause();
 		Object[] options = {  "Reset", "Exit", "Replay"}; 
-		int a = JOptionPane.showOptionDialog(gui.getBoardPanel(),"Game has ended","Game Over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+		String outputMsg = new String();
+		String endTime = new String();
+		endTime = Integer.toString(clock.getMinutes()*60 + clock.getSeconds());
+		outputMsg = "Your Score is " + endTime;
+		int a = JOptionPane.showOptionDialog(gui.getBoardPanel(), outputMsg, "Game Over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
 				, null, options, null);
 		
 		if(a == JOptionPane.YES_OPTION) {
