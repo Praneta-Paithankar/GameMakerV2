@@ -12,12 +12,15 @@ public class Constants {
 
 	public final static int TIMER_COUNT = 25;
 	
-	public final static int BRICK_NO =1;
+	public final static int BRICK_NO = 4;
 	public final static int BRICK_WIDTH = 75;
 	public final static int BRICK_HEIGHT = 30;
 	public final static int BRICK_START_Y = 100;
 	public final static int BRICK_START_X = 0;
+	public final static int BRICK_DISTANCE_X = 75;
+	public final static int BRICK_DISTANCE_Y = 50;
 	public final static Color BRICK_COLOR =  new Color(78,104,130);
+	public final static Color BRICK_BORDER = new Color(62,83,104);	
 	
 	public final static int BALL_POS_X = 0;
 	public final static int  BALL_DELTA_X = 5;

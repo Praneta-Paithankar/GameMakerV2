@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import com.dimension.Rectangle;
+import com.infrastruture.Constants;
 import com.infrastruture.Sprite;
 
 public class Brick implements Sprite{
@@ -38,6 +39,7 @@ public class Brick implements Sprite{
 		if(visible) {
 		g.setColor(color);
 		g.fillRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
+		g.setColor(Constants.BRICK_BORDER);
 		g.drawRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
 		}
 	}

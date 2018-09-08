@@ -332,15 +332,11 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			gui.changeFocus();
 			gui.changeUI();
 
-		}
-		
-		else if(commandText.equals("replay")) {
+		}else if(commandText.equals("replay")) {
 			pause();
 			replayAction();
 			gui.changeFocus();
-		}
-		
-		else if(commandText.equals("start")) {
+		}else if(commandText.equals("start")) {
 			if(isGamePaused) {
 				unPause();
 				gui.changeFocus();
@@ -348,8 +344,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			}else {
 				Breakout.startGame(true);
 			}
-		}
-		else if(commandText.equals("pause")) {
+		}else if(commandText.equals("pause")) {
 			pause();
 			gui.changeFocus();
 			gui.changeUI();
@@ -380,8 +375,6 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		
 		if(a == JOptionPane.YES_OPTION) {
 			gui.dispose();
-			commandQueue = new ArrayDeque<Command>();
-			gameReset();
 			gui.revalidate();
 			Breakout.startGame(true);			
 		}

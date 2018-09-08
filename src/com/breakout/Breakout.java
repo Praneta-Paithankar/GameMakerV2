@@ -39,13 +39,14 @@ public class Breakout {
 		
 		ArrayList<Brick> bricks = new ArrayList<>();
 		int brickPosX = Constants.BRICK_START_X; 
-		
+		int brickPosY = Constants.BRICK_START_Y;
 		for(int i=0; i< Constants.BRICK_NO; i++) {
-			r = new Rectangle(Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT, brickPosX, Constants.BRICK_START_Y);
+			r = new Rectangle(Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT, brickPosX, brickPosY);
 			Brick brick = new Brick(r , true,Constants.BRICK_COLOR);
 			bricks.add(brick);
 			boardPanel.addElement(brick);
-			brickPosX += Constants.BRICK_WIDTH ;
+			brickPosX += 2* Constants.BRICK_WIDTH+ Constants.BRICK_DISTANCE_X ;
+			brickPosY +=  Constants.BRICK_DISTANCE_Y;
 		}
 		
 		
