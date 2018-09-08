@@ -52,7 +52,7 @@ public class Breakout {
 		Driver driver = new Driver(ball, paddle, bricks, gui,observable, clock);
 		
 		gui.addDriver(driver);
-		observable.registerObserver(driver);
+//		observable.registerObserver(driver);
 		observable.startTimer();
 		gui.setVisible(true);
 			
