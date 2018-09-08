@@ -303,14 +303,14 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	}
 	
 	
-	protected void pause() {
+	public void pause() {
 		isGamePaused = true;
 		if(!observable.isObserverListEmpty()) {
 		observable.removeObserver(this);
 		}
 	}
 
-	protected void unPause() {
+	public void unPause() {
 		isGamePaused = false;
 		observable.registerObserver(this);
 	}
@@ -339,11 +339,19 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		}
 		
 		else if(commandText.equals("start")) {
-			unPause();
-			gui.changeFocus();
-			gui.changeUI();
+			System.out.print(isGamePaused);
+			if(isGamePaused) {
+				unPause();
+				gui.changeFocus();
+				gui.changeUI();
+			}else {
+				gui.dispose();
+				commandQueue = new ArrayDeque<Command>();
+				gameReset();
+				gui.revalidate();
+				Breakout.startGame();
+			}
 		}
-		
 		else if(commandText.equals("pause")) {
 			pause();
 			gui.changeFocus();
@@ -385,7 +393,8 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		}
 		else
 			System.exit(0);
-		
+		isGamePaused = false;
+		System.out.print("In Game over" + isGamePaused);
 	}
 
 }

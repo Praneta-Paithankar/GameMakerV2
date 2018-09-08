@@ -55,7 +55,7 @@ public class Breakout {
 //		observable.registerObserver(driver);
 		observable.startTimer();
 		gui.setVisible(true);
-			
+		driver.pause();
 	}
 
 }
