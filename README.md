@@ -1,6 +1,6 @@
 # Breakout Game
 
-*A version of classic Atari Game : Breakout
+* A version of classic Atari Game : Breakout
 
 ## Functions
 * Start
