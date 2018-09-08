@@ -5,7 +5,6 @@ public class Circle {
 	private Coordinate center;
 
 	public Circle(int radius, Coordinate center) {
-		super();
 		this.radius = radius;
 		this.center = center;
 	}

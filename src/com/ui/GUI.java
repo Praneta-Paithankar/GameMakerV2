@@ -1,16 +1,13 @@
 package com.ui;
 
-import java.awt.Button;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,56 +16,42 @@ import javax.swing.SwingConstants;
 import com.driver.Driver;
 import com.infrastruture.Constants;
 
+
+@SuppressWarnings("serial")
 public class GUI extends JFrame{
 	
 	private GamePanel boardPanel;
-	private JLabel label;
+	
 	private JLabel exitLabel;
 	private Driver driver;
 	private JPanel mainPanel;
-	private JPanel timerPanel;
-	private JButton button;
+	private StaticPanel timerPanel;
+	
 	public GUI() {
-		super();
-	}
-	public GUI(GamePanel boardPanel)
-	{
-		super("Breakout Game");
-		this.boardPanel = boardPanel;
+		boardPanel = new GamePanel();
+		timerPanel = new StaticPanel();
 		initializeUI();
 	}
 
-	public void updateTime(long milliseconds) {
-		int seconds = (int) (milliseconds / 1000) % 60 ;
-		int minutes = (int) ((milliseconds / (1000*60)) % 60);
-		int hours   = (int) ((milliseconds / (1000*60*60)) % 24);
-		 
-		String time = String.format("%d::%d::%d", hours,minutes,seconds);
-		label.setText(time);
+	public GUI(GamePanel boardPanel,StaticPanel timerPanel)
+	{
+		super("Breakout Game");
+		this.boardPanel = boardPanel;
+		this.timerPanel = timerPanel;
+		initializeUI();
 	}
+	
+	public StaticPanel getStaticPanel() {
+		return (timerPanel);
+	}
+
 	public void changeUI()
 	{
 		boardPanel.repaint();
+		timerPanel.repaint();
 	}
-	private void createTimerPanel() {
-		
-		timerPanel = new JPanel();
-        timerPanel.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
-        timerPanel.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
-        label = new JLabel("0::0::0",SwingConstants.LEFT);
-		label.setSize(100,100);
-		label.setForeground(Color.WHITE);
-		Font font = new Font("Helvetica", Font.BOLD,30);
-		label.setFont(font);
-		timerPanel.add(label);
-		timerPanel.setBackground(Color.black);
-	    button = new JButton("press");
-		
-		button.setActionCommand("undo");
-		button.setVisible(true);
-		timerPanel.add(button);
-		mainPanel.add(timerPanel);
-	}
+
+
 	private void createBoardPanel() {
 
 		boardPanel.setLayout(new GridBagLayout());
@@ -94,7 +77,7 @@ public class GUI extends JFrame{
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
        
-        createTimerPanel();
+        mainPanel.add(timerPanel);
         createBoardPanel();
         
 		add(mainPanel);
@@ -113,7 +96,8 @@ public class GUI extends JFrame{
 	public void addDriver(Driver driver){
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
-		button.addActionListener(driver);
+        timerPanel.createButtons(driver);
+	
 	}
 	public void changeFocus()
 	{
@@ -123,5 +107,19 @@ public class GUI extends JFrame{
 		exitLabel.setText("Game Over");
 		boardPanel.repaint();
 	}
-		
+	public GamePanel getBoardPanel() {
+		return boardPanel;
+	}
+
+	public void setBoardPanel(GamePanel boardPanel) {
+		this.boardPanel = boardPanel;
+	}
+
+	public StaticPanel getTimerPanel() {
+		return timerPanel;
+	}
+
+	public void setTimerPanel(StaticPanel timerPanel) {
+		this.timerPanel = timerPanel;
+	}	
 }

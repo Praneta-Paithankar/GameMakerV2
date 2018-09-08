@@ -11,10 +11,14 @@ public class BallActCommand implements Command {
 	Ball ball;
 	Coordinate prevCenter;
 	Coordinate prevDelta;
+	Coordinate currentCenter;
+	Coordinate currentDelta;
 	
 	public BallActCommand(Ball ball) {
 		super();
 		this.ball = ball;
+		this.currentCenter = null;
+		this.currentDelta = null;
 	}
 
 	@Override
@@ -22,14 +26,22 @@ public class BallActCommand implements Command {
 		// Move ball 
 		Circle circle = ball.getCircle();
 		
+		if(currentCenter != null) {
+			 circle.setCenter(currentCenter);
+			 if(currentDelta != null) ball.setDelta(currentDelta);
+		}else{
 		prevCenter = circle.getCenter();
-		prevDelta = ball.getDelta();
+		prevDelta = new Coordinate(ball.getDelta().getX(), ball.getDelta().getY());
 		
    	    int newCenterX = circle.getCenter().getX() + ball.getDelta().getX() ;
         int newCenterY = circle.getCenter().getY() + ball.getDelta().getY() ;
-  	    circle.setCenter(new Coordinate(newCenterX, newCenterY));
+        currentCenter = new Coordinate(newCenterX, newCenterY);
+        
+  	    circle.setCenter(currentCenter);
 		checkBounds();
+		}
 	}
+	
     public void execute(int newCenterX,int newCenterY, int deltaX, int deltaY)
     {
     	Circle circle = ball.getCircle();
@@ -83,13 +95,14 @@ public class BallActCommand implements Command {
  		}
  		if(isHit)
  		{
- 			 circle.setCenter(new Coordinate(newCenterX, newCenterY));
+ 			currentCenter = new Coordinate(newCenterX, newCenterY);
+ 			currentDelta = delta;
+ 			circle.setCenter(currentCenter);
  		}
 	}
 
 	@Override
-	public void undo() {
-		 
+	public void undo() { 
 		Circle circle  = ball.getCircle();
 		circle.setCenter(prevCenter);
 		ball.setDelta(prevDelta);

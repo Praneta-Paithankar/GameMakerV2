@@ -1,10 +1,10 @@
 package com.breakout;
 
-import java.awt.Color;
 import java.util.ArrayList;
 
 import com.component.Ball;
 import com.component.Brick;
+import com.component.Clock;
 import com.component.Paddle;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
@@ -14,12 +14,13 @@ import com.infrastruture.Constants;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 import com.ui.GamePanel;
+import com.ui.StaticPanel;
 
 public class Breakout {
 	
-	public static void main(String[] args){
+	public static void startGame(){
 		
-		BreakoutTimer timer  = new BreakoutTimer(Constants.TICK_PER_SECOND);
+		BreakoutTimer observable  = new BreakoutTimer();
 		GamePanel boardPanel =new GamePanel();
 		
 		Circle c = new Circle(Constants.BALL_RADIUS, Constants.BALL_POS_X,Constants.BALL_POS_Y);
@@ -30,9 +31,12 @@ public class Breakout {
 		Paddle paddle = new Paddle(r,Constants.PADDLE_DELTA_X,Constants.PADDLE_COLOR);
 		boardPanel.addElement(paddle);
 		
-
+		Clock clock = new Clock();
+		StaticPanel timerPanel = new StaticPanel();
+		timerPanel.addElement(clock);
 		
-		GUI gui = new GUI(boardPanel);
+		GUI gui = new GUI(boardPanel,timerPanel);
+		
 		ArrayList<Brick> bricks = new ArrayList<>();
 		int brickPosX = Constants.BRICK_START_X; 
 		
@@ -45,12 +49,11 @@ public class Breakout {
 		}
 		
 		
-		Driver driver = new Driver(ball, paddle, bricks, gui,timer);
+		Driver driver = new Driver(ball, paddle, bricks, gui,observable, clock);
 		
 		gui.addDriver(driver);
-		timer.addObserver(driver);
-    	timer.startTimer();
-       	gui.pack();
+		observable.registerObserver(driver);
+		observable.startTimer();
 		gui.setVisible(true);
 			
 	}

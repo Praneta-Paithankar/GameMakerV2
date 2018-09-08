@@ -4,64 +4,87 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Iterator;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import com.breakout.Breakout;
 import com.commands.*;
 import com.component.Ball;
 import com.component.Brick;
+import com.component.Clock;
 import com.component.Paddle;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
-import com.infrastruture.ClockObserver;
+import com.infrastruture.Command;
 import com.infrastruture.Constants;
+import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
-public class Driver implements ClockObserver, KeyListener,ActionListener{
+public class Driver implements Observer, KeyListener,ActionListener{
 	
 	private Ball ball;
 	private Paddle paddle;
 	private ArrayList<Brick> bricks;
     private GUI gui;
-    private BreakoutTimer timer;
-    private static int counter ;
-    private static int noOfBricks;
+    private BreakoutTimer observable;
+    private int noOfBricks;
     private BrickActCommand[] brickActCommands;
     private BallActCommand ballActCommand;
     private PaddleActCommand paddleActCommand;
+    private TimerCommand timerCommand;
+    private Clock clock;
+
+    private Deque<Command> commandQueue;
     
-    
-	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer timer) {
-		super();
+	public Driver(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock) {
+		
 		this.ball = ball;
 		this.paddle = paddle;
 		this.bricks = bricks;
 		this.gui = gui;
-		this.timer = timer;
+		this.observable = observable;
+		this.clock = clock;
 		this.noOfBricks = bricks.size();
-		counter = 0;
-		
+		brickActCommands = new BrickActCommand [noOfBricks];
+		commandQueue = new ArrayDeque<Command>();
+		timerCommand = new TimerCommand(clock);
 		initCommands();
     }
 	private void initCommands()
 	{
-		brickActCommands = new BrickActCommand [noOfBricks];
+		
 		int i=0;
 		for(Brick b : bricks)
 		{
 			brickActCommands[i] = new BrickActCommand(b);
 			i++;
 		}
+		timerCommand = new TimerCommand(clock);
 		ballActCommand = new BallActCommand(ball);
 		paddleActCommand = new PaddleActCommand(paddle);
+		
 	}
 
 	@Override
-	public void update(long milliseconds) {
-		//ball.enact();
+	public void update() {
+		
+		initCommands();
+		
+
 		ballActCommand.execute();
-		counter +=1;
+		timerCommand.execute();
+		commandQueue.addLast(timerCommand);
+		commandQueue.addLast(ballActCommand);
+		
 		int i= 0;
 		
 		for(Brick b : bricks) {
@@ -69,29 +92,34 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 			{
 				if(checkCollision(b.getRectangle())){
 					brickActCommands[i].execute();
+					commandQueue.addLast(brickActCommands[i]);
 					noOfBricks--;
 				}
 			}
 			i++;
 		}
-		if(noOfBricks ==0)
+		if(noOfBricks == 0)
 		{   
-			timer.stopTimer();
-			gui.updateTime(milliseconds);
+			// Stopping the observable
+			observable.stopTimer();
 			gui.removeKeyListner();
-  			gui.changeUI();;
-  			gui.addGameOverPane();
+  			gui.changeUI();
+  			SwingUtilities.invokeLater(
+  					new Runnable() {
+
+  						@Override
+  						public void run() {
+  						
+  							gameOver();	
+  						}
+			});
   			return;
 		}
 		//Check collision between ball and paddle
 		checkCollision(paddle.getRectangle());
 		
-		if( counter == Constants.TICK_PER_SECOND) {
-			counter = 0;
-			gui.updateTime(milliseconds);
-		}
-		gui.changeUI();
 		
+		gui.changeUI();
 		
 	}
 	@Override
@@ -105,17 +133,15 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 			if(paddle.getDeltaX()>0)
 				paddle.setDeltaX(-paddle.getDeltaX());
-			//paddle.enact();
 			paddleActCommand.execute();
-			
+			commandQueue.addLast(paddleActCommand);
 			checkCollision(paddle.getRectangle());
 		}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			if(paddle.getDeltaX()<0)
 				paddle.setDeltaX(-paddle.getDeltaX());
-			//paddle.enact();
 			paddleActCommand.execute();
-			checkCollision(paddle.getRectangle());
-			
+			commandQueue.addLast(paddleActCommand);
+			checkCollision(paddle.getRectangle());	
 		}
 	}
 
@@ -124,6 +150,7 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
+	
 	private boolean checkCollision( Rectangle rectangle)
 	{
 		Circle circle = ball.getCircle();
@@ -192,22 +219,166 @@ public class Driver implements ClockObserver, KeyListener,ActionListener{
 				newCenterX = (int)(topRectangleX+ rectangle.getWidth() + (circle.getRadius()/1.41));
 				newCenterY =  (int)(topRectangleY+  rectangle.getHeight() + (circle.getRadius()/1.41));
 			}
+			ballActCommand =  new BallActCommand(ball);
 			ballActCommand.execute(newCenterX, newCenterY, deltaX, deltaY);
 			return true;
 		}
 		return false;
 	}
 	
+	private void undoAction() {
+
+		int count = 0;
+		while(count != Constants.TIMER_COUNT) {
+			Command val=commandQueue.pollLast();
+			if(val == null)
+				break;
+			if(val instanceof TimerCommand)
+			{
+				count++;
+			}
+			if(val instanceof BrickActCommand)
+			{
+				noOfBricks++;
+			}
+			val.undo();
+		}
+	  
+	}
+	
+	private void replayAction() {
+		// TODO Auto-generated method stub
+		
+		pause();
+		Iterator<Command> itr = commandQueue.iterator();
+		this.gameReset();
+		
+		new Thread(){
+			public void run(){
+				GUI replayWindow = new GUI();
+				replayWindow.setTitle("Replay");
+				replayWindow.getBoardPanel().addElement(ball);
+				replayWindow.getBoardPanel().addElement(paddle);
+				replayWindow.getTimerPanel().addElement(clock);
+				for (Brick b : bricks) {	
+					replayWindow.getBoardPanel().addElement(b);
+				}
+				replayWindow.setVisible(true);
+				while(itr.hasNext()){
+					try {
+						SwingUtilities.invokeAndWait(new Runnable(){
+							Command val = (Command) itr.next();
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								val.execute();
+								replayWindow.changeUI();
+								try {
+									currentThread();
+									Thread.sleep(10);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						});
+					} catch (InvocationTargetException | InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				replayWindow.dispose();
+				
+			}
+		}.start();
+		
+	}
+	
+	
+	protected void pause() {
+		if(!observable.isObserverListEmpty()) {
+		observable.removeObserver(this);
+		}
+	}
+
+	protected void unPause() {
+		observable.registerObserver(this);
+	}
+	
+	//Switch between actions when a button is pressed
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-	
 		String commandText= e.getActionCommand();
 		if(commandText.equals("undo")) {
-			ballActCommand.undo();
-			paddleActCommand.undo();
+			pause();
+			undoAction();
+			unPause();
+			gui.changeFocus();
+			gui.changeUI();
+
+		}
+		
+		else if(commandText.equals("replay")) {
+			replayAction();
+			gui.changeFocus();
+		}
+		
+		else if(commandText.equals("start")) {
+			unPause();
 			gui.changeFocus();
 			gui.changeUI();
 		}
+		
+		else if(commandText.equals("pause")) {
+			pause();
+			gui.changeFocus();
+			gui.changeUI();
+		}
+		
 	}
+	
+	public void gameReset() {
+		
+		ball.reset();
+		paddle.reset();
+		clock.reset();
+		noOfBricks = Constants.BRICK_NO;
+		for (Brick b : bricks) {
+			b.reset();	
+		}
+	}
+	
+	public void gameOver() {
+		pause();
+		Object[] options = {  "Reset", "Exit", "Replay"}; 
+		String outputMsg = new String();
+		String endTime = new String();
+		endTime = Integer.toString(clock.getMinutes()*60 + clock.getSeconds());
+		outputMsg = "Your Score is " + endTime;
+		int a = JOptionPane.showOptionDialog(gui.getBoardPanel(), outputMsg, "Game Over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+				, null, options, null);
+		
+		if(a == JOptionPane.YES_OPTION) {
+			gui.dispose();
+			commandQueue = new ArrayDeque<Command>();
+			gameReset();
+			gui.revalidate();
+			Breakout.startGame();			
+		}
+		else if(a == JOptionPane.CANCEL_OPTION) {
+			replayAction();
+		}
+		else
+			System.exit(0);
+		
+	}
+
 }
