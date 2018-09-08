@@ -27,7 +27,7 @@ public class GamePanel extends JPanel {
 	{
 	    elements = new ArrayList<Sprite>();
         try {
-            image = ImageIO.read(new File("./src/com/image/coffee.jpg"));
+            image = ImageIO.read(new File("./src/com/image/nature.jpg"));
             image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
         } catch (IOException e) {
             // TODO Auto-generated catch block

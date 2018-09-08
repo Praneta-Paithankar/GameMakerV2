@@ -25,6 +25,7 @@ public class StaticPanel extends JPanel{
 	public StaticPanel() {
 		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
         this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
+       
         elements = new ArrayList<>();
 	}
 	public ArrayList<Sprite> getElements(){
