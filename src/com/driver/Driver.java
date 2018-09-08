@@ -42,6 +42,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
     private PaddleActCommand paddleActCommand;
     private TimerCommand timerCommand;
     private Clock clock;
+    private boolean isGamePaused = false;
 
     private Deque<Command> commandQueue;
     
@@ -243,7 +244,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			}
 			val.undo();
 		}
-	  
+		
 	}
 	
 	private void replayAction() {
@@ -303,12 +304,14 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	
 	
 	protected void pause() {
+		isGamePaused = true;
 		if(!observable.isObserverListEmpty()) {
 		observable.removeObserver(this);
 		}
 	}
 
 	protected void unPause() {
+		isGamePaused = false;
 		observable.registerObserver(this);
 	}
 	
@@ -318,9 +321,13 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String commandText= e.getActionCommand();
 		if(commandText.equals("undo")) {
-			pause();
-			undoAction();
-			unPause();
+			if(!isGamePaused) {
+				pause();
+				undoAction();
+				unPause();
+			} else {
+				undoAction();
+			}
 			gui.changeFocus();
 			gui.changeUI();
 
