@@ -1,8 +1,13 @@
-# Assignement 2 : Breakout Game
+# Breakout Game
 
 ## Functions
-Start, Pause, Undo and Replay game.
+* Start
+* Pause
+* Undo
+* Replay
+* Reset
 
-## Pattern 
-Command Pattern
+## Design Pattern 
+* Observer Pattern
+* Command Pattern
 
