@@ -11,10 +11,8 @@ public class App {
 			@Override
 			public void run() {
 			
-				Breakout.startGame();	
+				Breakout.startGame(false);	
 			}
 		});
-		// todo: create a new screen instance
-		
 	}
 }

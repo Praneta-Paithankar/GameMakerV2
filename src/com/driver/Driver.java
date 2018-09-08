@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import com.breakout.Breakout;
-import com.commands.*;
+import com.commands.BallActCommand;
+import com.commands.BrickActCommand;
+import com.commands.PaddleActCommand;
+import com.commands.TimerCommand;
 import com.component.Ball;
 import com.component.Brick;
 import com.component.Clock;
@@ -42,6 +44,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
     private PaddleActCommand paddleActCommand;
     private TimerCommand timerCommand;
     private Clock clock;
+    private boolean isGamePaused = false;
 
     private Deque<Command> commandQueue;
     
@@ -243,13 +246,12 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			}
 			val.undo();
 		}
-	  
+		
 	}
 	
 	private void replayAction() {
 		// TODO Auto-generated method stub
 		
-		pause();
 		Iterator<Command> itr = commandQueue.iterator();
 		this.gameReset();
 		
@@ -302,13 +304,15 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	}
 	
 	
-	protected void pause() {
+	public void pause() {
+		isGamePaused = true;
 		if(!observable.isObserverListEmpty()) {
 		observable.removeObserver(this);
 		}
 	}
 
-	protected void unPause() {
+	public void unPause() {
+		isGamePaused = false;
 		observable.registerObserver(this);
 	}
 	
@@ -318,26 +322,29 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String commandText= e.getActionCommand();
 		if(commandText.equals("undo")) {
-			pause();
-			undoAction();
-			unPause();
+			if(!isGamePaused) {
+				pause();
+				undoAction();
+				unPause();
+			} else {
+				undoAction();
+			}
 			gui.changeFocus();
 			gui.changeUI();
 
-		}
-		
-		else if(commandText.equals("replay")) {
+		}else if(commandText.equals("replay")) {
+			pause();
 			replayAction();
 			gui.changeFocus();
-		}
-		
-		else if(commandText.equals("start")) {
-			unPause();
-			gui.changeFocus();
-			gui.changeUI();
-		}
-		
-		else if(commandText.equals("pause")) {
+		}else if(commandText.equals("start")) {
+			if(isGamePaused) {
+				unPause();
+				gui.changeFocus();
+				gui.changeUI();
+			}else {
+				Breakout.startGame(true);
+			}
+		}else if(commandText.equals("pause")) {
 			pause();
 			gui.changeFocus();
 			gui.changeUI();
@@ -368,17 +375,15 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		
 		if(a == JOptionPane.YES_OPTION) {
 			gui.dispose();
-			commandQueue = new ArrayDeque<Command>();
-			gameReset();
 			gui.revalidate();
-			Breakout.startGame();			
+			Breakout.startGame(true);			
 		}
 		else if(a == JOptionPane.CANCEL_OPTION) {
 			replayAction();
 		}
 		else
 			System.exit(0);
-		
+		isGamePaused = false;
 	}
 
 }
