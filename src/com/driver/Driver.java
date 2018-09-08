@@ -343,8 +343,6 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			gui.changeUI();
 		}
 		
-//		gui.changeFocus();
-//		gui.changeUI();
 	}
 	
 	public void gameReset() {

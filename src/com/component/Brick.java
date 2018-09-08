@@ -38,7 +38,6 @@ public class Brick implements Sprite{
 		if(visible) {
 		g.setColor(color);
 		g.fillRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
-		g.setColor(Color.BLACK);
 		g.drawRect(rectangle.getTopLeftCoordinate().getX(), rectangle.getTopLeftCoordinate().getY(), rectangle.getWidth(), rectangle.getHeight());
 		}
 	}
