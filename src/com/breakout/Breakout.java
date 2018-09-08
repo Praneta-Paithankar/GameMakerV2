@@ -18,7 +18,7 @@ import com.ui.StaticPanel;
 
 public class Breakout {
 	
-	public static void startGame(){
+	public static void startGame(boolean isRestart){
 		
 		BreakoutTimer observable  = new BreakoutTimer();
 		GamePanel boardPanel =new GamePanel();
@@ -52,10 +52,12 @@ public class Breakout {
 		Driver driver = new Driver(ball, paddle, bricks, gui,observable, clock);
 		
 		gui.addDriver(driver);
-//		observable.registerObserver(driver);
 		observable.startTimer();
 		gui.setVisible(true);
-		driver.pause();
+		if(isRestart)
+			observable.registerObserver(driver);
+		else
+			driver.pause();
 	}
 
 }

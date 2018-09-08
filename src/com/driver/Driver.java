@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import com.breakout.Breakout;
-import com.commands.*;
+import com.commands.BallActCommand;
+import com.commands.BrickActCommand;
+import com.commands.PaddleActCommand;
+import com.commands.TimerCommand;
 import com.component.Ball;
 import com.component.Brick;
 import com.component.Clock;
@@ -250,7 +252,6 @@ public class Driver implements Observer, KeyListener,ActionListener{
 	private void replayAction() {
 		// TODO Auto-generated method stub
 		
-		pause();
 		Iterator<Command> itr = commandQueue.iterator();
 		this.gameReset();
 		
@@ -334,22 +335,18 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		}
 		
 		else if(commandText.equals("replay")) {
+			pause();
 			replayAction();
 			gui.changeFocus();
 		}
 		
 		else if(commandText.equals("start")) {
-			System.out.print(isGamePaused);
 			if(isGamePaused) {
 				unPause();
 				gui.changeFocus();
 				gui.changeUI();
 			}else {
-				gui.dispose();
-				commandQueue = new ArrayDeque<Command>();
-				gameReset();
-				gui.revalidate();
-				Breakout.startGame();
+				Breakout.startGame(true);
 			}
 		}
 		else if(commandText.equals("pause")) {
@@ -386,7 +383,7 @@ public class Driver implements Observer, KeyListener,ActionListener{
 			commandQueue = new ArrayDeque<Command>();
 			gameReset();
 			gui.revalidate();
-			Breakout.startGame();			
+			Breakout.startGame(true);			
 		}
 		else if(a == JOptionPane.CANCEL_OPTION) {
 			replayAction();
@@ -394,7 +391,6 @@ public class Driver implements Observer, KeyListener,ActionListener{
 		else
 			System.exit(0);
 		isGamePaused = false;
-		System.out.print("In Game over" + isGamePaused);
 	}
 
 }
