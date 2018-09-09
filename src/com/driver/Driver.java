@@ -342,6 +342,8 @@ public class Driver implements Observer, KeyListener,ActionListener{
 				gui.changeFocus();
 				gui.changeUI();
 			}else {
+				gui.dispose();
+				gui.revalidate();
 				Breakout.startGame(true);
 			}
 		}else if(commandText.equals("pause")) {
