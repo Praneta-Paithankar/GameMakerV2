@@ -3,11 +3,13 @@ package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import org.json.JSONObject;
+
 import com.dimension.Rectangle;
 import com.infrastruture.Constants;
-import com.infrastruture.Sprite;
+import com.infrastruture.Element;
 
-public class Brick implements Sprite{
+public class Brick implements Element{
 
 	private Rectangle rectangle;
 	private boolean visible;
@@ -48,6 +50,30 @@ public class Brick implements Sprite{
 	public void reset() {
 		// TODO Auto-generated method stub
 		this.setVisible(true);
+		
+	}
+
+	@Override
+	public JSONObject save() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addElement(Element e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeElement(Element e) {
+		// TODO Auto-generated method stub
 		
 	}
 }

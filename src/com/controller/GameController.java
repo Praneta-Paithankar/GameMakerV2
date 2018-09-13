@@ -85,7 +85,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	@Override
 	public void update() {
 		
-		initCommands();
+		//initCommands();
 		timerCommand.execute();
 		ballActCommand.execute();
 		commandQueue.addLast(timerCommand);

@@ -15,17 +15,17 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import com.infrastruture.Constants;
-import com.infrastruture.Sprite;
+import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel {
 	
 	private BufferedImage image;
-	private ArrayList<Sprite> elements;
+	private ArrayList<Element> elements;
 	
 	public GamePanel()
 	{
-	    elements = new ArrayList<Sprite>();
+	    elements = new ArrayList<Element>();
         try {
             image = ImageIO.read(new File("./src/com/image/nature.jpg"));
             image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
@@ -35,7 +35,7 @@ public class GamePanel extends JPanel {
         }
 	}
 	
-	public ArrayList<Sprite> getElements(){
+	public ArrayList<Element> getElements(){
 		return elements;
 	}
 	
@@ -48,11 +48,11 @@ public class GamePanel extends JPanel {
         return resized;
     }
 	
-	public void addElement(Sprite element){
+	public void addElement(Element element){
 		elements.add(element);
 		
 	}
-	public void removeElement(Sprite element)
+	public void removeElement(Element element)
 	{
 		elements.remove(element);
 	}
@@ -64,7 +64,7 @@ public class GamePanel extends JPanel {
             g.drawImage(image, 0, 0, this);
         }
 		
-		for(Sprite element : elements)
+		for(Element element : elements)
 		{
 			element.draw(g);
 		}
