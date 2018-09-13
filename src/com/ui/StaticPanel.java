@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import com.driver.Driver;
+import com.controller.GameController;
 import com.infrastruture.Constants;
 import com.infrastruture.Sprite;
 
@@ -19,7 +19,7 @@ import com.infrastruture.Sprite;
 public class StaticPanel extends JPanel{
 	//private JLabel timerlabel;
 	private JLabel score;
-	private Driver driver;
+	private GameController driver;
 	private ArrayList<Sprite> elements;
 	
 	public StaticPanel() {
@@ -41,7 +41,7 @@ public class StaticPanel extends JPanel{
 		elements.remove(element);
 	}
 	
-	public void createButtons(Driver driver)
+	public void createButtons(GameController driver)
 	{
 		this.driver = driver;
 	    createReplay();

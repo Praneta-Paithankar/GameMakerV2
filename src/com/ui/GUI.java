@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import com.driver.Driver;
+import com.controller.GameController;
 import com.infrastruture.Constants;
 
 
@@ -23,7 +23,7 @@ public class GUI extends JFrame{
 	private GamePanel boardPanel;
 	
 	private JLabel exitLabel;
-	private Driver driver;
+	private GameController driver;
 	private JPanel mainPanel;
 	private StaticPanel timerPanel;
 	
@@ -47,7 +47,8 @@ public class GUI extends JFrame{
 
 	public void changeUI()
 	{
-		boardPanel.repaint();
+		//boardPanel.repaint();
+		boardPanel.paintImmediately(0, 0, Constants.BOARD_PANEL_WIDTH, Constants.BOARD_PANEL_HEIGHT);
 		timerPanel.repaint();
 	}
 
@@ -93,7 +94,7 @@ public class GUI extends JFrame{
 	public void removeKeyListner() {
 		mainPanel.removeKeyListener(driver);
 	}
-	public void addDriver(Driver driver){
+	public void addDriver(GameController driver){
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
         timerPanel.createButtons(driver);
