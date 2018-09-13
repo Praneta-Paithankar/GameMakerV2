@@ -2,14 +2,16 @@ package com.breakout;
 
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
+
 import com.component.Ball;
 import com.component.Brick;
 import com.component.Clock;
 import com.component.Paddle;
+import com.controller.GameController;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
-import com.driver.Driver;
 import com.infrastruture.Constants;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
@@ -50,7 +52,7 @@ public class Breakout {
 		}
 		
 		
-		Driver driver = new Driver(ball, paddle, bricks, gui,observable, clock);
+		GameController driver = new GameController(ball, paddle, bricks, gui,observable, clock);
 		
 		gui.addDriver(driver);
 		observable.startTimer();
@@ -60,5 +62,14 @@ public class Breakout {
 		else
 			driver.pause();
 	}
+	public static void main(String args[]) {
+		SwingUtilities.invokeLater(new Runnable() {
 
+			@Override
+			public void run() {
+			
+				startGame(false);	
+			}
+		});
+	}
 }

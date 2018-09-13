@@ -22,7 +22,7 @@ public class Constants {
 	public final static Color BRICK_COLOR =  new Color(78,104,130);
 	public final static Color BRICK_BORDER = new Color(62,83,104);	
 	
-	public final static int BALL_POS_X = 0;
+	public final static int BALL_POS_X = 15;
 	public final static int  BALL_DELTA_X = 5;
 	public final static int BALL_DELTA_Y =5;
 	public final static int BALL_POS_Y = 200;

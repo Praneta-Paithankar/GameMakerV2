@@ -11,47 +11,51 @@ import com.infrastruture.Sprite;
 
 public class Clock implements Sprite{
 
+	private long milisecondsElapsed;
 
-	private int minutes;
-	private int seconds;
-
-
-	public int getMinutes() {
-		return minutes;
+	public Clock() {
+		milisecondsElapsed = 0;
 	}
 
-	public int getSeconds() {
-		return seconds;
+	public String getTime() {
+		if (getSeconds() >= 10) {
+			return Integer.toString(getMinutes()) + ":" + Integer.toString(getSeconds());
+		} else {
+			return Integer.toString(getMinutes()) + ":0" + Integer.toString(getSeconds());
+		}
 	}
-
-	public void setMinutes(int minutes) {
-		this.minutes = minutes;
-	}
-
-	public void setSeconds(int seconds) {
-		this.seconds = seconds;
-	}
-
+	
 	@Override
 	public void draw(Graphics g) {
-		//		
+				
 		// TODO center box around the time 
 //		g.drawRect(getX(), getY(), getWidth(), getHeight());
 		g.drawRect(0, 150, 250, 100);
 //		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 40));
-		g.drawString((minutes+" : "+ seconds), 10+ 5, 200);
+		String time = getTime();
+		g.drawString(time, 10+ 5, 200);
 	}
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
-		this.minutes = 0;
-		this.seconds = 0;
-		
+		milisecondsElapsed = 0;	
+	}
+	
+	public long getMilisecondsElapsed() {
+		return milisecondsElapsed;
 	}
 
+	public void setMilisecondsElapsed(long milisecondsElapsed) {
+		this.milisecondsElapsed = milisecondsElapsed;
+	}
 
+	private int getMinutes() {
+		return (int) (milisecondsElapsed / 60000);
+	}
 
+	private int getSeconds() {
+		return (int) ((milisecondsElapsed / 1000) % 60);
+	}
 
 }
