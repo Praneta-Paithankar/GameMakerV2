@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.json.JSONObject;
@@ -13,18 +12,17 @@ import org.json.JSONObject;
 import com.controller.GameController;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
-import com.infrastruture.Savable;
+
 
 @SuppressWarnings("serial")
-public class StaticPanel extends JPanel implements Savable{
+public class StaticPanel extends JPanel implements Element{
 
 	private GameController driver;
 	private ArrayList<Element> elements;
-	private ArrayList<Savable> components;
+	
 	public StaticPanel() {
 		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
         this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
-        components =new ArrayList<>();
         elements = new ArrayList<>();
 	}
 	public ArrayList<Element> getElements(){
@@ -85,9 +83,9 @@ public class StaticPanel extends JPanel implements Savable{
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		for(Element element : elements)
+		for(Element component : elements)
 		{
-			element.draw(g);
+			component.draw(g);
 		}
 	}
 	
@@ -101,13 +99,23 @@ public class StaticPanel extends JPanel implements Savable{
 		// TODO Auto-generated method stub
 		
 	}
+	public void addComponent(Element e) {
+		elements.add(e);
+	}
+
 	@Override
-	public void addComponent(Savable s) {
-		components.add(s);
-		
+	public void removeComponent(Element e) {
+		elements.remove(e);
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		repaint();
 	}
 	@Override
-	public void removeComponent(Savable s) {
-		components.remove(s);
+	public void reset() {
+		for(Element element : elements) {
+			element.reset();
+		}
 	}
 }

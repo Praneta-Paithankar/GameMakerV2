@@ -9,9 +9,9 @@ import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
-import com.infrastruture.Savable;
 
-public class Ball implements Element,Savable{
+
+public class Ball implements Element{
 	
     private Circle circle;
     private Coordinate delta;
@@ -66,17 +66,19 @@ public class Ball implements Element,Savable{
 		
 	}
 
-
 	@Override
-	public void addComponent(Savable e) {
+	public void addComponent(Element e) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void removeComponent(Savable e) {
+	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+	
 
 }

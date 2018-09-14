@@ -1,44 +1,37 @@
 package com.ui;
 
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import org.json.JSONObject;
 
 import com.controller.GameController;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
-import com.infrastruture.Savable;
 
 
 @SuppressWarnings("serial")
-public class GUI extends JFrame implements Savable{
+public class GUI extends JFrame implements Element{
 	
 	private GamePanel boardPanel;
-	private ArrayList<Savable> components;
+	private ArrayList<Element> elements;
 	private GameController driver;
 	private JPanel mainPanel;
 	private StaticPanel timerPanel;
 	
 	public GUI() {
-		components = new ArrayList<>();
+		elements = new ArrayList<>();
 		initializeUI();
 	}
 
 	public GUI(GamePanel boardPanel, StaticPanel timerPanel) {
-		components = new ArrayList<>();
+		elements = new ArrayList<>();
 		this.boardPanel = boardPanel;
 		this.timerPanel = timerPanel;
 		initializeUI();
@@ -62,12 +55,7 @@ public class GUI extends JFrame implements Savable{
 	   setResizable(false);	
 		
 	}
-	public void changeUI()
-	{
-		//boardPanel.repaint();
-		boardPanel.paintImmediately(0, 0, Constants.BOARD_PANEL_WIDTH, Constants.BOARD_PANEL_HEIGHT);
-		timerPanel.repaint();
-	}
+
 	public GamePanel getBoardPanel() {
 		return boardPanel;
 	}
@@ -98,16 +86,29 @@ public class GUI extends JFrame implements Savable{
 		
 	}
 
-
 	@Override
-	public void addComponent(Savable s) {
-		components.add(s);
+	public void draw(Graphics g) {
+		for(Element element : elements) {
+			element.draw(g);
+		}
+		
 	}
 
+	@Override
+	public void reset() {
+		for(Element element : elements) {
+			element.reset();
+		}
+	}
 
 	@Override
-	public void removeComponent(Savable s) {
-		components.add(s);	
+	public void addComponent(Element e) {
+		elements.add(e);
+	}
+
+	@Override
+	public void removeComponent(Element e) {
+		elements.remove(e);
 	}
 
 	

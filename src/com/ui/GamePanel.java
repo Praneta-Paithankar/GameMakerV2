@@ -21,19 +21,18 @@ import org.json.JSONObject;
 
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
-import com.infrastruture.Savable;
+
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements Savable {
+public class GamePanel extends JPanel implements Element {
 	
 	private BufferedImage image;
 	private ArrayList<Element> elements;
-	private ArrayList<Savable>components;
+
 	
 	public GamePanel()
 	{
 	    elements = new ArrayList<Element>();
-	    components = new ArrayList<>();
         try {
             image = ImageIO.read(new File("./src/com/image/nature.jpg"));
             image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
@@ -69,8 +68,7 @@ public class GamePanel extends JPanel implements Savable {
 		elements.add(element);
 		
 	}
-	public void removeElement(Element element)
-	{
+	public void removeElement(Element element){
 		elements.remove(element);
 	}
 	
@@ -99,14 +97,27 @@ public class GamePanel extends JPanel implements Savable {
 		}
 	}
 
+	
+
 	@Override
-	public void addComponent(Savable e) {
-		components.add(e);
-		
+	public void draw(Graphics g) {
+		repaint();
 	}
 
 	@Override
-	public void removeComponent(Savable e) {
-		components.remove(e);
+	public void reset() {
+		for(Element element : elements) {
+			element.reset();
+		}
 	}
+
+	public void addComponent(Element e) {
+		elements.add(e);
+	}
+
+	@Override
+	public void removeComponent(Element e) {
+		elements.remove(e);
+	}
+
 }

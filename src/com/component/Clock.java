@@ -8,11 +8,10 @@ import org.json.JSONObject;
 
 import com.infrastruture.Constants;
 import com.infrastruture.Observer;
-import com.infrastruture.Savable;
 import com.infrastruture.Element;
 
 
-public class Clock implements Element,Savable{
+public class Clock implements Element{
 
 	private long milisecondsElapsed;
 
@@ -37,7 +36,7 @@ public class Clock implements Element,Savable{
 //		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 40));
 		String time = getTime();
-		g.drawString(time, 10+ 5, 200);
+		g.drawString(time, 15, 200);
 	}
 
 	@Override
@@ -73,15 +72,14 @@ public class Clock implements Element,Savable{
 		
 	}
 
-
 	@Override
-	public void addComponent(Savable e) {
+	public void addComponent(Element e) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void removeComponent(Savable e) {
+	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
 	}
