@@ -8,24 +8,32 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+
+import org.json.JSONObject;
 
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
+import com.infrastruture.Savable;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel {
+public class GamePanel extends JPanel implements Savable {
 	
 	private BufferedImage image;
 	private ArrayList<Element> elements;
+	private ArrayList<Savable>components;
 	
 	public GamePanel()
 	{
 	    elements = new ArrayList<Element>();
+	    components = new ArrayList<>();
         try {
             image = ImageIO.read(new File("./src/com/image/nature.jpg"));
             image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
@@ -33,12 +41,18 @@ public class GamePanel extends JPanel {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        setLayout();
 	}
 	
-	public ArrayList<Element> getElements(){
-		return elements;
+	public void setLayout() {
+		
+		setLayout(new GridBagLayout());
+        setPreferredSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
+	    setBorder(BorderFactory.createLineBorder(Color.GRAY));
+	    setMaximumSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
+		setBackground(Color.black);
+		setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
 	}
-	
 	private BufferedImage resize(BufferedImage img, int width, int height) {
         Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -48,6 +62,9 @@ public class GamePanel extends JPanel {
         return resized;
     }
 	
+	public ArrayList<Element> getElements(){
+		return elements;
+	}
 	public void addElement(Element element){
 		elements.add(element);
 		
@@ -56,17 +73,40 @@ public class GamePanel extends JPanel {
 	{
 		elements.remove(element);
 	}
+	
+
+	@Override
+	public JSONObject save() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		
-        if (image != null) {
-            g.drawImage(image, 0, 0, this);
-        }
-		
+		if (image != null) {
+	        g.drawImage(image, 0, 0, this);
+	    }
 		for(Element element : elements)
 		{
 			element.draw(g);
 		}
-    }
+	}
+
+	@Override
+	public void addComponent(Savable e) {
+		components.add(e);
+		
+	}
+
+	@Override
+	public void removeComponent(Savable e) {
+		components.remove(e);
+	}
 }

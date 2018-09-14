@@ -8,10 +8,11 @@ import org.json.JSONObject;
 
 import com.infrastruture.Constants;
 import com.infrastruture.Observer;
+import com.infrastruture.Savable;
 import com.infrastruture.Element;
 
 
-public class Clock implements Element{
+public class Clock implements Element,Savable{
 
 	private long milisecondsElapsed;
 
@@ -72,14 +73,15 @@ public class Clock implements Element{
 		
 	}
 
+
 	@Override
-	public void addElement(Element e) {
+	public void addComponent(Savable e) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void removeElement(Element e) {
+	public void removeComponent(Savable e) {
 		// TODO Auto-generated method stub
 		
 	}

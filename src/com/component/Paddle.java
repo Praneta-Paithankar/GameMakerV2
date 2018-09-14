@@ -8,8 +8,9 @@ import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
+import com.infrastruture.Savable;
 
-public class Paddle implements Element{
+public class Paddle implements Element,Savable{
 
 	private Rectangle rectangle;
 	private int deltaX;
@@ -74,13 +75,13 @@ public class Paddle implements Element{
 	}
 
 	@Override
-	public void addElement(Element e) {
+	public void addComponent(Savable e) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void removeElement(Element e) {
+	public void removeComponent(Savable e) {
 		// TODO Auto-generated method stub
 		
 	}

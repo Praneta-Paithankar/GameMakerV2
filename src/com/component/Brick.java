@@ -8,8 +8,9 @@ import org.json.JSONObject;
 import com.dimension.Rectangle;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
+import com.infrastruture.Savable;
 
-public class Brick implements Element{
+public class Brick implements Element,Savable{
 
 	private Rectangle rectangle;
 	private boolean visible;
@@ -66,14 +67,16 @@ public class Brick implements Element{
 	}
 
 	@Override
-	public void addElement(Element e) {
+	public void addComponent(Savable e) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void removeElement(Element e) {
+	public void removeComponent(Savable e) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 }

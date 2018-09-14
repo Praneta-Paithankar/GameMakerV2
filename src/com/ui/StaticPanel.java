@@ -1,27 +1,30 @@
 package com.ui;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.json.JSONObject;
+
 import com.controller.GameController;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
+import com.infrastruture.Savable;
 
 @SuppressWarnings("serial")
-public class StaticPanel extends JPanel{
+public class StaticPanel extends JPanel implements Savable{
 
-	private JLabel score;
 	private GameController driver;
 	private ArrayList<Element> elements;
-	
+	private ArrayList<Savable> components;
 	public StaticPanel() {
 		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
         this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
-       
+        components =new ArrayList<>();
         elements = new ArrayList<>();
 	}
 	public ArrayList<Element> getElements(){
@@ -78,14 +81,33 @@ public class StaticPanel extends JPanel{
 		startButton.setVisible(true);
 		this.add(startButton);
 	}
+
+	@Override
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		for(Element element : elements)
+		{
+			element.draw(g);
+		}
+	}
 	
-//	@Override
-//	public void paintComponent(Graphics g){
-//		super.paintComponent(g);
-//		for(Element element : elements)
-//		{
-//			element.draw(g);
-//		}
-//    }
-	
+	@Override
+	public JSONObject save() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void addComponent(Savable s) {
+		components.add(s);
+		
+	}
+	@Override
+	public void removeComponent(Savable s) {
+		components.remove(s);
+	}
 }
