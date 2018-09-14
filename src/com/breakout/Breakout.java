@@ -28,16 +28,12 @@ public class Breakout {
 		Circle c = new Circle(Constants.BALL_RADIUS, Constants.BALL_POS_X,Constants.BALL_POS_Y);
 		Ball ball = new Ball(c, new Coordinate(Constants.BALL_DELTA_X, Constants.BALL_DELTA_Y), Constants.BALL_COLOR);
 		boardPanel.addElement(ball);
-
+        
+        
 		Rectangle r =new Rectangle(Constants.PADDLE_WIDTH,Constants.PADDLE_HEIGHT,Constants.PADDLE_POS_X, Constants.PADDLE_POS_Y);
 		Paddle paddle = new Paddle(r,Constants.PADDLE_DELTA_X,Constants.PADDLE_COLOR);
 		boardPanel.addElement(paddle);
 		
-		Clock clock = new Clock();
-		StaticPanel timerPanel = new StaticPanel();
-		timerPanel.addElement(clock);
-		
-		GUI gui = new GUI(boardPanel,timerPanel);
 		
 		ArrayList<Brick> bricks = new ArrayList<>();
 		int brickPosX = Constants.BRICK_START_X; 
@@ -47,16 +43,27 @@ public class Breakout {
 			Brick brick = new Brick(r , true,Constants.BRICK_COLOR);
 			bricks.add(brick);
 			boardPanel.addElement(brick);
+			
 			brickPosX += 2* Constants.BRICK_WIDTH+ Constants.BRICK_DISTANCE_X ;
 			brickPosY +=  Constants.BRICK_DISTANCE_Y;
 		}
 		
+		Clock clock = new Clock();
+		StaticPanel timerPanel = new StaticPanel();
+		timerPanel.addElement(clock);
+		
+		
+		GUI gui = new GUI(boardPanel,timerPanel);
+		gui.addComponent(boardPanel);
+		gui.addComponent(timerPanel);
 		
 		GameController driver = new GameController(ball, paddle, bricks, gui,observable, clock);
 		
 		gui.addDriver(driver);
 		observable.startTimer();
 		gui.setVisible(true);
+//		gui.changeUI();
+		gui.draw(null);
 		if(isRestart)
 			observable.registerObserver(driver);
 		else
@@ -67,7 +74,6 @@ public class Breakout {
 
 			@Override
 			public void run() {
-			
 				startGame(false);	
 			}
 		});

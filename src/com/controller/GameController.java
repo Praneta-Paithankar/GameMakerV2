@@ -85,7 +85,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	@Override
 	public void update() {
 		
-		initCommands();
+		//initCommands();
 		timerCommand.execute();
 		ballActCommand.execute();
 		commandQueue.addLast(timerCommand);
@@ -112,7 +112,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			// Stopping the observable
 			observable.stopTimer();
 			gui.removeKeyListner();
-  			gui.changeUI();
+			gui.draw(null);
   			SwingUtilities.invokeLater(
   					new Runnable() {
 
@@ -127,7 +127,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		//Check collision between ball and paddle
 		result = collisionChecker.checkCollisionBetweenCircleAndRectangle(ball.getCircle(), paddle.getRectangle());
 		changeBallDirectionCommand(result);
-		gui.changeUI();
+		gui.draw(null);
 		
 	}
 	private void changeBallDirectionCommand(Direction result) {
@@ -211,7 +211,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 							public void run() {
 								// TODO Auto-generated method stub
 								val.execute();
-								gui.changeUI();
+								gui.draw(null);
 								try {
 									currentThread();
 									Thread.sleep(10);
@@ -265,7 +265,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 				undoAction();
 			}
 			gui.changeFocus();
-			gui.changeUI();
+			gui.draw(null);
 
 		}else if(commandText.equals("replay")) {
 			pause();
@@ -275,7 +275,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			if(isGamePaused) {
 				unPause();
 				gui.changeFocus();
-				gui.changeUI();
+				gui.draw(null);
 			}else {
 				gui.dispose();
 				gui.revalidate();
@@ -284,7 +284,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		}else if(commandText.equals("pause")) {
 			pause();
 			gui.changeFocus();
-			gui.changeUI();
+			gui.draw(null);
 		}
 		
 	}

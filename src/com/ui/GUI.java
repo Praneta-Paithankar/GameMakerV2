@@ -1,95 +1,63 @@
 package com.ui;
 
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagLayout;
+import java.awt.Graphics;
+import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+
+import org.json.JSONObject;
 
 import com.controller.GameController;
 import com.infrastruture.Constants;
+import com.infrastruture.Element;
 
 
 @SuppressWarnings("serial")
-public class GUI extends JFrame{
+public class GUI extends JFrame implements Element{
 	
 	private GamePanel boardPanel;
-	
-	private JLabel exitLabel;
+	private ArrayList<Element> elements;
 	private GameController driver;
 	private JPanel mainPanel;
 	private StaticPanel timerPanel;
 	
 	public GUI() {
-		boardPanel = new GamePanel();
-		timerPanel = new StaticPanel();
+		elements = new ArrayList<>();
 		initializeUI();
 	}
 
-	public GUI(GamePanel boardPanel,StaticPanel timerPanel)
-	{
-		super("Breakout Game");
+	public GUI(GamePanel boardPanel, StaticPanel timerPanel) {
+		elements = new ArrayList<>();
 		this.boardPanel = boardPanel;
 		this.timerPanel = timerPanel;
 		initializeUI();
 	}
 	
-	public StaticPanel getStaticPanel() {
-		return (timerPanel);
-	}
-
-	public void changeUI()
-	{
-		//boardPanel.repaint();
-		boardPanel.paintImmediately(0, 0, Constants.BOARD_PANEL_WIDTH, Constants.BOARD_PANEL_HEIGHT);
-		timerPanel.repaint();
-	}
-
-
-	private void createBoardPanel() {
-
-		boardPanel.setLayout(new GridBagLayout());
-        boardPanel.setPreferredSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
-	    boardPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-	    boardPanel.setMaximumSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
-		boardPanel.setBackground(Color.black);
-		
-		exitLabel = new JLabel();
-		exitLabel.setForeground(Color.WHITE);
-		exitLabel.setAlignmentX(SwingConstants.CENTER);
-		exitLabel.setAlignmentY(SwingConstants.CENTER);
-		Font font = new Font("Helvetica", Font.BOLD,50);
-		
-		exitLabel.setFont(font);
-		boardPanel.add(exitLabel);
-		boardPanel.setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
-		mainPanel.add(boardPanel);
-		
-	}
 	private void initializeUI() {
 		
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
+       mainPanel = new JPanel();
+       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
        
-        mainPanel.add(timerPanel);
-        createBoardPanel();
+       mainPanel.add(timerPanel);
+       mainPanel.add(boardPanel);
         
-		add(mainPanel);
+	   add(mainPanel);
 		
-		mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
-		mainPanel.setFocusable(true);
-		mainPanel.requestFocusInWindow();
-		setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);	
+	   mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
+	   mainPanel.setFocusable(true);
+	   mainPanel.requestFocusInWindow();
+	   setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
+	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	   setResizable(false);	
 		
+	}
+
+	public GamePanel getBoardPanel() {
+		return boardPanel;
 	}
 	public void removeKeyListner() {
 		mainPanel.removeKeyListener(driver);
@@ -104,23 +72,45 @@ public class GUI extends JFrame{
 	{
 		mainPanel.requestFocus();
 	}
-	public void addGameOverPane() {
-		exitLabel.setText("Game Over");
-		boardPanel.repaint();
-	}
-	public GamePanel getBoardPanel() {
-		return boardPanel;
-	}
-
-	public void setBoardPanel(GamePanel boardPanel) {
-		this.boardPanel = boardPanel;
+	
+	
+	@Override
+	public JSONObject save() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public StaticPanel getTimerPanel() {
-		return timerPanel;
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public void setTimerPanel(StaticPanel timerPanel) {
-		this.timerPanel = timerPanel;
-	}	
+	@Override
+	public void draw(Graphics g) {
+		for(Element element : elements) {
+			element.draw(g);
+		}
+		
+	}
+
+	@Override
+	public void reset() {
+		for(Element element : elements) {
+			element.reset();
+		}
+	}
+
+	@Override
+	public void addComponent(Element e) {
+		elements.add(e);
+	}
+
+	@Override
+	public void removeComponent(Element e) {
+		elements.remove(e);
+	}
+
+	
+	
 }

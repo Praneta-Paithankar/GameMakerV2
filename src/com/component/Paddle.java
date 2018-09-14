@@ -2,12 +2,14 @@ package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import org.json.JSONObject;
+
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.Constants;
-import com.infrastruture.Sprite;
+import com.infrastruture.Element;
 
-public class Paddle implements Sprite{
+public class Paddle implements Element{
 
 	private Rectangle rectangle;
 	private int deltaX;
@@ -57,5 +59,30 @@ public class Paddle implements Sprite{
 		Coordinate newCoordinate = new Coordinate(Constants.PADDLE_POS_X, Constants.PADDLE_POS_Y);
 		rectangle.setTopLeftCoordinate(newCoordinate);
 		 
+	}
+
+	@Override
+	public JSONObject save() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void addComponent(Element e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeComponent(Element e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

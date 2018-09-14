@@ -4,12 +4,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
+import org.json.JSONObject;
+
 import com.infrastruture.Constants;
 import com.infrastruture.Observer;
-import com.infrastruture.Sprite;
+import com.infrastruture.Element;
 
 
-public class Clock implements Sprite{
+public class Clock implements Element{
 
 	private long milisecondsElapsed;
 
@@ -34,7 +36,7 @@ public class Clock implements Sprite{
 //		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 40));
 		String time = getTime();
-		g.drawString(time, 10+ 5, 200);
+		g.drawString(time, 15, 200);
 	}
 
 	@Override
@@ -56,6 +58,30 @@ public class Clock implements Sprite{
 
 	private int getSeconds() {
 		return (int) ((milisecondsElapsed / 1000) % 60);
+	}
+
+	@Override
+	public JSONObject save() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addComponent(Element e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeComponent(Element e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

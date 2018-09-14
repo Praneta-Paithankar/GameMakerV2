@@ -1,42 +1,39 @@
 package com.ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
+
+import org.json.JSONObject;
 
 import com.controller.GameController;
 import com.infrastruture.Constants;
-import com.infrastruture.Sprite;
+import com.infrastruture.Element;
+
 
 @SuppressWarnings("serial")
-public class StaticPanel extends JPanel{
-	//private JLabel timerlabel;
-	private JLabel score;
+public class StaticPanel extends JPanel implements Element{
+
 	private GameController driver;
-	private ArrayList<Sprite> elements;
+	private ArrayList<Element> elements;
 	
 	public StaticPanel() {
 		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
         this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
-       
         elements = new ArrayList<>();
 	}
-	public ArrayList<Sprite> getElements(){
+	public ArrayList<Element> getElements(){
 		return elements;
 	}
 	
-	public void addElement(Sprite element){
+	public void addElement(Element element){
 		elements.add(element);
 		
 	}
-	public void removeElement(Sprite element)
+	public void removeElement(Element element)
 	{
 		elements.remove(element);
 	}
@@ -82,14 +79,43 @@ public class StaticPanel extends JPanel{
 		startButton.setVisible(true);
 		this.add(startButton);
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		for(Sprite element : elements)
+		for(Element component : elements)
 		{
-			element.draw(g);
+			component.draw(g);
 		}
-    }
+	}
 	
+	@Override
+	public JSONObject save() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void addComponent(Element e) {
+		elements.add(e);
+	}
+
+	@Override
+	public void removeComponent(Element e) {
+		elements.remove(e);
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		repaint();
+	}
+	@Override
+	public void reset() {
+		for(Element element : elements) {
+			element.reset();
+		}
+	}
 }

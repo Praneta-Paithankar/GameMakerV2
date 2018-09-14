@@ -3,12 +3,15 @@ package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import org.json.JSONObject;
+
 import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.infrastruture.Constants;
-import com.infrastruture.Sprite;
+import com.infrastruture.Element;
 
-public class Ball implements Sprite{
+
+public class Ball implements Element{
 	
     private Circle circle;
     private Coordinate delta;
@@ -50,5 +53,32 @@ public class Ball implements Sprite{
 		circle.setCenter(new Coordinate(Constants.BALL_POS_X,Constants.BALL_POS_Y));
 		this.setDelta(new Coordinate(Constants.BALL_DELTA_X, Constants.BALL_DELTA_Y));
 	}
+
+	@Override
+	public JSONObject save() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addComponent(Element e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeComponent(Element e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	
 
 }
