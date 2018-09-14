@@ -8,11 +8,15 @@ import org.apache.log4j.Logger;
 import org.json.simple.DeserializationException;
 import org.json.simple.JsonObject;
 import org.json.simple.Jsoner;
+import javax.swing.JComponent;
 
+//import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
 import com.infrastruture.*;
 
 
-public class Clock implements Element{
+public class Clock extends JComponent implements Element{
+
 	protected Logger log = Logger.getLogger(Clock.class);
 	private long milisecondsElapsed;
 	private JsonObject jsonObject;
@@ -37,9 +41,13 @@ public class Clock implements Element{
 				
 		// TODO center box around the time 
 		g.drawRect(0, 150, 250, 100);
+//		g.drawRect(getX(), getY(), getWidth(), getHeight());
+//		g.drawRect(0, 150, 250, 100);
+		g.drawRect(0, 0, Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH);
+//		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 40));
 		String time = getTime();
-		g.drawString(time, 15, 400);
+		g.drawString(time, 30, 80);
 	}
 
 	@Override

@@ -1,23 +1,31 @@
 package com.ui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
 
+import com.behavior.BoxLayoutXAxisBehavior;
+import com.behavior.BoxLayoutYAxisBehavior;
+import com.component.Clock;
 import com.controller.GameController;
+import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
 
 @SuppressWarnings("serial")
-public class StaticPanel extends JPanel implements Element{
+public class StaticPanel extends AbstractPanel implements Element{
 	protected Logger log = Logger.getLogger(StaticPanel.class);
 	private JLabel score;
 	private GameController driver;
@@ -25,8 +33,11 @@ public class StaticPanel extends JPanel implements Element{
 	private JsonObject jsonObject;
 	
 	public StaticPanel() {
-		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
-        this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
+		setLayoutBehavior(new BoxLayoutYAxisBehavior());
+		performUpdateLayout(this, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT);
+
+//		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
+//        this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
         elements = new ArrayList<>();
 	}
 	public ArrayList<Element> getElements(){
@@ -42,6 +53,7 @@ public class StaticPanel extends JPanel implements Element{
 	    createPause();
 	    createSave();
 	    createLoad();
+	    createLayout();
 	}
 	
 	
@@ -50,7 +62,12 @@ public class StaticPanel extends JPanel implements Element{
 		replayButton.setActionCommand("replay");
 		replayButton.addActionListener(driver);
 		replayButton.setVisible(true);
+		replayButton.setAlignmentX(CENTER_ALIGNMENT);
+		replayButton.setAlignmentY(CENTER_ALIGNMENT);
+
+		this.add(Box.createRigidArea(new Dimension(30,30)));
 		this.add(replayButton);
+		this.add(Box.createRigidArea(new Dimension(5,5)));
 	}
 	
 	public void createUndo() {
@@ -58,7 +75,12 @@ public class StaticPanel extends JPanel implements Element{
 		undoButton.setActionCommand("undo");
 		undoButton.addActionListener(driver);
 		undoButton.setVisible(true);
+		undoButton.setAlignmentX(CENTER_ALIGNMENT);
+		undoButton.setAlignmentY(CENTER_ALIGNMENT);
+
+		this.add(Box.createRigidArea(new Dimension(5,5)));
 		this.add(undoButton);
+		this.add(Box.createRigidArea(new Dimension(5,5)));
 	}
 	
 	public void createStart() {
@@ -66,7 +88,12 @@ public class StaticPanel extends JPanel implements Element{
      	startButton.setActionCommand("start");
      	startButton.addActionListener(driver);
 		startButton.setVisible(true);
+		startButton.setAlignmentX(CENTER_ALIGNMENT);
+		startButton.setAlignmentY(CENTER_ALIGNMENT);
+
+		this.add(Box.createRigidArea(new Dimension(5,5)));
 		this.add(startButton);
+		this.add(Box.createRigidArea(new Dimension(5,5)));
 	}
 	
 	public void createPause() {
@@ -74,7 +101,12 @@ public class StaticPanel extends JPanel implements Element{
      	startButton.setActionCommand("pause");
      	startButton.addActionListener(driver);
 		startButton.setVisible(true);
+		startButton.setAlignmentX(CENTER_ALIGNMENT);
+		startButton.setAlignmentY(CENTER_ALIGNMENT);
+		
+		this.add(Box.createRigidArea(new Dimension(5,5)));
 		this.add(startButton);
+		this.add(Box.createRigidArea(new Dimension(5,5)));
 	}
 	
 	public void createSave() {
@@ -93,17 +125,44 @@ public class StaticPanel extends JPanel implements Element{
 		this.add(loadButton);
 	}
 
+	public void createLayout() {
+		JButton layoutButton = new JButton("Layout");
+		layoutButton.setActionCommand("layout");
+		layoutButton.addActionListener(driver);
+		layoutButton.setVisible(true);
+		layoutButton.setAlignmentX(CENTER_ALIGNMENT);
+		layoutButton.setAlignmentY(CENTER_ALIGNMENT);
+		
+		this.add(Box.createRigidArea(new Dimension(5,5)));
+		this.add(layoutButton);
+		this.add(Box.createRigidArea(new Dimension(5,5)));
+	}
+
+	
 	@Override
 	public void paintComponent(Graphics g){
+//		System.out.println("StaticPanel::paintComponent");
+
 		super.paintComponent(g);
 		for(Element component : elements)
 		{
-			component.draw(g);
+			double X = this.getComponent(0).getX();
+			double Y = this.getComponent(0).getY();
+//			System.out.println("X: " + X + " Y: " + Y);
+//			System.out.println("Width: " + Integer.toString(this.getComponent(0).getWidth()));
+//			System.out.println("Height: " + Integer.toString(this.getComponent(0).getHeight()));
+			Graphics2D g2d = (Graphics2D) g.create();
+			g2d.translate(X, Y); 
+			component.draw(g2d);
+			g2d.dispose();
 		}
+		
 	}
 	
 	
 	public void addComponent(Element e) {
+//		System.out.println("Add component in Static(timerPanel)");
+		this.add((Component)e);
 		elements.add(e);
 	}
 
@@ -114,6 +173,7 @@ public class StaticPanel extends JPanel implements Element{
 
 	@Override
 	public void draw(Graphics g) {
+//		System.out.println("StaticPanel::draw");
 		repaint();
 	}
 	@Override

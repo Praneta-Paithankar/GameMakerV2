@@ -16,7 +16,10 @@ import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
 import org.json.simple.Jsoner;
 
+import com.behavior.BoxLayoutYAxisBehavior;
+import com.behavior.FlowLayoutBehavior;
 import com.controller.GameController;
+import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
@@ -27,15 +30,13 @@ public class GUI extends JFrame implements Element{
 	private ArrayList<Element> elements;
 
 	private GameController driver;
-	private JPanel mainPanel;
+	private MainPanel mainPanel;
 	private StaticPanel timerPanel;
 	private JsonObject jsonObject;
 	private JFileChooser c;
 	private FileWriter fileWriter;
 	private String filePath;
 	private FileReader fileReader;
-	
-
 	public GUI() {
 		boardPanel = new GamePanel();
 		timerPanel = new StaticPanel();
@@ -43,24 +44,27 @@ public class GUI extends JFrame implements Element{
 		initializeUI();
 	}
 
-	public GUI(GamePanel boardPanel, StaticPanel timerPanel) {
-		super("Breakout Game");
+	public GUI(MainPanel mainPanel, GamePanel boardPanel, StaticPanel timerPanel) {
+		elements = new ArrayList<>();
+		this.mainPanel = mainPanel;
 		this.boardPanel = boardPanel;
 		this.timerPanel = timerPanel;
-		elements = new ArrayList<>();
 		initializeUI();
 	}
-	
+
 	private void initializeUI() {
-       mainPanel = new JPanel();
-       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));       
-       mainPanel.add(timerPanel);
-       mainPanel.add(boardPanel);
+		
+//       mainPanel = new JPanel();
+//       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
        
-       add(mainPanel);
-	   mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
-	   mainPanel.setFocusable(true);
-	   mainPanel.requestFocusInWindow();
+//       mainPanel.add(timerPanel);
+//       mainPanel.add(boardPanel);
+        
+//	   add(mainPanel);
+		
+//	   mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
+//	   mainPanel.setFocusable(true);
+//	   mainPanel.requestFocusInWindow();
 	   setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
 	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	   setResizable(false);	
@@ -76,8 +80,8 @@ public class GUI extends JFrame implements Element{
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
         timerPanel.createButtons(driver);
-	
 	}
+
 	public void changeFocus()
 	{
 		mainPanel.requestFocus();
@@ -100,6 +104,8 @@ public class GUI extends JFrame implements Element{
 
 	@Override
 	public void addComponent(Element e) {
+		System.out.println("Add component in GUI (frame)");
+		add((AbstractPanel)e);
 		elements.add(e);
 	}
 
@@ -181,5 +187,20 @@ public class GUI extends JFrame implements Element{
 
 	public void setFileReader(FileReader fileReader) {
 		this.fileReader = fileReader;
+	}		
+
+	public void modifyLayout() {
+		// TODO Auto-generated method stub
+		JPanel contentPane = (JPanel) getContentPane();
+		System.out.println("Modifying Layout");
+		mainPanel.setLayoutBehavior(new BoxLayoutYAxisBehavior());
+		mainPanel.performUpdateLayout(mainPanel, Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
+		
+		timerPanel.setLayoutBehavior(new FlowLayoutBehavior());
+		timerPanel.performUpdateLayout(timerPanel, Constants.FRAME_WIDTH,Constants.TIMER_PANEL_WIDTH);
+		
+		boardPanel.setLayoutBehavior(new FlowLayoutBehavior());
+		boardPanel.performUpdateLayout(boardPanel, Constants.FRAME_WIDTH,Constants.BOARD_PANEL_WIDTH);
+		contentPane.revalidate();
 	}
 }

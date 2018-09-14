@@ -85,7 +85,6 @@ public class GameController implements Observer, KeyListener,ActionListener{
     }
 	private void initCommands()
 	{
-		
 		int i=0;
 		for(Brick b : bricks)
 		{
@@ -101,7 +100,6 @@ public class GameController implements Observer, KeyListener,ActionListener{
 
 	@Override
 	public void update() {
-		
 		//initCommands();
 		timerCommand.execute();
 		ballActCommand.execute();
@@ -144,9 +142,9 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		//Check collision between ball and paddle
 		result = collisionChecker.checkCollisionBetweenCircleAndRectangle(ball.getCircle(), paddle.getRectangle());
 		changeBallDirectionCommand(result);
-		 
 		gui.draw(null);
 	}
+
 	private void changeBallDirectionCommand(Direction result) {
 		
 		if(result == Direction.X) {
@@ -355,6 +353,10 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			load();
 			gui.changeFocus();
 			gui.draw(null);;
+		}else if(commandText.equals("layout")) {
+//			gui.changeFocus();
+			gui.modifyLayout();
+			gui.draw(null);
 		}
 	}
 	

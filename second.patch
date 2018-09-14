@@ -1,0 +1,856 @@
+commit 82e02c0d3b84a9d795cf14366606295f74ccb3ab
+Author: Abhishek Kanike <abkanike@iu.edu>
+Date:   Sun Sep 16 10:12:20 2018 -0400
+
+    Working patch
+
+diff --git a/src/com/behavior/BoxLayoutYAxisBehavior.java b/src/com/behavior/BoxLayoutYAxisBehavior.java
+index 028c01b..6188b62 100644
+--- a/src/com/behavior/BoxLayoutYAxisBehavior.java
++++ b/src/com/behavior/BoxLayoutYAxisBehavior.java
+@@ -1,8 +1,11 @@
+ package com.behavior;
+ 
++import java.awt.Component;
+ import java.awt.Dimension;
+ 
++import javax.swing.Box;
+ import javax.swing.BoxLayout;
++import javax.swing.JButton;
+ 
+ import com.infrastruture.AbstractPanel;
+ import com.infrastruture.LayoutBehavior;
+@@ -13,6 +16,18 @@ public class BoxLayoutYAxisBehavior implements LayoutBehavior {
+ 	public void updateLayoutBehavior(AbstractPanel abstractPanel, int width, int height) {
+ 		
+ 		abstractPanel.setLayout(new BoxLayout(abstractPanel, BoxLayout.Y_AXIS));
+-		abstractPanel.setPreferredSize(new Dimension(width, height));
++		Component[] comp = abstractPanel.getComponents();
++		
++		/*
++		for (int i = 0;i<comp.length;i++) {
++			if (comp[i] instanceof JButton) {
++				abstractPanel.add(Box.createRigidArea(new Dimension(30,30)));
++			}
++		}
++		*/
++//		abstractPanel.setMaximumSize(new Dimension(width, height));
++//		abstractPanel.setMinimumSize(new Dimension(width, height));
++//		abstractPanel.setPreferredSize(new Dimension(width, height));
++		
+ 	}
+ }
+diff --git a/src/com/behavior/GridBagLayoutBehavior.java b/src/com/behavior/GridBagLayoutBehavior.java
+new file mode 100644
+index 0000000..86a39fd
+--- /dev/null
++++ b/src/com/behavior/GridBagLayoutBehavior.java
+@@ -0,0 +1,39 @@
++package com.behavior;
++
++import java.awt.Component;
++import java.awt.Dimension;
++import java.awt.GridBagConstraints;
++import java.awt.GridBagLayout;
++import java.awt.GridLayout;
++import java.awt.Insets;
++
++import javax.swing.JButton;
++
++import com.infrastruture.AbstractPanel;
++import com.infrastruture.LayoutBehavior;
++
++public class GridBagLayoutBehavior implements LayoutBehavior {
++
++	@Override
++	public void updateLayoutBehavior(AbstractPanel abstractPanel, int width, int height) {
++		abstractPanel.setLayout(new GridBagLayout());
++		GridBagConstraints c = new GridBagConstraints();
++		Component[] comp = abstractPanel.getComponents();
++		int padding = 7;
++		int[] x = new int[] {0, 1, 2, 0, 1, 2, 1, 0, 2};
++		int[] y = new int[] {0, 0, 0, 2, 2, 2, 1, 1, 1};
++		
++		for (int i = 0;i<comp.length;i++) {
++			c.weightx = 0.5;
++			c.insets = new Insets(padding, padding, padding, padding);
++			c.fill = GridBagConstraints.HORIZONTAL;
++			c.gridx = x[i];
++			c.gridy = y[i];
++			c.weightx = 0.5;
++			abstractPanel.add(comp[i], c);
++		}
++		abstractPanel.setPreferredSize(new Dimension(width, height));
++		
++	}
++
++}
+diff --git a/src/com/breakout/Breakout.java b/src/com/breakout/Breakout.java
+index 2da1891..cafb482 100644
+--- a/src/com/breakout/Breakout.java
++++ b/src/com/breakout/Breakout.java
+@@ -1,8 +1,10 @@
+ package com.breakout;
+ 
++import java.awt.BorderLayout;
+ import java.awt.Dimension;
+ import java.util.ArrayList;
+ 
++import javax.swing.Box;
+ import javax.swing.SwingUtilities;
+ 
+ import org.apache.log4j.PropertyConfigurator;
+@@ -19,10 +21,12 @@ import com.dimension.Rectangle;
+ import com.helper.CollisionChecker;
+ import com.infrastruture.*;
+ import com.timer.BreakoutTimer;
++import com.ui.ControlPanel;
+ import com.ui.GUI;
+ import com.ui.GamePanel;
+ import com.ui.MainPanel;
+ import com.ui.StaticPanel;
++import com.ui.TimerPanel;
+ 
+ public class Breakout {
+ 	protected Logger log = Logger.getLogger(Breakout.class);
+@@ -50,7 +54,7 @@ public class Breakout {
+ 			bricks.add(brick);
+ 			boardPanel.addComponent(brick);
+ 			
+-			brickPosX += 2* Constants.BRICK_WIDTH+ Constants.BRICK_DISTANCE_X ;
++			brickPosX += 2 * Constants.BRICK_WIDTH+ Constants.BRICK_DISTANCE_X ;
+ 			brickPosY +=  Constants.BRICK_DISTANCE_Y;
+ 		}
+ 		
+@@ -59,19 +63,29 @@ public class Breakout {
+ 		clock.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH));
+ //		clock.setPreferredSize(new Dimension(50, 50));
+ //		clock.setMaximumSize(new Dimension(50, 50));
+-		StaticPanel timerPanel = new StaticPanel();
++		
++		
++		// Start - Create StaticPanel
++		StaticPanel staticPanel = new StaticPanel();
+ 
++		TimerPanel timerPanel = new TimerPanel();
+ 		timerPanel.addComponent(clock);
+ 		
++		ControlPanel controlPanel = new ControlPanel();
++
++		staticPanel.addComponent(timerPanel);
++		staticPanel.addComponent(controlPanel);
++		// End - Create StaticPanel
++
+ 		
+ 		MainPanel mainPanel = new MainPanel();
+-		mainPanel.addComponent(timerPanel);
++		mainPanel.addComponent(staticPanel);
+ 		mainPanel.addComponent(boardPanel);
+ 
+-		GUI gui = new GUI(mainPanel, boardPanel,timerPanel);
++		GUI gui = new GUI(mainPanel, boardPanel, staticPanel, timerPanel, controlPanel);
+ 		
+ 		gui.addComponent(mainPanel);
+-		
++
+ 		CollisionChecker checker = new CollisionChecker();
+ 		
+ 		GameController driver = new GameController(ball, paddle, bricks, gui,observable, clock,checker);
+@@ -79,9 +93,10 @@ public class Breakout {
+ 		gui.addDriver(driver);
+ 		observable.startTimer();
+ 		gui.setVisible(true);
+-//		gui.changeUI();
++
+ 		System.out.println("Print from Breakout");
+ 		gui.draw(null);
++		gui.pack();
+ 		if(isRestart)
+ 			observable.registerObserver(driver);
+ 		else
+diff --git a/src/com/component/Clock.java b/src/com/component/Clock.java
+index fb44c42..ebdc75e 100644
+--- a/src/com/component/Clock.java
++++ b/src/com/component/Clock.java
+@@ -1,6 +1,5 @@
+ package com.component;
+ 
+-import java.awt.Color;
+ import java.awt.Font;
+ import java.awt.Graphics;
+ 
+@@ -12,8 +11,10 @@ import javax.swing.JComponent;
+ import org.json.simple.parser.JSONParser;
+ 
+ import com.infrastruture.*;
++import com.infrastruture.Constants;
++import com.infrastruture.Element;
+ 
+-
++@SuppressWarnings("serial")
+ public class Clock extends JComponent implements Element{
+ 
+ 	protected Logger log = Logger.getLogger(Clock.class);
+@@ -38,11 +39,11 @@ public class Clock extends JComponent implements Element{
+ 		g.drawRect(0, 150, 250, 100);
+ //		g.drawRect(getX(), getY(), getWidth(), getHeight());
+ //		g.drawRect(0, 150, 250, 100);
+-		g.drawRect(0, 0, Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH);
++//		g.drawRect(5, 0, Constants.TIMER_PANEL_WIDTH - 10, Constants.TIMER_PANEL_WIDTH - 10);
+ //		g.setColor(Color.WHITE);
+ 		g.setFont(new Font("Arial", Font.BOLD, 40));
+ 		String time = getTime();
+-		g.drawString(time, 30, 80);
++		g.drawString(time, 25, 80);
+ 	}
+ 
+ 	@Override
+diff --git a/src/com/infrastruture/AbstractPanel.java b/src/com/infrastruture/AbstractPanel.java
+index aeb1b71..22f0a97 100644
+--- a/src/com/infrastruture/AbstractPanel.java
++++ b/src/com/infrastruture/AbstractPanel.java
+@@ -1,16 +1,27 @@
+ package com.infrastruture;
+ 
++import java.awt.Color;
++import java.awt.Dimension;
++
++import javax.swing.BorderFactory;
+ import javax.swing.JPanel;
+ 
+ @SuppressWarnings("serial")
+ public abstract class AbstractPanel extends JPanel {
+ 	LayoutBehavior layoutBehavior;
+ 	
++	public AbstractPanel() {
++		setBorder(BorderFactory.createRaisedBevelBorder());
++	}
++	
+ 	public void setLayoutBehavior(LayoutBehavior layoutBehavior) {
+ 		this.layoutBehavior = layoutBehavior; 
+ 	}
+ 	
+ 	public void performUpdateLayout(AbstractPanel abstractPanel, int width, int height) {
+ 		layoutBehavior.updateLayoutBehavior(abstractPanel, width, height);
++		abstractPanel.setMaximumSize(new Dimension(width, height));
++		abstractPanel.setMinimumSize(new Dimension(width, height));
++		abstractPanel.setPreferredSize(new Dimension(width, height));
+ 	}
+ }
+diff --git a/src/com/infrastruture/Constants.java b/src/com/infrastruture/Constants.java
+index 6a557d7..2c34102 100644
+--- a/src/com/infrastruture/Constants.java
++++ b/src/com/infrastruture/Constants.java
+@@ -24,7 +24,7 @@ public class Constants {
+ 	
+ 	public final static int BALL_POS_X = 15;
+ 	public final static int  BALL_DELTA_X = 5;
+-	public final static int BALL_DELTA_Y =5;
++	public final static int BALL_DELTA_Y = 5;
+ 	public final static int BALL_POS_Y = 200;
+ 	public final static int BALL_RADIUS = 15;
+ 	public final static Color BALL_COLOR = new Color(155,94,155);
+diff --git a/src/com/ui/ControlPanel.java b/src/com/ui/ControlPanel.java
+new file mode 100644
+index 0000000..6a48ef4
+--- /dev/null
++++ b/src/com/ui/ControlPanel.java
+@@ -0,0 +1,145 @@
++package com.ui;
++
++import java.awt.Graphics;
++
++//import org.json.JSONObject;
++import org.json.simple.JsonObject;
++
++import com.behavior.FlowLayoutBehavior;
++import com.controller.GameController;
++import com.infrastruture.AbstractPanel;
++import com.infrastruture.Constants;
++import com.infrastruture.Element;
++
++@SuppressWarnings("serial")
++public class ControlPanel  extends AbstractPanel implements Element {
++
++	private GameController driver;
++
++	public ControlPanel() {
++		setLayoutBehavior(new FlowLayoutBehavior());
++		performUpdateLayout(this, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT-Constants.TIMER_PANEL_WIDTH);
++	}
++	
++	public void createButtons(GameController driver)
++	{
++		this.driver = driver;
++	    createReplay();
++	    createUndo();
++	    createStart();
++	    createPause();
++//	    this.add(new JPanel());
++//	    this.add(new JPanel());
++	    
++	    createSave();
++	    createLoad();
++	    createLayout();
++	}
++	
++	public void createReplay() {
++		ControlPanelButton replayButton = new ControlPanelButton("Replay", "replay", driver);
++
++//		this.add(Box.createRigidArea(new Dimension(30,30)));
++		this.add(replayButton);
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++	}
++	
++	public void createUndo() {
++		ControlPanelButton undoButton = new ControlPanelButton("Undo", "undo", driver);
++	
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++		this.add(undoButton);
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++	}
++	
++	public void createStart() {
++		ControlPanelButton startButton = new ControlPanelButton("Start", "start", driver);
++
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++		this.add(startButton);
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++	}
++	
++	public void createPause() {
++		ControlPanelButton pauseButton = new ControlPanelButton("Pause", "pause", driver);
++
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++		this.add(pauseButton);
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++	}
++
++	public void createLayout() {
++		ControlPanelButton layoutButton = new ControlPanelButton("Layout", "layout", driver);
++
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++		this.add(layoutButton);
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++	}
++
++	public void createLoad() {
++		ControlPanelButton layoutButton = new ControlPanelButton("Load", "load", driver);
++
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++		this.add(layoutButton);
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++	}
++
++	public void createSave() {
++		ControlPanelButton layoutButton = new ControlPanelButton("Save", "save", driver);
++
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++		this.add(layoutButton);
++//		this.add(Box.createRigidArea(new Dimension(5,5)));
++	}
++@Override
++	public void draw(Graphics g) {
++		// TODO Auto-generated method stub
++		
++	}
++
++	@Override
++	public void reset() {
++		// TODO Auto-generated method stub
++		
++	}
++
++	@Override
++	public void addComponent(Element e) {
++		// TODO Auto-generated method stub
++		System.out.println("Add component in ControlPanel");
++
++	}
++
++	@Override
++	public void removeComponent(Element e) {
++		// TODO Auto-generated method stub
++		
++	}
++
++	@Override
++	public JsonObject save() {
++		// TODO Auto-generated method stub
++		return null;
++	}
++
++	@Override
++	public int load(Object object) {
++		// TODO Auto-generated method stub
++		return 0;
++	}
++
++	/*
++	@Override
++	public void load() {
++		// TODO Auto-generated method stub
++		
++	}
++
++	@Override
++	public JSONObject save() {
++		// TODO Auto-generated method stub
++		return null;
++	}
++	*/
++
++}
+diff --git a/src/com/ui/ControlPanelButton.java b/src/com/ui/ControlPanelButton.java
+new file mode 100644
+index 0000000..1bffc5f
+--- /dev/null
++++ b/src/com/ui/ControlPanelButton.java
+@@ -0,0 +1,24 @@
++package com.ui;
++
++import java.awt.Dimension;
++
++import javax.swing.JButton;
++
++import com.controller.GameController;
++
++@SuppressWarnings("serial")
++public class ControlPanelButton extends JButton {
++	private int width = 100;
++	private int height = 30;
++	public ControlPanelButton(String name, String command, GameController driver) {
++		setText(name);
++		setActionCommand(command);
++		addActionListener(driver);
++		setVisible(true);
++		setAlignmentX(CENTER_ALIGNMENT);
++		setAlignmentY(CENTER_ALIGNMENT);
++		setMinimumSize(new Dimension(width, height));
++		setPreferredSize(new Dimension(width, height));
++		setMaximumSize(new Dimension(width, height));
++	}
++}
+diff --git a/src/com/ui/GUI.java b/src/com/ui/GUI.java
+index 0b737d7..c3f4ee1 100644
+--- a/src/com/ui/GUI.java
++++ b/src/com/ui/GUI.java
+@@ -2,6 +2,8 @@ package com.ui;
+ 
+ import java.awt.Color;
+ import java.awt.Dimension;
++
++import java.awt.BorderLayout;
+ import java.awt.Graphics;
+ import java.awt.Font;
+ import java.util.ArrayList;
+@@ -22,8 +24,10 @@ import org.apache.log4j.Logger;
+ import org.json.simple.JsonObject;
+ import org.json.simple.parser.JSONParser;
+ 
++import com.behavior.BoxLayoutXAxisBehavior;
+ import com.behavior.BoxLayoutYAxisBehavior;
+ import com.behavior.FlowLayoutBehavior;
++import com.behavior.GridBagLayoutBehavior;
+ import com.controller.GameController;
+ import com.infrastruture.AbstractPanel;
+ import com.infrastruture.Constants;
+@@ -38,30 +42,23 @@ public class GUI extends JFrame implements Element{
+ 	private JLabel exitLabel;
+ 	private GameController driver;
+ 	private MainPanel mainPanel;
+-	private StaticPanel timerPanel;
+ 	private JsonObject jsonObject;
+ 	private JSONParser parser;
++	private StaticPanel staticPanel;
++	private TimerPanel timerPanel;
++	private ControlPanel controlPanel;
+ 
+-	public GUI() {
+-		boardPanel = new GamePanel();
+-		timerPanel = new StaticPanel();
+-		elementList = new ArrayList<>();
+-		initializeUI();
+-	}
+-
+-	public GUI(GamePanel boardPanel, StaticPanel timerPanel) {
++	private boolean toggleLayout;
++	
++	public GUI(MainPanel mainPanel, GamePanel boardPanel, StaticPanel staticPanel, TimerPanel timerPanel, ControlPanel controlPanel) {
+ 		super("Breakout Game");
+-		this.boardPanel = boardPanel;
+-		this.timerPanel = timerPanel;
+-		elementList = new ArrayList<>();
+-		initializeUI();
+-	}
+-	public GUI(MainPanel mainPanel, GamePanel boardPanel, StaticPanel timerPanel) {
+-		elementList = new ArrayList<>();
+ 		this.mainPanel = mainPanel;
+ 		this.boardPanel = boardPanel;
++		this.staticPanel = staticPanel;
+ 		this.timerPanel = timerPanel;
++		this.controlPanel = controlPanel;
+ 		initializeUI();
++		elementList = new ArrayList<>();
+ 	}
+ 
+ 	private void initializeUI() {
+@@ -77,7 +74,8 @@ public class GUI extends JFrame implements Element{
+ //	   mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
+ //	   mainPanel.setFocusable(true);
+ //	   mainPanel.requestFocusInWindow();
+-	   setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
++//	   setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
++		setSize(900, 900);
+ 	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+ 	   setResizable(false);	
+ 	}
+@@ -95,7 +93,7 @@ public class GUI extends JFrame implements Element{
+ 	public void addDriver(GameController driver){
+ 		this.driver = driver;
+ 		mainPanel.addKeyListener(driver);
+-        timerPanel.createButtons(driver);
++        controlPanel.createButtons(driver);
+ 	}
+ 
+ 	public void changeFocus()
+@@ -191,17 +189,43 @@ public class GUI extends JFrame implements Element{
+ 	}		
+ 
+ 	public void modifyLayout() {
+-		// TODO Auto-generated method stub
+-		JPanel contentPane = (JPanel) getContentPane();
+-		System.out.println("Modifying Layout");
+-		mainPanel.setLayoutBehavior(new BoxLayoutYAxisBehavior());
+-		mainPanel.performUpdateLayout(mainPanel, Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
++		toggleLayout = !toggleLayout;
+ 		
+-		timerPanel.setLayoutBehavior(new FlowLayoutBehavior());
+-		timerPanel.performUpdateLayout(timerPanel, Constants.FRAME_WIDTH,Constants.TIMER_PANEL_WIDTH);
++		if (toggleLayout) {
++			System.out.println("Modifying Layout");
++			mainPanel.setLayoutBehavior(new BoxLayoutYAxisBehavior());
++			mainPanel.performUpdateLayout(mainPanel, Constants.FRAME_HEIGHT, Constants.FRAME_WIDTH);
++			
++			staticPanel.setLayoutBehavior(new BoxLayoutXAxisBehavior());
++			staticPanel.performUpdateLayout(staticPanel, Constants.BOARD_PANEL_HEIGHT,Constants.TIMER_PANEL_WIDTH);
++
++			timerPanel.setLayoutBehavior(new FlowLayoutBehavior());
++			timerPanel.performUpdateLayout(timerPanel, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_WIDTH);
++
++			controlPanel.setLayoutBehavior(new GridBagLayoutBehavior());
++			controlPanel.performUpdateLayout(controlPanel,Constants.TIMER_PANEL_HEIGHT-Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH);
++			
++			boardPanel.setLayoutBehavior(new FlowLayoutBehavior());
++			boardPanel.performUpdateLayout(boardPanel, Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT);
++		} else {
++			mainPanel.setLayoutBehavior(new BoxLayoutXAxisBehavior());
++			mainPanel.performUpdateLayout(mainPanel, Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
++
++			staticPanel.setLayoutBehavior(new BoxLayoutYAxisBehavior());
++			staticPanel.performUpdateLayout(staticPanel, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT);
++
++			timerPanel.setLayoutBehavior(new FlowLayoutBehavior());
++			timerPanel.performUpdateLayout(timerPanel, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_WIDTH);
++
++			controlPanel.setLayoutBehavior(new FlowLayoutBehavior());
++			controlPanel.performUpdateLayout(controlPanel, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT-Constants.TIMER_PANEL_WIDTH);
++
++			boardPanel.setLayoutBehavior(new FlowLayoutBehavior());
++			boardPanel.performUpdateLayout(boardPanel, Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT);
++		}
+ 		
+-		boardPanel.setLayoutBehavior(new FlowLayoutBehavior());
+-		boardPanel.performUpdateLayout(boardPanel, Constants.FRAME_WIDTH,Constants.BOARD_PANEL_WIDTH);
++		JPanel contentPane = (JPanel) getContentPane();
+ 		contentPane.revalidate();
++		this.pack();
+ 	}
+ }
+diff --git a/src/com/ui/GamePanel.java b/src/com/ui/GamePanel.java
+index ed7c97d..22ab539 100644
+--- a/src/com/ui/GamePanel.java
++++ b/src/com/ui/GamePanel.java
+@@ -39,6 +39,7 @@ public class GamePanel extends AbstractPanel implements Element {
+ 	
+ 	public GamePanel()
+ 	{
++//		setBorder(BorderFactory.createLoweredBevelBorder());
+ 	    elements = new ArrayList<Element>();
+         try {
+             image = ImageIO.read(new File("./src/com/image/nature.jpg"));
+@@ -74,22 +75,22 @@ public class GamePanel extends AbstractPanel implements Element {
+ 		setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
+ 		*/
+ 	}
+-
+ 	
+ 	public void performUpdateLayout(AbstractPanel abstractPanel, int width, int height) {
+-		super.performUpdateLayout(abstractPanel, width, height);
+         try {
+             image = ImageIO.read(new File("./src/com/image/nature.jpg"));
+             image = resize(image, width, height);
++            System.out.println("Image width: " + width + " height: " + height);
+         } catch (IOException e) {
+             // TODO Auto-generated catch block
+             e.printStackTrace();
+         }		
++		super.performUpdateLayout(abstractPanel, width, height);
+ 	}
+ 	
+-	
+ 	private BufferedImage resize(BufferedImage img, int width, int height) {
+         Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
++        System.out.println("Width: " + width + " Height: " + height);
+         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+         Graphics2D g2d = resized.createGraphics();
+         g2d.drawImage(tmp, 0, 0, null);
+@@ -100,6 +101,7 @@ public class GamePanel extends AbstractPanel implements Element {
+ 	public ArrayList<Element> getElements(){
+ 		return elements;
+ 	}
++
+ 	public void addElement(Element element){
+ 		elements.add(element);
+ 		
+diff --git a/src/com/ui/MainPanel.java b/src/com/ui/MainPanel.java
+index 3510ea2..f279075 100644
+--- a/src/com/ui/MainPanel.java
++++ b/src/com/ui/MainPanel.java
+@@ -1,5 +1,6 @@
+ package com.ui;
+ 
++import java.awt.Color;
+ import java.awt.Graphics;
+ import java.awt.Panel;
+ import java.util.ArrayList;
+@@ -7,8 +8,12 @@ import java.util.ArrayList;
+ //import org.json.JSONObject;
+ 
+ import org.json.simple.JsonObject;
++import javax.swing.BorderFactory;
++
++//import org.json.JSONObject;
+ 
+ import com.behavior.BoxLayoutXAxisBehavior;
++import com.behavior.BoxLayoutYAxisBehavior;
+ import com.infrastruture.AbstractPanel;
+ import com.infrastruture.Constants;
+ import com.infrastruture.Element;
+@@ -20,6 +25,7 @@ public class MainPanel extends AbstractPanel implements Element {
+ 
+ 	
+ 	public MainPanel() {
++//		setBorder(BorderFactory.createLineBorder(Color.black));
+         elements = new ArrayList<>();
+ 		setLayoutBehavior(new BoxLayoutXAxisBehavior());
+ 		performUpdateLayout(this, Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
+@@ -52,7 +58,7 @@ public class MainPanel extends AbstractPanel implements Element {
+ 
+ 	@Override
+ 	public void addComponent(Element e) {
+-//		System.out.println("Add component in MainPanel (mainPanel)");
++		System.out.println("Add component in MainPanel (mainPanel)");
+ 		elements.add(e);
+ 		this.add((AbstractPanel)e);
+ 	}
+diff --git a/src/com/ui/StaticPanel.java b/src/com/ui/StaticPanel.java
+index ca569f9..9bded8e 100644
+--- a/src/com/ui/StaticPanel.java
++++ b/src/com/ui/StaticPanel.java
+@@ -1,11 +1,13 @@
+ package com.ui;
+ 
++import java.awt.Color;
+ import java.awt.Component;
+ import java.awt.Dimension;
+ import java.awt.Graphics;
+ import java.awt.Graphics2D;
+ import java.util.ArrayList;
+ 
++import javax.swing.BorderFactory;
+ import javax.swing.Box;
+ import javax.swing.JButton;
+ import javax.swing.JComponent;
+@@ -17,6 +19,7 @@ import org.json.simple.JsonObject;
+ 
+ import com.behavior.BoxLayoutXAxisBehavior;
+ import com.behavior.BoxLayoutYAxisBehavior;
++import com.behavior.GridBagLayoutBehavior;
+ import com.component.Clock;
+ import com.controller.GameController;
+ import com.infrastruture.AbstractPanel;
+@@ -33,9 +36,11 @@ public class StaticPanel extends AbstractPanel implements Element{
+ 	private JsonObject jsonObject;
+ 	
+ 	public StaticPanel() {
++		setBorder(BorderFactory.createLoweredBevelBorder());
++		
+ 		setLayoutBehavior(new BoxLayoutYAxisBehavior());
++//		setLayoutBehavior(new GridLayoutBehavior());
+ 		performUpdateLayout(this, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT);
+-
+ //		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
+ //        this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
+         elements = new ArrayList<>();
+@@ -148,6 +153,7 @@ public class StaticPanel extends AbstractPanel implements Element{
+ 	}
+ 
+ 	
++	/*
+ 	@Override
+ 	public void paintComponent(Graphics g){
+ //		System.out.println("StaticPanel::paintComponent");
+@@ -167,11 +173,27 @@ public class StaticPanel extends AbstractPanel implements Element{
+ 		}
+ 		
+ 	}
++<<<<<<< 1243d225a68d13c1ecb85853a9b5309caf898ee2
+ 	
+ 	
++=======
++	*/
++
++	/*
++	@Override
++	public JSONObject save() {
++		// TODO Auto-generated method stub
++		return null;
++	}
++	@Override
++	public void load() {
++		// TODO Auto-generated method stub
++		
++	}
++	*/
+ 	public void addComponent(Element e) {
+-//		System.out.println("Add component in Static(timerPanel)");
+-		this.add((Component)e);
++		System.out.println("Add component in StaticPanel");
++		this.add((AbstractPanel)e);
+ 		elements.add(e);
+ 	}
+ 
+@@ -183,7 +205,10 @@ public class StaticPanel extends AbstractPanel implements Element{
+ 	@Override
+ 	public void draw(Graphics g) {
+ //		System.out.println("StaticPanel::draw");
+-		repaint();
++//		repaint();
++	for(Element component : elements) {
++		component.draw(null);
++	}
+ 	}
+ 	@Override
+ 	public void reset() {
+diff --git a/src/com/ui/TimerPanel.java b/src/com/ui/TimerPanel.java
+new file mode 100644
+index 0000000..af73e93
+--- /dev/null
++++ b/src/com/ui/TimerPanel.java
+@@ -0,0 +1,105 @@
++package com.ui;
++
++import java.awt.Color;
++import java.awt.Graphics;
++import java.util.ArrayList;
++
++import javax.swing.BorderFactory;
++import javax.swing.JComponent;
++
++//import org.json.JSONObject;
++import org.json.simple.JsonObject;
++
++import com.behavior.BoxLayoutXAxisBehavior;
++import com.behavior.FlowLayoutBehavior;
++import com.infrastruture.AbstractPanel;
++import com.infrastruture.Constants;
++import com.infrastruture.Element;
++
++@SuppressWarnings("serial")
++public class TimerPanel extends AbstractPanel implements Element {
++
++	private ArrayList<Element> components;
++
++	public TimerPanel() {
++//		setBorder(BorderFactory.createLineBorder(Color.blue));
++		
++		setLayoutBehavior(new FlowLayoutBehavior());
++		performUpdateLayout(this, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_WIDTH);
++
++        components = new ArrayList<>();
++	}
++
++	
++	@Override
++	public void paintComponent(Graphics g){
++//		System.out.println("StaticPanel::paintComponent");
++
++		super.paintComponent(g);
++		for(Element component : components)
++		{
++//			double X = this.getComponent(0).getX();
++//			double Y = this.getComponent(0).getY();
++//			System.out.println("X: " + X + " Y: " + Y);
++//			System.out.println("Width: " + Integer.toString(this.getComponent(0).getWidth()));
++//			System.out.println("Height: " + Integer.toString(this.getComponent(0).getHeight()));
++//			Graphics2D g2d = (Graphics2D) g.create();
++//			g2d.translate(X, Y); 
++//			component.draw(g2d);
++			component.draw(g);
++//			g2d.dispose();
++		}
++		
++	}
++
++	@Override
++	public void draw(Graphics g) {
++		repaint();
++	}
++
++	@Override
++	public void reset() {
++		// TODO Auto-generated method stub
++		for(Element component : components) {
++			component.reset();
++		}
++	}
++
++	@Override
++	public void addComponent(Element e) {
++		System.out.println("Add component in TimerPanel");
++		components.add(e);
++		add((JComponent)e);
++	}
++
++	@Override
++	public void removeComponent(Element e) {
++		components.remove(e);		
++	}
++
++
++	@Override
++	public JsonObject save() {
++		// TODO Auto-generated method stub
++		return null;
++	}
++
++
++	@Override
++	public int load(Object object) {
++		// TODO Auto-generated method stub
++		return 0;
++	}
++
++	/*
++	@Override
++	public void load() {		
++	}
++
++	@Override
++	public JSONObject save() {
++		return null;
++	}
++	*/
++
++}

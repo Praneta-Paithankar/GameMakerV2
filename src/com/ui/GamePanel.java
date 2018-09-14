@@ -1,7 +1,12 @@
 package com.ui;
 
+import java.awt.Graphics;
+
+import com.behavior.FlowLayoutBehavior;
+import com.image.*;
 import java.util.ArrayList;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -19,12 +24,13 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
 
+import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements Element {
+public class GamePanel extends AbstractPanel implements Element {
 	protected Logger log = Logger.getLogger(GamePanel.class);
 	private BufferedImage image;
 	private ArrayList<Element> elements;
@@ -42,16 +48,45 @@ public class GamePanel extends JPanel implements Element {
         }
         setLayout();
 	}
-	
-	public void setLayout() {
-		
-		setLayout(new GridBagLayout());
-        setPreferredSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
+
+	/*
+	@Override
+	public void performUpdateLayout(AbstractPanel abstractPanel, int width, int height) {
+		super.performUpdateLayout(abstractPanel, Constants.BOARD_PANEL_WIDTH, Constants.BOARD_PANEL_HEIGHT);
 	    setBorder(BorderFactory.createLineBorder(Color.GRAY));
 	    setMaximumSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
 		setBackground(Color.black);
 		setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
 	}
+	*/
+	
+	public void setLayout() {
+//		setLayout(new GridBagLayout());
+//        setPreferredSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
+		setLayoutBehavior(new FlowLayoutBehavior());
+		performUpdateLayout(this, Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT);
+
+		/*
+		setBorder(BorderFactory.createLineBorder(Color.GRAY));
+	    setMaximumSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
+		setBackground(Color.black);
+		setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
+		*/
+	}
+
+	
+	public void performUpdateLayout(AbstractPanel abstractPanel, int width, int height) {
+		super.performUpdateLayout(abstractPanel, width, height);
+        try {
+            image = ImageIO.read(new File("./src/com/image/nature.jpg"));
+            image = resize(image, width, height);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }		
+	}
+	
+	
 	private BufferedImage resize(BufferedImage img, int width, int height) {
         Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -67,6 +102,7 @@ public class GamePanel extends JPanel implements Element {
 	
 	@Override
 	public void paintComponent(Graphics g){
+//		System.out.println("GamePanel::paintComponent");
 		super.paintComponent(g);
 		if (image != null) {
 	        g.drawImage(image, 0, 0, this);
@@ -81,6 +117,7 @@ public class GamePanel extends JPanel implements Element {
 
 	@Override
 	public void draw(Graphics g) {
+//		System.out.println("GamePanel::draw");
 		repaint();
 	}
 
@@ -92,8 +129,11 @@ public class GamePanel extends JPanel implements Element {
 	}
 
 	public void addComponent(Element e) {
+//		System.out.println("Add component in GamePanel (boardPanel)");
+		this.add((Component)e);
 		elements.add(e);
 	}
+	
 
 	@Override
 	public void removeComponent(Element e) {

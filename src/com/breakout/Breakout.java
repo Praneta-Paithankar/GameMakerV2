@@ -1,5 +1,6 @@
 package com.breakout;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
@@ -20,6 +21,7 @@ import com.infrastruture.*;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 import com.ui.GamePanel;
+import com.ui.MainPanel;
 import com.ui.StaticPanel;
 
 public class Breakout {
@@ -53,13 +55,20 @@ public class Breakout {
 		}
 		
 		Clock clock = new Clock();
+		clock.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH));
+		clock.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH));
+//		clock.setPreferredSize(new Dimension(50, 50));
+//		clock.setMaximumSize(new Dimension(50, 50));
 		StaticPanel timerPanel = new StaticPanel();
 		timerPanel.addComponent(clock);
 		
+		MainPanel mainPanel = new MainPanel();
+		mainPanel.addComponent(timerPanel);
+		mainPanel.addComponent(boardPanel);
+
+		GUI gui = new GUI(mainPanel, boardPanel,timerPanel);
 		
-		GUI gui = new GUI(boardPanel,timerPanel);
-		gui.addComponent(boardPanel);
-		gui.addComponent(timerPanel);
+		gui.addComponent(mainPanel);
 		
 		CollisionChecker checker = new CollisionChecker();
 		
@@ -68,6 +77,8 @@ public class Breakout {
 		gui.addDriver(driver);
 		observable.startTimer();
 		gui.setVisible(true);
+//		gui.changeUI();
+		System.out.println("Print from Breakout");
 		gui.draw(null);
 		if(isRestart)
 			observable.registerObserver(driver);
