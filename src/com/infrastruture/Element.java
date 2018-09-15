@@ -2,7 +2,7 @@ package com.infrastruture;
 
 import java.awt.Graphics;
 
-import org.json.JSONObject;
+import org.json.simple.*;;
 
 public interface Element {
 	 void draw(Graphics g);
@@ -10,5 +10,5 @@ public interface Element {
 	 void addComponent(Element e);
 	 void removeComponent(Element e);
 	 void load();
-	 JSONObject save(); 
+	 JsonObject save(); 
 }

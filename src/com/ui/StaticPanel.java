@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.json.JSONObject;
+import org.json.simple.JsonObject;
 
 import com.controller.GameController;
 import com.infrastruture.Constants;
@@ -89,11 +89,7 @@ public class StaticPanel extends JPanel implements Element{
 		}
 	}
 	
-	@Override
-	public JSONObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 	@Override
 	public void load() {
 		// TODO Auto-generated method stub
@@ -117,5 +113,10 @@ public class StaticPanel extends JPanel implements Element{
 		for(Element element : elements) {
 			element.reset();
 		}
+	}
+	@Override
+	public JsonObject save() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

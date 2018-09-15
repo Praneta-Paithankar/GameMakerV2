@@ -42,7 +42,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
     private BreakoutTimer observable;
     private int noOfBricks;
     private BrickEnactCommand[] brickActCommands;
-    private BallEnactCommand ballActCommand;
+	private BallEnactCommand ballActCommand;
     private TimerCommand timerCommand;
     private Clock clock;
     private boolean isGamePaused = false;
@@ -50,8 +50,10 @@ public class GameController implements Observer, KeyListener,ActionListener{
     private Deque<Command> commandQueue;
     private BallChangeXDirectionCommand ballChangeXDirectionCommand;
     private BallChangeYDirectionCommand ballChangeYDirectionCommand;
+    private PaddleLeftMoveCommand paddleLeftMoveCommand;
+    private PaddleRightMoveCommand paddleRightMoveCommand;
     
-	public GameController(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock) {
+	public GameController(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock,CollisionChecker collisionChecker) {
 		
 		this.ball = ball;
 		this.paddle = paddle;
@@ -59,11 +61,12 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		this.gui = gui;
 		this.observable = observable;
 		this.clock = clock;
+		this.collisionChecker = collisionChecker;
 		this.noOfBricks = bricks.size();
 		brickActCommands = new BrickEnactCommand [noOfBricks];
 		commandQueue = new ArrayDeque<Command>();
 		timerCommand = new TimerCommand(clock);
-		collisionChecker = new CollisionChecker();
+		
 		initCommands();
     }
 	private void initCommands()
@@ -154,14 +157,14 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
-			PaddleLeftMoveCommand p =  new PaddleLeftMoveCommand(paddle);
-			p.execute();
-			commandQueue.addLast(p);
+			setPaddleLeftMoveCommand(new PaddleLeftMoveCommand(paddle));
+			paddleLeftMoveCommand.execute();
+			commandQueue.addLast(paddleLeftMoveCommand);
 			collisionChecker.checkCollisionBetweenCircleAndRectangle(ball.getCircle(),paddle.getRectangle());
 		}else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
-			PaddleRightMoveCommand p =  new PaddleRightMoveCommand(paddle);
-			p.execute();
-			commandQueue.addLast(p);
+			setPaddleRightMoveCommand(new PaddleRightMoveCommand(paddle));
+			paddleRightMoveCommand.execute();
+			commandQueue.addLast(paddleRightMoveCommand);
 			collisionChecker.checkCollisionBetweenCircleAndRectangle(ball.getCircle(),paddle.getRectangle());
 		}
 	}
@@ -320,5 +323,48 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			System.exit(0);
 		isGamePaused = false;
 	}
-
+	
+	
+	public TimerCommand getTimerCommand() {
+		return timerCommand;
+	}
+	public void setTimerCommand(TimerCommand timerCommand) {
+		this.timerCommand = timerCommand;
+	}
+	public PaddleLeftMoveCommand getPaddleLeftMoveCommand() {
+		return paddleLeftMoveCommand;
+	}
+	public void setPaddleLeftMoveCommand(PaddleLeftMoveCommand paddleLeftMoveCommand) {
+		this.paddleLeftMoveCommand = paddleLeftMoveCommand;
+	}
+	public PaddleRightMoveCommand getPaddleRightMoveCommand() {
+		return paddleRightMoveCommand;
+	}
+	public void setPaddleRightMoveCommand(PaddleRightMoveCommand paddleRightMoveCommand) {
+		this.paddleRightMoveCommand = paddleRightMoveCommand;
+	}
+	public BallEnactCommand getBallActCommand() {
+		return ballActCommand;
+	}
+	public void setBallActCommand(BallEnactCommand ballActCommand) {
+		this.ballActCommand = ballActCommand;
+	}
+	public BallChangeXDirectionCommand getBallChangeXDirectionCommand() {
+		return ballChangeXDirectionCommand;
+	}
+	public void setBallChangeXDirectionCommand(BallChangeXDirectionCommand ballChangeXDirectionCommand) {
+		this.ballChangeXDirectionCommand = ballChangeXDirectionCommand;
+	}
+	public BallChangeYDirectionCommand getBallChangeYDirectionCommand() {
+		return ballChangeYDirectionCommand;
+	}
+	public void setBallChangeYDirectionCommand(BallChangeYDirectionCommand ballChangeYDirectionCommand) {
+		this.ballChangeYDirectionCommand = ballChangeYDirectionCommand;
+	}
+	public BrickEnactCommand[] getBrickActCommands() {
+			return brickActCommands;
+		}
+		public void setBrickActCommands(BrickEnactCommand[] brickActCommands) {
+			this.brickActCommands = brickActCommands;
+		}
 }

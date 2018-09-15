@@ -3,7 +3,7 @@ package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import org.json.JSONObject;
+import org.json.simple.JsonObject;
 
 import com.dimension.Rectangle;
 import com.infrastruture.Constants;
@@ -53,11 +53,7 @@ public class Brick implements Element{
 		
 	}
 
-	@Override
-	public JSONObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public void load() {
@@ -75,6 +71,12 @@ public class Brick implements Element{
 	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public JsonObject save() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

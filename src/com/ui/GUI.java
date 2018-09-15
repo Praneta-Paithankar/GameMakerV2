@@ -9,7 +9,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.json.JSONObject;
+import org.json.simple.JsonObject;
 
 import com.controller.GameController;
 import com.infrastruture.Constants;
@@ -74,12 +74,7 @@ public class GUI extends JFrame implements Element{
 	}
 	
 	
-	@Override
-	public JSONObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public void load() {
 		// TODO Auto-generated method stub
@@ -109,6 +104,12 @@ public class GUI extends JFrame implements Element{
 	@Override
 	public void removeComponent(Element e) {
 		elements.remove(e);
+	}
+
+	@Override
+	public JsonObject save() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

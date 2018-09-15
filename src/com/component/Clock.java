@@ -1,13 +1,10 @@
 package com.component;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
-import org.json.JSONObject;
+import org.json.simple.JsonObject;
 
-import com.infrastruture.Constants;
-import com.infrastruture.Observer;
 import com.infrastruture.Element;
 
 
@@ -60,12 +57,7 @@ public class Clock implements Element{
 		return (int) ((milisecondsElapsed / 1000) % 60);
 	}
 
-	@Override
-	public JSONObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public void load() {
 		// TODO Auto-generated method stub
@@ -82,6 +74,12 @@ public class Clock implements Element{
 	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public JsonObject save() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

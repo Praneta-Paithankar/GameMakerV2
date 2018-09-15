@@ -1,23 +1,21 @@
 package com.ui;
 
-import java.awt.Graphics;
-import com.image.*;
-import java.util.ArrayList;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
-import org.json.JSONObject;
+import org.json.simple.JsonObject;
 
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -73,11 +71,7 @@ public class GamePanel extends JPanel implements Element {
 	}
 	
 
-	@Override
-	public JSONObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public void load() {
@@ -118,6 +112,12 @@ public class GamePanel extends JPanel implements Element {
 	@Override
 	public void removeComponent(Element e) {
 		elements.remove(e);
+	}
+
+	@Override
+	public JsonObject save() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
