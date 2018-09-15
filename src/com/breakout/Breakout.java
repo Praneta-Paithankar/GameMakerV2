@@ -12,6 +12,7 @@ import com.controller.GameController;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
+import com.helper.CollisionChecker;
 import com.infrastruture.Constants;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
@@ -57,12 +58,13 @@ public class Breakout {
 		gui.addComponent(boardPanel);
 		gui.addComponent(timerPanel);
 		
-		GameController driver = new GameController(ball, paddle, bricks, gui,observable, clock);
+		CollisionChecker checker = new CollisionChecker();
+		
+		GameController driver = new GameController(ball, paddle, bricks, gui,observable, clock,checker);
 		
 		gui.addDriver(driver);
 		observable.startTimer();
 		gui.setVisible(true);
-//		gui.changeUI();
 		gui.draw(null);
 		if(isRestart)
 			observable.registerObserver(driver);
