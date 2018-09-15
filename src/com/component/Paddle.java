@@ -2,7 +2,7 @@ package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import org.json.JSONObject;
+import org.json.simple.JsonObject;
 
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
@@ -61,12 +61,7 @@ public class Paddle implements Element{
 		 
 	}
 
-	@Override
-	public JSONObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	
 	@Override
 	public void load() {
 		// TODO Auto-generated method stub
@@ -84,5 +79,11 @@ public class Paddle implements Element{
 	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public JsonObject save() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

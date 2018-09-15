@@ -3,7 +3,7 @@ package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import org.json.JSONObject;
+import org.json.simple.JsonObject;
 
 import com.dimension.Circle;
 import com.dimension.Coordinate;
@@ -54,11 +54,7 @@ public class Ball implements Element{
 		this.setDelta(new Coordinate(Constants.BALL_DELTA_X, Constants.BALL_DELTA_Y));
 	}
 
-	@Override
-	public JSONObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public void load() {
@@ -76,6 +72,12 @@ public class Ball implements Element{
 	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public JsonObject save() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
