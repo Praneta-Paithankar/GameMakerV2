@@ -132,9 +132,8 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		//Check collision between ball and paddle
 		result = collisionChecker.checkCollisionBetweenCircleAndRectangle(ball.getCircle(), paddle.getRectangle());
 		changeBallDirectionCommand(result);
-		//doubt 
-//		gui.draw(null);
-		 gui.changeUI();
+		 
+		gui.draw(null);
 	}
 	private void changeBallDirectionCommand(Direction result) {
 		
@@ -217,9 +216,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 							public void run() {
 								// TODO Auto-generated method stub
 								val.execute();
-								//doubt
-//								gui.draw(null);
-								gui.changeUI();
+								gui.draw(null);
 								try {
 									currentThread();
 									Thread.sleep(10);
@@ -308,7 +305,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		}else if(commandText.equals("load")) {
 			load();
 			gui.changeFocus();
-			gui.changeUI();
+			gui.draw(null);;
 		}
 	}
 	

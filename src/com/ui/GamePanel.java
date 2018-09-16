@@ -64,13 +64,6 @@ public class GamePanel extends JPanel implements Element {
 	public ArrayList<Element> getElements(){
 		return elements;
 	}
-	public void addElement(Element element){
-		elements.add(element);
-		
-	}
-	public void removeElement(Element element){
-		elements.remove(element);
-	}
 	
 	@Override
 	public void paintComponent(Graphics g){
