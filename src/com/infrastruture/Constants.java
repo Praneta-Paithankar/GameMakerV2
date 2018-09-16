@@ -3,8 +3,10 @@ package com.infrastruture;
 import java.awt.Color;
 
 public class Constants {
-	public final static int FRAME_WIDTH =  900;
-	public final static int FRAME_HEIGHT =  750;
+	public final static int FRAME_WIDTH = 900;
+	public final static int  FRAME_HEIGHT = 900;
+	public final static int MAIN_PANEL_WIDTH =  900;
+	public final static int MAIN_PANEL_HEIGHT =  750;
 	public final static int TIMER_PANEL_WIDTH =  150;
 	public final static int TIMER_PANEL_HEIGHT =  750;
 	public final static int BOARD_PANEL_WIDTH =  750;

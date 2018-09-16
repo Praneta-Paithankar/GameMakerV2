@@ -28,8 +28,6 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	    createUndo();
 	    createStart();
 	    createPause();
-//	    this.add(new JPanel());
-//	    this.add(new JPanel());
 	    
 	    createSave();
 	    createLoad();
@@ -38,60 +36,41 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	
 	public void createReplay() {
 		ControlPanelButton replayButton = new ControlPanelButton("Replay", "replay", driver);
-
-//		this.add(Box.createRigidArea(new Dimension(30,30)));
 		this.add(replayButton);
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
+
 	}
 	
 	public void createUndo() {
 		ControlPanelButton undoButton = new ControlPanelButton("Undo", "undo", driver);
-	
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 		this.add(undoButton);
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
+
 	}
 	
 	public void createStart() {
 		ControlPanelButton startButton = new ControlPanelButton("Start", "start", driver);
-
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 		this.add(startButton);
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 	}
 	
 	public void createPause() {
 		ControlPanelButton pauseButton = new ControlPanelButton("Pause", "pause", driver);
-
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 		this.add(pauseButton);
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 	}
 
 	public void createLayout() {
 		ControlPanelButton layoutButton = new ControlPanelButton("Layout", "layout", driver);
-
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 		this.add(layoutButton);
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 	}
 
 	public void createLoad() {
 		ControlPanelButton layoutButton = new ControlPanelButton("Load", "load", driver);
-
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 		this.add(layoutButton);
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 	}
 
 	public void createSave() {
 		ControlPanelButton layoutButton = new ControlPanelButton("Save", "save", driver);
-
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 		this.add(layoutButton);
-//		this.add(Box.createRigidArea(new Dimension(5,5)));
 	}
-@Override
+	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
 		
@@ -106,7 +85,7 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	@Override
 	public void addComponent(Element e) {
 		// TODO Auto-generated method stub
-		System.out.println("Add component in ControlPanel");
+		
 
 	}
 
@@ -128,18 +107,5 @@ public class ControlPanel  extends AbstractPanel implements Element {
 		return 0;
 	}
 
-	/*
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public JSONObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	*/
 
 }

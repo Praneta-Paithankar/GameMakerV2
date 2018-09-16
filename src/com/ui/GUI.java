@@ -60,19 +60,7 @@ public class GUI extends JFrame implements Element{
 
 	private void initializeUI() {
 		
-//       mainPanel = new JPanel();
-//       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
-       
-//       mainPanel.add(timerPanel);
-//       mainPanel.add(boardPanel);
-        
-//	   add(mainPanel);
-		
-//	   mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
-//	   mainPanel.setFocusable(true);
-//	   mainPanel.requestFocusInWindow();
-//	   setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
-		setSize(900, 900);
+	   setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
 	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	   setResizable(false);	
 	}
@@ -197,7 +185,7 @@ public class GUI extends JFrame implements Element{
 		
 		if (toggleLayout) {
 			mainPanel.setLayoutBehavior(new BoxLayoutYAxisBehavior());
-			mainPanel.performUpdateLayout(mainPanel, Constants.FRAME_HEIGHT, Constants.FRAME_WIDTH);
+			mainPanel.performUpdateLayout(mainPanel, Constants.MAIN_PANEL_HEIGHT, Constants.MAIN_PANEL_WIDTH);
 			
 			staticPanel.setLayoutBehavior(new BoxLayoutXAxisBehavior());
 			staticPanel.performUpdateLayout(staticPanel, Constants.BOARD_PANEL_HEIGHT,Constants.TIMER_PANEL_WIDTH);
@@ -212,7 +200,7 @@ public class GUI extends JFrame implements Element{
 			boardPanel.performUpdateLayout(boardPanel, Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT);
 		} else {
 			mainPanel.setLayoutBehavior(new BoxLayoutXAxisBehavior());
-			mainPanel.performUpdateLayout(mainPanel, Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
+			mainPanel.performUpdateLayout(mainPanel, Constants.MAIN_PANEL_WIDTH,Constants.MAIN_PANEL_HEIGHT);
 
 			staticPanel.setLayoutBehavior(new BoxLayoutYAxisBehavior());
 			staticPanel.performUpdateLayout(staticPanel, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT);
