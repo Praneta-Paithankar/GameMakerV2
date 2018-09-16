@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+//import org.junit.runner.RunWith;
 
 import com.component.Ball;
 import com.dimension.Circle;
@@ -17,7 +17,7 @@ import com.infrastruture.Direction;
 
 import org.mockito.junit.MockitoJUnitRunner;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 class CollisionCheckerTest {
 
 	private CollisionChecker collisionChecker;
