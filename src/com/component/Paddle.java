@@ -78,12 +78,15 @@ public class Paddle implements Element{
 	@Override
 	public JsonObject save() {
 		jsonObject = new JsonObject();
+		
 		try {
 			jsonObject.put("PaddleX", this.getRectangle().getTopLeftCoordinate().getX());
 			jsonObject.put("PaddleY", this.getRectangle().getTopLeftCoordinate().getY());
+			jsonObject.put("PaddleDeltaX", this.getDeltaX());
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
+		
 		return jsonObject;
 	}
 
@@ -91,8 +94,10 @@ public class Paddle implements Element{
 	public int load(Object object) {
 		// TODO Auto-generated method stub
 		jsonObject = (JsonObject) object;
-		this.getRectangle().getTopLeftCoordinate().setX((int)(long)jsonObject.get("PaddleX"));
-		this.getRectangle().getTopLeftCoordinate().setY((int)(long)jsonObject.get("PaddleY"));
+		
+		this.getRectangle().getTopLeftCoordinate().setX(jsonObject.getInteger("PaddleX"));
+		this.getRectangle().getTopLeftCoordinate().setY(jsonObject.getInteger("PaddleY"));
+		this.setDeltaX(jsonObject.getInteger("PaddleDeltaX"));
 		
 		return 1;
 	}

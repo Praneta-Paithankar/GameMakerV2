@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import org.apache.log4j.Logger;
+import org.json.simple.DeserializationException;
 import org.json.simple.JsonObject;
+import org.json.simple.Jsoner;
 
 import com.dimension.Circle;
 import com.dimension.Coordinate;
@@ -86,12 +88,12 @@ public class Ball implements Element{
 	@Override
 	public int load(Object object) {
 		// TODO Auto-generated method stub
-		jsonObject = (JsonObject) object;
-		
-		this.getCircle().getCenter().setX((int)(long)(jsonObject.get("BallX")));
-		this.getCircle().getCenter().setY((int)(long)(jsonObject.get("BallY")));
-		this.getDelta().setX((int)(long)(jsonObject.get("BallDeltaX")));
-		this.getDelta().setY((int)(long)(jsonObject.get("BallDeltaY")));
+			jsonObject = (JsonObject)object;
+			
+			this.getCircle().getCenter().setX((jsonObject.getInteger("BallX")));
+			this.getCircle().getCenter().setY((jsonObject.getInteger("BallY")));
+			this.getDelta().setX((jsonObject.getInteger("BallDeltaX")));
+			this.getDelta().setY((jsonObject.getInteger("BallDeltaY")));
 		
 		return 1;
 	}

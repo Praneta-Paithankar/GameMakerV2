@@ -18,7 +18,6 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
-import org.json.simple.parser.JSONParser;
 
 import com.infrastruture.Constants;
 import com.infrastruture.Element;

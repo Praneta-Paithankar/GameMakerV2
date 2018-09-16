@@ -20,7 +20,7 @@ import javax.swing.SwingConstants;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
-import org.json.simple.parser.JSONParser;
+import org.json.simple.Jsoner;
 
 import com.controller.GameController;
 import com.infrastruture.Constants;
@@ -37,7 +37,8 @@ public class GUI extends JFrame implements Element{
 	private JPanel mainPanel;
 	private StaticPanel timerPanel;
 	private JsonObject jsonObject;
-	private JSONParser parser;
+	private JFileChooser c;
+	private FileWriter file;
 	
 	public GUI() {
 		boardPanel = new GamePanel();
@@ -135,7 +136,7 @@ public class GUI extends JFrame implements Element{
 		// TODO Auto-generated method stub
 		jsonObject = new JsonObject();
 		try {
-			JFileChooser c = new JFileChooser();
+			c = new JFileChooser();
 			int rVal = c.showSaveDialog(boardPanel);
 		      if (rVal == JFileChooser.APPROVE_OPTION) {
 		        filename.setText(c.getSelectedFile().getName());
@@ -143,11 +144,8 @@ public class GUI extends JFrame implements Element{
 		        for (Element element : elementList) {
 					jsonObject.put(element.getClass().toString(), element.save());
 		        }
-				System.out.println(jsonObject.size());
-		        FileWriter file = new FileWriter(dir.getText() + "\\" + filename.getText());
-				//doubt here in GUI
-				System.out.println("rohan" + jsonObject.toString());
-				file.write(jsonObject.toString());				
+		        file = new FileWriter(dir.getText() + "\\" + filename.getText());
+				file.write(jsonObject.toJson());				
 				file.flush();
 		      }
 		      if (rVal == JFileChooser.CANCEL_OPTION) {
@@ -165,15 +163,13 @@ public class GUI extends JFrame implements Element{
 	public int load(Object object) {
 		int brickCount = 0;
 		try {
-			JFileChooser c = new JFileChooser();
+			c = new JFileChooser();
 			int rVal = c.showOpenDialog(boardPanel);
 		      if (rVal == JFileChooser.APPROVE_OPTION) {
 		        filename.setText(c.getSelectedFile().getName());
 		        dir.setText(c.getCurrentDirectory().toString());
-		        parser = new JSONParser();
-				Object obj = parser.parse(new FileReader(dir.getText() + "\\" + filename.getText()));
+				Object obj = Jsoner.deserialize(new FileReader(dir.getText() + "\\" + filename.getText()));
 				jsonObject = (JsonObject) obj;
-				
 				for (Element element : elementList) {
 					if(element.getClass().toString().contains("GamePanel")) {
 						brickCount = element.load(jsonObject.get(element.getClass().toString()));

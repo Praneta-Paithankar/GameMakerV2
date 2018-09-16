@@ -5,7 +5,9 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 import org.apache.log4j.Logger;
+import org.json.simple.DeserializationException;
 import org.json.simple.JsonObject;
+import org.json.simple.Jsoner;
 
 import com.infrastruture.*;
 
@@ -83,9 +85,8 @@ public class Clock implements Element{
 	@Override
 	public int load(Object object) {
 		// TODO Auto-generated method stub
-		jsonObject = (JsonObject) object;
-		this.setMilisecondsElapsed((long)(jsonObject.get("Clock")));
-		
+			jsonObject = (JsonObject) object;
+			this.setMilisecondsElapsed((jsonObject.getLong("Clock")));
 		return 1;
 	}
 }
