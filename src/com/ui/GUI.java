@@ -1,20 +1,16 @@
 package com.ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.GridBagLayout;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
@@ -26,8 +22,7 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame implements Element{
-	protected Logger log = Logger.getLogger(GUI.class);
-	private JTextField filename = new JTextField(), dir = new JTextField();	
+	protected Logger log = Logger.getLogger(GUI.class);	
 	private GamePanel boardPanel;
 	private ArrayList<Element> elements;
 
@@ -36,8 +31,11 @@ public class GUI extends JFrame implements Element{
 	private StaticPanel timerPanel;
 	private JsonObject jsonObject;
 	private JFileChooser c;
-	private FileWriter file;
+	private FileWriter fileWriter;
+	private String filePath;
+	private FileReader fileReader;
 	
+
 	public GUI() {
 		boardPanel = new GamePanel();
 		timerPanel = new StaticPanel();
@@ -116,26 +114,26 @@ public class GUI extends JFrame implements Element{
 		jsonObject = new JsonObject();
 		try {
 			c = new JFileChooser();
-			int rVal = c.showSaveDialog(boardPanel);
+			c.setDialogType(JFileChooser.SAVE_DIALOG);
+			c.setFileFilter(new FileNameExtensionFilter("json file","json"));
+			int rVal = c.showSaveDialog(this);
 		      if (rVal == JFileChooser.APPROVE_OPTION) {
-		        filename.setText(c.getSelectedFile().getName());
-		        dir.setText(c.getCurrentDirectory().toString());
+		        String name = c.getSelectedFile().toString();
+		    	if (!name.endsWith(".json"))
+		    	        name += ".json";
+		    	setFilePath(name);
 		        for (Element element : elements) {
 					jsonObject.put(element.getClass().toString(), element.save());
 		        }
-		        String filePath = Paths.get(dir.getText() , filename.getText()).toString();
-		        file = new FileWriter(filePath);
-				file.write(jsonObject.toJson());				
-				file.flush();
+		        
 		      }
 		      if (rVal == JFileChooser.CANCEL_OPTION) {
-		        filename.setText("You pressed cancel");
-		        dir.setText("");
+		        setFilePath("");
+		        jsonObject = null;
 		      }
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		} 
-		
 		return jsonObject;
 	}
 
@@ -144,12 +142,13 @@ public class GUI extends JFrame implements Element{
 		int brickCount = 0;
 		try {
 			c = new JFileChooser();
+			c.setFileFilter(new FileNameExtensionFilter("json file","json"));
 			int rVal = c.showOpenDialog(boardPanel);
-		      if (rVal == JFileChooser.APPROVE_OPTION) {
-		        filename.setText(c.getSelectedFile().getName());
-		        dir.setText(c.getCurrentDirectory().toString());
-		        String filePath = Paths.get(dir.getText() , filename.getText()).toString();
-				Object obj = Jsoner.deserialize(new FileReader(filePath));
+		    if (rVal == JFileChooser.APPROVE_OPTION) {
+		    	String name = c.getSelectedFile().toString();
+		    	setFilePath(name);
+		    	setFileReader(new FileReader(filePath));
+				Object obj = Jsoner.deserialize(getFileReader());
 				jsonObject = (JsonObject) obj;
 				for (Element element : elements) {
 					if(element.getClass().toString().contains("GamePanel")) {
@@ -158,15 +157,29 @@ public class GUI extends JFrame implements Element{
 						element.load(jsonObject.get(element.getClass().toString()));
 					}
 				}
-		      }
-		      if (rVal == JFileChooser.CANCEL_OPTION) {
-		        filename.setText("You pressed cancel");
-		        dir.setText("");
-		      }
+		     }
+		     if (rVal == JFileChooser.CANCEL_OPTION) {
+		    	 setFilePath("");
+		     }
 			
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 		return brickCount;
-	}		
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}	
+	public FileReader getFileReader() {
+		return fileReader;
+	}
+
+	public void setFileReader(FileReader fileReader) {
+		this.fileReader = fileReader;
+	}
 }

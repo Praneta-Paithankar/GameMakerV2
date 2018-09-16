@@ -4,7 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -47,7 +50,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	private BallEnactCommand ballActCommand;
     private TimerCommand timerCommand;
     private Clock clock;
-    private boolean isGamePaused = false;
+    private boolean isGamePaused ;
     private CollisionChecker collisionChecker;
     private JsonObject jsonObject;
     private Deque<Command> commandQueue;
@@ -55,6 +58,13 @@ public class GameController implements Observer, KeyListener,ActionListener{
     private BallChangeYDirectionCommand ballChangeYDirectionCommand;
     private PaddleLeftMoveCommand paddleLeftMoveCommand;
     private PaddleRightMoveCommand paddleRightMoveCommand;
+    private FileWriter file;
+    
+    private boolean isGameLoaded;
+    private Ball startBall;
+    private Paddle startPaddle;
+    private ArrayList<Brick> startBricks;
+    private Clock startClock;
     
 	public GameController(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock,CollisionChecker collisionChecker) {
 		
@@ -66,6 +76,8 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		this.clock = clock;
 		this.collisionChecker = collisionChecker;
 		this.noOfBricks = bricks.size();
+		isGamePaused = false;
+		isGameLoaded = false;
 		brickActCommands = new BrickEnactCommand [noOfBricks];
 		commandQueue = new ArrayDeque<Command>();
 		timerCommand = new TimerCommand(clock);	
@@ -178,7 +190,6 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	}
 	
 	
-	
 	private void undoAction() {
 
 		int count = 0;
@@ -204,7 +215,6 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		
 		Iterator<Command> itr = commandQueue.iterator();
 		int brickCount = noOfBricks;
-		gameReset();
 		
 		new Thread(){
 			public void run(){
@@ -257,13 +267,48 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	}
 	public void save() {
 		pause();
-		gui.save();
+		JsonObject jsonObject=  gui.save();
+        try {
+			setFile(new FileWriter(gui.getFilePath()));
+			file.write(jsonObject.toJson());				
+			file.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
+	public void createCopy() {
+		startBall = new Ball(ball);
+		startPaddle = new Paddle(paddle);
+		startClock = new Clock(clock);
+		this.noOfBricks = bricks.size();
+		startBricks = new ArrayList<>();
+		for(Brick b : bricks) {
+			startBricks.add(new Brick(b));
+		}
+	}
 	public void load() {
 		pause();
 		commandQueue.clear();
+		isGameLoaded = true;
 		this.noOfBricks = gui.load(null);
+		clock.reset();
+		createCopy();
+	}
+	
+	public void gameResetAfterLoad() {
+		ball.reset(startBall);
+		paddle.reset(startPaddle);
+		clock.reset( );
+		this.noOfBricks = startBricks.size();
+		Iterator<Brick> brickItr= bricks.iterator();
+		Iterator<Brick> saveBrickItr= startBricks.iterator();
+		while(brickItr.hasNext() && saveBrickItr.hasNext()) {
+			Brick brick = brickItr.next();
+			Brick saveBrick = saveBrickItr.next();
+			brick.reset(saveBrick);
+		}
+		
 	}
 	//Switch between actions when a button is pressed
 	
@@ -283,6 +328,10 @@ public class GameController implements Observer, KeyListener,ActionListener{
 
 		}else if(commandText.equals("replay")) {
 			pause();
+			if(isGameLoaded)
+				gameResetAfterLoad();
+			else
+				gameReset();
 			replayAction();
 			gui.changeFocus();
 		}else if(commandText.equals("start")) {
@@ -342,6 +391,12 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	}
 	
 	
+	public FileWriter getFile() {
+		return file;
+	}
+	public void setFile(FileWriter file) {
+		this.file = file;
+	}
 	public TimerCommand getTimerCommand() {
 		return timerCommand;
 	}
