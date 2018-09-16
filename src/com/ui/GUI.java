@@ -1,6 +1,8 @@
 package com.ui;
 
 import java.awt.Dimension;
+
+import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -16,7 +18,12 @@ import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
 import org.json.simple.Jsoner;
 
+import com.behavior.BoxLayoutXAxisBehavior;
+import com.behavior.BoxLayoutYAxisBehavior;
+import com.behavior.FlowLayoutBehavior;
+import com.behavior.GridBagLayoutBehavior;
 import com.controller.GameController;
+import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
@@ -24,44 +31,48 @@ import com.infrastruture.Element;
 public class GUI extends JFrame implements Element{
 	protected Logger log = Logger.getLogger(GUI.class);	
 	private GamePanel boardPanel;
-	private ArrayList<Element> elements;
+	private ArrayList<Element> elementList;
 
 	private GameController driver;
-	private JPanel mainPanel;
-	private StaticPanel timerPanel;
+	private MainPanel mainPanel;
 	private JsonObject jsonObject;
 	private JFileChooser c;
 	private FileWriter fileWriter;
 	private String filePath;
 	private FileReader fileReader;
+
+	private StaticPanel staticPanel;
+	private TimerPanel timerPanel;
+	private ControlPanel controlPanel;
+	private boolean toggleLayout;
 	
-
-	public GUI() {
-		boardPanel = new GamePanel();
-		timerPanel = new StaticPanel();
-		elements = new ArrayList<>();
-		initializeUI();
-	}
-
-	public GUI(GamePanel boardPanel, StaticPanel timerPanel) {
+	public GUI(MainPanel mainPanel, GamePanel boardPanel, StaticPanel staticPanel, TimerPanel timerPanel, ControlPanel controlPanel) {
 		super("Breakout Game");
+		this.mainPanel = mainPanel;
 		this.boardPanel = boardPanel;
+		this.staticPanel = staticPanel;
 		this.timerPanel = timerPanel;
-		elements = new ArrayList<>();
+		this.controlPanel = controlPanel;
+		toggleLayout = false;
 		initializeUI();
+		elementList = new ArrayList<>();
 	}
-	
+
 	private void initializeUI() {
-       mainPanel = new JPanel();
-       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));       
-       mainPanel.add(timerPanel);
-       mainPanel.add(boardPanel);
+		
+//       mainPanel = new JPanel();
+//       mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
        
-       add(mainPanel);
-	   mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
-	   mainPanel.setFocusable(true);
-	   mainPanel.requestFocusInWindow();
-	   setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
+//       mainPanel.add(timerPanel);
+//       mainPanel.add(boardPanel);
+        
+//	   add(mainPanel);
+		
+//	   mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
+//	   mainPanel.setFocusable(true);
+//	   mainPanel.requestFocusInWindow();
+//	   setSize(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
+		setSize(900, 900);
 	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	   setResizable(false);	
 	}
@@ -75,9 +86,9 @@ public class GUI extends JFrame implements Element{
 	public void addDriver(GameController driver){
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
-        timerPanel.createButtons(driver);
-	
+        controlPanel.createButtons(driver);
 	}
+
 	public void changeFocus()
 	{
 		mainPanel.requestFocus();
@@ -86,26 +97,27 @@ public class GUI extends JFrame implements Element{
 
 	@Override
 	public void draw(Graphics g) {
-		for(Element element : elements) {
+		for(Element element : elementList) {
 			element.draw(g);
 		}	
 	}
 
 	@Override
 	public void reset() {
-		for(Element element : elements) {
+		for(Element element : elementList) {
 			element.reset();
 		}
 	}
 
 	@Override
 	public void addComponent(Element e) {
-		elements.add(e);
+		add((AbstractPanel)e);
+		elementList.add(e);
 	}
 
 	@Override
 	public void removeComponent(Element e) {
-		elements.remove(e);
+		elementList.remove(e);
 	}
 
 	@Override
@@ -122,7 +134,7 @@ public class GUI extends JFrame implements Element{
 		    	if (!name.endsWith(".json"))
 		    	        name += ".json";
 		    	setFilePath(name);
-		        for (Element element : elements) {
+		        for (Element element : elementList) {
 					jsonObject.put(element.getClass().toString(), element.save());
 		        }
 		        
@@ -150,14 +162,11 @@ public class GUI extends JFrame implements Element{
 		    	setFileReader(new FileReader(filePath));
 				Object obj = Jsoner.deserialize(getFileReader());
 				jsonObject = (JsonObject) obj;
-				for (Element element : elements) {
-					if(element.getClass().toString().contains("GamePanel")) {
+				for (Element element : elementList) {
 						brickCount = element.load(jsonObject.get(element.getClass().toString()));
-					}else {
-						element.load(jsonObject.get(element.getClass().toString()));
 					}
 				}
-		     }
+		    
 		     if (rVal == JFileChooser.CANCEL_OPTION) {
 		    	 setFilePath("");
 		     }
@@ -181,5 +190,45 @@ public class GUI extends JFrame implements Element{
 
 	public void setFileReader(FileReader fileReader) {
 		this.fileReader = fileReader;
+	}		
+
+	public void modifyLayout() {
+		toggleLayout = !toggleLayout;
+		
+		if (toggleLayout) {
+			mainPanel.setLayoutBehavior(new BoxLayoutYAxisBehavior());
+			mainPanel.performUpdateLayout(mainPanel, Constants.FRAME_HEIGHT, Constants.FRAME_WIDTH);
+			
+			staticPanel.setLayoutBehavior(new BoxLayoutXAxisBehavior());
+			staticPanel.performUpdateLayout(staticPanel, Constants.BOARD_PANEL_HEIGHT,Constants.TIMER_PANEL_WIDTH);
+
+			timerPanel.setLayoutBehavior(new FlowLayoutBehavior());
+			timerPanel.performUpdateLayout(timerPanel, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_WIDTH);
+
+			controlPanel.setLayoutBehavior(new GridBagLayoutBehavior());
+			controlPanel.performUpdateLayout(controlPanel,Constants.TIMER_PANEL_HEIGHT-Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH);
+			
+			boardPanel.setLayoutBehavior(new FlowLayoutBehavior());
+			boardPanel.performUpdateLayout(boardPanel, Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT);
+		} else {
+			mainPanel.setLayoutBehavior(new BoxLayoutXAxisBehavior());
+			mainPanel.performUpdateLayout(mainPanel, Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
+
+			staticPanel.setLayoutBehavior(new BoxLayoutYAxisBehavior());
+			staticPanel.performUpdateLayout(staticPanel, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT);
+
+			timerPanel.setLayoutBehavior(new FlowLayoutBehavior());
+			timerPanel.performUpdateLayout(timerPanel, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_WIDTH);
+
+			controlPanel.setLayoutBehavior(new FlowLayoutBehavior());
+			controlPanel.performUpdateLayout(controlPanel, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT-Constants.TIMER_PANEL_WIDTH);
+
+			boardPanel.setLayoutBehavior(new FlowLayoutBehavior());
+			boardPanel.performUpdateLayout(boardPanel, Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT);
+		}
+		
+		JPanel contentPane = (JPanel) getContentPane();
+		contentPane.revalidate();
+		this.pack();
 	}
 }

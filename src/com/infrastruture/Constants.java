@@ -24,7 +24,7 @@ public class Constants {
 	
 	public final static int BALL_POS_X = 15;
 	public final static int  BALL_DELTA_X = 5;
-	public final static int BALL_DELTA_Y =5;
+	public final static int BALL_DELTA_Y = 5;
 	public final static int BALL_POS_Y = 200;
 	public final static int BALL_RADIUS = 15;
 	public final static Color BALL_COLOR = new Color(155,94,155);

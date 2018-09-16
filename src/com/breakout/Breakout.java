@@ -1,7 +1,10 @@
 package com.breakout;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -18,9 +21,12 @@ import com.dimension.Rectangle;
 import com.helper.CollisionChecker;
 import com.infrastruture.*;
 import com.timer.BreakoutTimer;
+import com.ui.ControlPanel;
 import com.ui.GUI;
 import com.ui.GamePanel;
+import com.ui.MainPanel;
 import com.ui.StaticPanel;
+import com.ui.TimerPanel;
 
 public class Breakout {
 	protected Logger log = Logger.getLogger(Breakout.class);
@@ -48,19 +54,35 @@ public class Breakout {
 			bricks.add(brick);
 			boardPanel.addComponent(brick);
 			
-			brickPosX += 2* Constants.BRICK_WIDTH+ Constants.BRICK_DISTANCE_X ;
+			brickPosX += 2 * Constants.BRICK_WIDTH+ Constants.BRICK_DISTANCE_X ;
 			brickPosY +=  Constants.BRICK_DISTANCE_Y;
 		}
 		
 		Clock clock = new Clock();
-		StaticPanel timerPanel = new StaticPanel();
+		clock.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH));
+		clock.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH));
+//		clock.setPreferredSize(new Dimension(50, 50));
+//		clock.setMaximumSize(new Dimension(50, 50));
+		
+		// Start - Create StaticPanel
+		StaticPanel staticPanel = new StaticPanel();
+
+		TimerPanel timerPanel = new TimerPanel();
 		timerPanel.addComponent(clock);
 		
+		ControlPanel controlPanel = new ControlPanel();
+
+		staticPanel.addComponent(timerPanel);
+		staticPanel.addComponent(controlPanel);
+		// End - Create StaticPanel
+		MainPanel mainPanel = new MainPanel();
+		mainPanel.addComponent(staticPanel);
+		mainPanel.addComponent(boardPanel);
+
+		GUI gui = new GUI(mainPanel, boardPanel, staticPanel, timerPanel, controlPanel);
 		
-		GUI gui = new GUI(boardPanel,timerPanel);
-		gui.addComponent(boardPanel);
-		gui.addComponent(timerPanel);
-		
+		gui.addComponent(mainPanel);
+
 		CollisionChecker checker = new CollisionChecker();
 		
 		GameController driver = new GameController(ball, paddle, bricks, gui,observable, clock,checker);
@@ -68,7 +90,9 @@ public class Breakout {
 		gui.addDriver(driver);
 		observable.startTimer();
 		gui.setVisible(true);
+
 		gui.draw(null);
+		gui.pack();
 		if(isRestart)
 			observable.registerObserver(driver);
 		else
