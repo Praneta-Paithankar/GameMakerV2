@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
+import org.apache.log4j.Logger;
 
 import com.infrastruture.Observer;
 import com.infrastruture.Constants;
@@ -12,7 +13,7 @@ import com.infrastruture.Observable;
 
 
 public class BreakoutTimer implements Observable{
-
+	protected Logger log = Logger.getLogger(BreakoutTimer.class);
 	private Timer timer;
 	ArrayList<Observer> observers = new ArrayList<>();
 

@@ -9,6 +9,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
+import org.apache.log4j.Logger;
+import org.json.simple.JsonObject;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -34,7 +36,7 @@ import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
 public class GameController implements Observer, KeyListener,ActionListener{
-	
+	protected Logger log = Logger.getLogger(GameController.class);	
 	private Ball ball;
 	private Paddle paddle;
 	private ArrayList<Brick> bricks;
@@ -47,6 +49,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
     private Clock clock;
     private boolean isGamePaused = false;
     private CollisionChecker collisionChecker;
+    private JsonObject jsonObject;
     private Deque<Command> commandQueue;
     private BallChangeXDirectionCommand ballChangeXDirectionCommand;
     private BallChangeYDirectionCommand ballChangeYDirectionCommand;
@@ -65,8 +68,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		this.noOfBricks = bricks.size();
 		brickActCommands = new BrickEnactCommand [noOfBricks];
 		commandQueue = new ArrayDeque<Command>();
-		timerCommand = new TimerCommand(clock);
-		
+		timerCommand = new TimerCommand(clock);	
 		initCommands();
     }
 	private void initCommands()
@@ -130,8 +132,9 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		//Check collision between ball and paddle
 		result = collisionChecker.checkCollisionBetweenCircleAndRectangle(ball.getCircle(), paddle.getRectangle());
 		changeBallDirectionCommand(result);
-		gui.draw(null);
-		
+		//doubt 
+//		gui.draw(null);
+		 gui.changeUI();
 	}
 	private void changeBallDirectionCommand(Direction result) {
 		
@@ -214,19 +217,21 @@ public class GameController implements Observer, KeyListener,ActionListener{
 							public void run() {
 								// TODO Auto-generated method stub
 								val.execute();
-								gui.draw(null);
+								//doubt
+//								gui.draw(null);
+								gui.changeUI();
 								try {
 									currentThread();
 									Thread.sleep(10);
 								} catch (InterruptedException e) {
 									// TODO Auto-generated catch block
-									e.printStackTrace();
+									log.error(e.getMessage());
 								}
 							}
 						});
 					} catch (InvocationTargetException | InterruptedException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						log.error(e.getMessage());
 					}	
 				}
 				try {
@@ -253,7 +258,16 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		isGamePaused = false;
 		observable.registerObserver(this);
 	}
+	public void save() {
+		pause();
+		gui.save();
+	}
 	
+	public void load() {
+		pause();
+		commandQueue.clear();
+		this.noOfBricks = gui.load(null);
+	}
 	//Switch between actions when a button is pressed
 	
 	@Override
@@ -288,8 +302,14 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			pause();
 			gui.changeFocus();
 			gui.draw(null);
+		}else if(commandText.equals("save")) {
+			save();
+			gui.changeFocus();
+		}else if(commandText.equals("load")) {
+			load();
+			gui.changeFocus();
+			gui.changeUI();
 		}
-		
 	}
 	
 	public void gameReset() {

@@ -9,6 +9,6 @@ public interface Element {
 	 void reset();  
 	 void addComponent(Element e);
 	 void removeComponent(Element e);
-	 void load();
-	 JsonObject save(); 
+	 public JsonObject save();
+	 public int load(Object object);
 }

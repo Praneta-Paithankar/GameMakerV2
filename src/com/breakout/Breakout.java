@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.log4j.Logger;
+
 import com.component.Ball;
 import com.component.Brick;
 import com.component.Clock;
@@ -13,14 +16,14 @@ import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.helper.CollisionChecker;
-import com.infrastruture.Constants;
+import com.infrastruture.*;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 import com.ui.GamePanel;
 import com.ui.StaticPanel;
 
 public class Breakout {
-	
+	protected Logger log = Logger.getLogger(Breakout.class);
 	public static void startGame(boolean isRestart){
 		
 		BreakoutTimer observable  = new BreakoutTimer();
@@ -55,8 +58,6 @@ public class Breakout {
 		
 		
 		GUI gui = new GUI(boardPanel,timerPanel);
-		gui.addComponent(boardPanel);
-		gui.addComponent(timerPanel);
 		
 		CollisionChecker checker = new CollisionChecker();
 		
@@ -72,6 +73,7 @@ public class Breakout {
 			driver.pause();
 	}
 	public static void main(String args[]) {
+		PropertyConfigurator.configure("log4j.properties");
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override

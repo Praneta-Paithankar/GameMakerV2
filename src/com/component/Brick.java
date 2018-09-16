@@ -3,6 +3,7 @@ package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
 
 import com.dimension.Rectangle;
@@ -10,10 +11,11 @@ import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
 public class Brick implements Element{
-
+	protected Logger log = Logger.getLogger(Brick.class);
 	private Rectangle rectangle;
 	private boolean visible;
 	private Color color;
+	private JsonObject jsonObject;
 	public Brick(Rectangle rectangle, boolean visible,Color color) {
 		this.setRectangle(rectangle);
 		this.setVisible(visible);
@@ -54,13 +56,6 @@ public class Brick implements Element{
 	}
 
 
-
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void addComponent(Element e) {
 		// TODO Auto-generated method stub
@@ -75,10 +70,29 @@ public class Brick implements Element{
 
 	@Override
 	public JsonObject save() {
-		// TODO Auto-generated method stub
-		return null;
+		jsonObject = new JsonObject();
+		try {
+			jsonObject.put("Brick", this.isVisible());
+			jsonObject.put("BrickX", this.getRectangle().getTopLeftCoordinate().getX());
+			jsonObject.put("BrickY", this.getRectangle().getTopLeftCoordinate().getY());
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return jsonObject;
 	}
 
-	
-	
+	@Override
+	public int load(Object object) {
+		// TODO Auto-generated method stub'
+		jsonObject = (JsonObject) object;
+		this.setVisible((Boolean)jsonObject.get("Brick"));
+		this.getRectangle().getTopLeftCoordinate().setX((int)(long)jsonObject.get("BrickX"));
+		this.getRectangle().getTopLeftCoordinate().setY((int)(long)jsonObject.get("BrickY"));
+		
+		if(this.isVisible() == true) {
+			return 1;
+		}else {
+			return 0;
+		}
+	}	
 }

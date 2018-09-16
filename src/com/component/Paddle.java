@@ -2,6 +2,7 @@ package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
 
 import com.dimension.Coordinate;
@@ -10,10 +11,11 @@ import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
 public class Paddle implements Element{
-
+	protected Logger log = Logger.getLogger(Paddle.class);
 	private Rectangle rectangle;
 	private int deltaX;
 	private Color color;
+	private JsonObject jsonObject;
 	
 	public Paddle(Rectangle rectangle, int deltaX, Color color) {
 		this.rectangle = rectangle;
@@ -61,14 +63,6 @@ public class Paddle implements Element{
 		 
 	}
 
-	
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	@Override
 	public void addComponent(Element e) {
 		// TODO Auto-generated method stub
@@ -83,7 +77,23 @@ public class Paddle implements Element{
 
 	@Override
 	public JsonObject save() {
+		jsonObject = new JsonObject();
+		try {
+			jsonObject.put("PaddleX", this.getRectangle().getTopLeftCoordinate().getX());
+			jsonObject.put("PaddleY", this.getRectangle().getTopLeftCoordinate().getY());
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return jsonObject;
+	}
+
+	@Override
+	public int load(Object object) {
 		// TODO Auto-generated method stub
-		return null;
+		jsonObject = (JsonObject) object;
+		this.getRectangle().getTopLeftCoordinate().setX((int)(long)jsonObject.get("PaddleX"));
+		this.getRectangle().getTopLeftCoordinate().setY((int)(long)jsonObject.get("PaddleY"));
+		
+		return 1;
 	}
 }

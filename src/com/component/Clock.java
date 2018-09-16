@@ -1,17 +1,19 @@
 package com.component;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
 
-import com.infrastruture.Element;
+import com.infrastruture.*;
 
 
 public class Clock implements Element{
-
+	protected Logger log = Logger.getLogger(Clock.class);
 	private long milisecondsElapsed;
-
+	private JsonObject jsonObject;
 	public Clock() {
 		milisecondsElapsed = 0;
 	}
@@ -28,9 +30,7 @@ public class Clock implements Element{
 	public void draw(Graphics g) {
 				
 		// TODO center box around the time 
-//		g.drawRect(getX(), getY(), getWidth(), getHeight());
 		g.drawRect(0, 150, 250, 100);
-//		g.setColor(Color.WHITE);
 		g.setFont(new Font("Arial", Font.BOLD, 40));
 		String time = getTime();
 		g.drawString(time, 15, 200);
@@ -57,13 +57,6 @@ public class Clock implements Element{
 		return (int) ((milisecondsElapsed / 1000) % 60);
 	}
 
-	
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void addComponent(Element e) {
 		// TODO Auto-generated method stub
@@ -78,8 +71,21 @@ public class Clock implements Element{
 
 	@Override
 	public JsonObject save() {
-		// TODO Auto-generated method stub
-		return null;
+		jsonObject = new JsonObject();
+		try {
+			jsonObject.put("Clock", this.getMilisecondsElapsed());
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return jsonObject;
 	}
 
+	@Override
+	public int load(Object object) {
+		// TODO Auto-generated method stub
+		jsonObject = (JsonObject) object;
+		this.setMilisecondsElapsed((long)(jsonObject.get("Clock")));
+		
+		return 1;
+	}
 }

@@ -1,5 +1,6 @@
 package com.ui;
 
+import java.util.ArrayList;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -15,7 +16,9 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
+import org.json.simple.parser.JSONParser;
 
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -23,10 +26,10 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements Element {
-	
+	protected Logger log = Logger.getLogger(GamePanel.class);
 	private BufferedImage image;
 	private ArrayList<Element> elements;
-
+	private JsonObject jsonObject;
 	
 	public GamePanel()
 	{
@@ -36,7 +39,7 @@ public class GamePanel extends JPanel implements Element {
             image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+        	log.error(e.getMessage());
         }
         setLayout();
 	}
@@ -70,15 +73,6 @@ public class GamePanel extends JPanel implements Element {
 		elements.remove(element);
 	}
 	
-
-	
-
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -116,8 +110,42 @@ public class GamePanel extends JPanel implements Element {
 
 	@Override
 	public JsonObject save() {
-		// TODO Auto-generated method stub
-		return null;
+		jsonObject = new JsonObject();
+		String className= "";
+		int count = 1;
+		try {
+			for (Element element : elements) {
+				if(element.getClass().toString().contains("Brick")) {
+					jsonObject.put(element.getClass().toString()+"_"+count, element.save());
+					count++;
+				}else {
+					jsonObject.put(element.getClass().toString(), element.save());
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return jsonObject;
+	}
+
+	@Override
+	public int load(Object object) {
+		jsonObject = (JsonObject) object;
+		int count = 1;
+		int visibilityFlag=0;
+		int brickCount = 0;
+		for (Element element : elements) {
+			if(element.getClass().toString().contains("Brick")) {
+				visibilityFlag = element.load(jsonObject.get(element.getClass().toString()+"_"+count));
+				count++;
+				if(visibilityFlag == 1) {
+					brickCount++;
+				}
+			}else {
+				element.load(jsonObject.get(element.getClass().toString()));
+			}
+		}	
+		return brickCount;
 	}
 
 }

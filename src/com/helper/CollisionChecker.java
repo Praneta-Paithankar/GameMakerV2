@@ -1,5 +1,7 @@
 package com.helper;
 
+import org.apache.log4j.Logger;
+
 import com.component.Ball;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
@@ -8,7 +10,7 @@ import com.infrastruture.Constants;
 import com.infrastruture.Direction;
 
 public class CollisionChecker {
-
+	protected Logger log = Logger.getLogger(CollisionChecker.class);
 	public  Direction checkCollisionBetweenBallAndWall(Ball ball) {
 		//Collision between ball and wall
 		

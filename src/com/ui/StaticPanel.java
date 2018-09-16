@@ -6,7 +6,9 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JLabel;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
 
 import com.controller.GameController;
@@ -16,9 +18,11 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class StaticPanel extends JPanel implements Element{
-
+	protected Logger log = Logger.getLogger(StaticPanel.class);
+	private JLabel score;
 	private GameController driver;
 	private ArrayList<Element> elements;
+	private JsonObject jsonObject;
 	
 	public StaticPanel() {
 		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
@@ -45,6 +49,8 @@ public class StaticPanel extends JPanel implements Element{
 	    createUndo();
 	    createStart();
 	    createPause();
+	    createSave();
+	    createLoad();
 	}
 	
 	
@@ -79,6 +85,22 @@ public class StaticPanel extends JPanel implements Element{
 		startButton.setVisible(true);
 		this.add(startButton);
 	}
+	
+	public void createSave() {
+		JButton saveButton = new JButton("Save");
+		saveButton.setActionCommand("save");
+		saveButton.addActionListener(driver);
+		saveButton.setVisible(true);
+		this.add(saveButton);
+	}
+	
+	public void createLoad() {
+		JButton loadButton = new JButton("Load");
+		loadButton.setActionCommand("load");
+		loadButton.addActionListener(driver);
+		loadButton.setVisible(true);
+		this.add(loadButton);
+	}
 
 	@Override
 	public void paintComponent(Graphics g){
@@ -90,11 +112,6 @@ public class StaticPanel extends JPanel implements Element{
 	}
 	
 	
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
 	public void addComponent(Element e) {
 		elements.add(e);
 	}
@@ -117,6 +134,22 @@ public class StaticPanel extends JPanel implements Element{
 	@Override
 	public JsonObject save() {
 		// TODO Auto-generated method stub
-		return null;
+		jsonObject = new JsonObject();
+		try {
+			for (Element element : elements) {
+					jsonObject.put(element.getClass().toString(), element.save());
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return jsonObject;
+	}
+	@Override
+	public int load(Object object) {
+		jsonObject = (JsonObject) object;
+		for (Element element : elements) {
+			element.load(jsonObject.get(element.getClass().toString()));
+		}
+		return 1;
 	}
 }
