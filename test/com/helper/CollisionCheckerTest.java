@@ -33,7 +33,7 @@ class CollisionCheckerTest {
 	}
 	@Test
 	void checkCollisionWithBallShouldReturnDirectionIfCollisonOccur() {
-		ball.getCircle().setCenter(new Coordinate(Constants.FRAME_WIDTH, 0));
+		ball.getCircle().setCenter(new Coordinate(Constants.MAIN_PANEL_WIDTH, 0));
 		Direction result = collisionChecker.checkCollisionBetweenBallAndWall(ball);
 		assertEquals(Direction.X, result);
 	}

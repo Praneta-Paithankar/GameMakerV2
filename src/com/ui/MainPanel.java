@@ -32,7 +32,7 @@ public class MainPanel extends AbstractPanel implements Element {
 //		setBorder(BorderFactory.createLineBorder(Color.black));
         elements = new ArrayList<>();
 		setLayoutBehavior(new BoxLayoutXAxisBehavior());
-		performUpdateLayout(this, Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
+		performUpdateLayout(this, Constants.MAIN_PANEL_WIDTH,Constants.MAIN_PANEL_HEIGHT);
 //		performUpdateLayout(this, Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT);
 		setFocusable(true);
 		requestFocusInWindow();

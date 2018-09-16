@@ -325,13 +325,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			gui.draw(null);
 
 		}else if(commandText.equals("replay")) {
-			pause();
-			if(isGameLoaded)
-				gameResetAfterLoad();
-			else
-				gameReset();
-			replayAction();
-			gui.changeFocus();
+			replay();
 		}else if(commandText.equals("start")) {
 			if(isGamePaused) {
 				unPause();
@@ -354,12 +348,23 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			gui.changeFocus();
 			gui.draw(null);;
 		}else if(commandText.equals("layout")) {
-//			gui.changeFocus();
+			pause();
 			gui.modifyLayout();
+			gui.changeFocus();
 			gui.draw(null);
+			unPause();
 		}
 	}
 	
+	public void replay() {
+		pause();
+		if(isGameLoaded)
+			gameResetAfterLoad();
+		else
+			gameReset();
+		replayAction();
+		gui.changeFocus();
+	}
 	public void gameReset() {
 		
 		ball.reset();
@@ -385,7 +390,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			Breakout.startGame(true);			
 		}
 		else if(a == JOptionPane.CANCEL_OPTION) {
-			replayAction();
+			replay();
 		}
 		else
 			System.exit(0);
