@@ -163,13 +163,10 @@ public class GUI extends JFrame implements Element{
 				Object obj = Jsoner.deserialize(getFileReader());
 				jsonObject = (JsonObject) obj;
 				for (Element element : elementList) {
-					if(element.getClass().toString().contains("GamePanel")) {
 						brickCount = element.load(jsonObject.get(element.getClass().toString()));
-					}else {
-						element.load(jsonObject.get(element.getClass().toString()));
 					}
 				}
-		     }
+		    
 		     if (rVal == JFileChooser.CANCEL_OPTION) {
 		    	 setFilePath("");
 		     }

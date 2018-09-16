@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 
+import org.apache.log4j.Logger;
 //import org.json.JSONObject;
 import org.json.simple.JsonObject;
 
@@ -18,8 +19,9 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class TimerPanel extends AbstractPanel implements Element {
-
+	protected Logger log = Logger.getLogger(TimerPanel.class);
 	private ArrayList<Element> components;
+	private JsonObject jsonObject;
 
 	public TimerPanel() {
 //		setBorder(BorderFactory.createLineBorder(Color.blue));
@@ -81,14 +83,26 @@ public class TimerPanel extends AbstractPanel implements Element {
 	@Override
 	public JsonObject save() {
 		// TODO Auto-generated method stub
-		return null;
+		jsonObject = new JsonObject();
+		try {
+			for (Element element : components) {
+					jsonObject.put(element.getClass().toString(), element.save());
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return jsonObject;
 	}
 
 
 	@Override
 	public int load(Object object) {
 		// TODO Auto-generated method stub
-		return 0;
+		jsonObject = (JsonObject) object;
+		for (Element element : components) {
+			element.load(jsonObject.get(element.getClass().toString()));
+		}
+		return 1;
 	}
 
 	/*
