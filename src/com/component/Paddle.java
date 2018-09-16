@@ -23,6 +23,12 @@ public class Paddle implements Element{
 		this.color = color;
 	}
 	
+	public Paddle(Paddle p) {
+		Rectangle r = p.getRectangle();
+		Coordinate t = new Coordinate(r.getTopLeftCoordinate().getX(), r.getTopLeftCoordinate().getY());
+		this.rectangle = new Rectangle(r.getWidth(), r.getHeight(), t);
+		this.deltaX = p.getDeltaX();
+	}
 	public Rectangle getRectangle() {
 		return rectangle;
 	}
@@ -59,10 +65,14 @@ public class Paddle implements Element{
 	public void reset() {
 		// TODO Auto-generated method stub
 		Coordinate newCoordinate = new Coordinate(Constants.PADDLE_POS_X, Constants.PADDLE_POS_Y);
-		rectangle.setTopLeftCoordinate(newCoordinate);
-		 
+		rectangle.setTopLeftCoordinate(newCoordinate);	 
 	}
-
+	public void reset (Paddle p) {
+		Rectangle r = p.getRectangle();
+		Coordinate t = new Coordinate(r.getTopLeftCoordinate().getX(), r.getTopLeftCoordinate().getY());
+		this.rectangle = new Rectangle(r.getWidth(), r.getHeight(), t);
+		this.deltaX = p.getDeltaX();
+	}
 	@Override
 	public void addComponent(Element e) {
 		// TODO Auto-generated method stub

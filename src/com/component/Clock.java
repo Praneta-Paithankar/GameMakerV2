@@ -20,6 +20,10 @@ public class Clock implements Element{
 		milisecondsElapsed = 0;
 	}
 
+	public Clock(Clock c) {
+		this.milisecondsElapsed = c.milisecondsElapsed;
+	}
+	
 	public String getTime() {
 		if (getSeconds() >= 10) {
 			return Integer.toString(getMinutes()) + ":" + Integer.toString(getSeconds());
@@ -35,14 +39,16 @@ public class Clock implements Element{
 		g.drawRect(0, 150, 250, 100);
 		g.setFont(new Font("Arial", Font.BOLD, 40));
 		String time = getTime();
-		g.drawString(time, 15, 200);
+		g.drawString(time, 15, 400);
 	}
 
 	@Override
 	public void reset() {
 		milisecondsElapsed = 0;	
 	}
-	
+	public void reset(Clock c) {
+		milisecondsElapsed = c.milisecondsElapsed;	
+	}
 	public long getMilisecondsElapsed() {
 		return milisecondsElapsed;
 	}

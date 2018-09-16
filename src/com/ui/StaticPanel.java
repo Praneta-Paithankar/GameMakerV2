@@ -33,15 +33,6 @@ public class StaticPanel extends JPanel implements Element{
 		return elements;
 	}
 	
-	public void addElement(Element element){
-		elements.add(element);
-		
-	}
-	public void removeElement(Element element)
-	{
-		elements.remove(element);
-	}
-	
 	public void createButtons(GameController driver)
 	{
 		this.driver = driver;

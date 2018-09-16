@@ -1,22 +1,16 @@
 package com.ui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Font;
-import java.util.ArrayList;
-import java.awt.GridBagLayout;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
@@ -28,22 +22,24 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame implements Element{
-	protected Logger log = Logger.getLogger(GUI.class);
-	private JTextField filename = new JTextField(), dir = new JTextField();	
+	protected Logger log = Logger.getLogger(GUI.class);	
 	private GamePanel boardPanel;
-	private ArrayList<Element> elementList;
-	private JLabel exitLabel;
+	private ArrayList<Element> elements;
+
 	private GameController driver;
 	private JPanel mainPanel;
 	private StaticPanel timerPanel;
 	private JsonObject jsonObject;
 	private JFileChooser c;
-	private FileWriter file;
+	private FileWriter fileWriter;
+	private String filePath;
+	private FileReader fileReader;
 	
+
 	public GUI() {
 		boardPanel = new GamePanel();
 		timerPanel = new StaticPanel();
-		elementList = new ArrayList<>();
+		elements = new ArrayList<>();
 		initializeUI();
 	}
 
@@ -51,36 +47,16 @@ public class GUI extends JFrame implements Element{
 		super("Breakout Game");
 		this.boardPanel = boardPanel;
 		this.timerPanel = timerPanel;
-		elementList = new ArrayList<>();
+		elements = new ArrayList<>();
 		initializeUI();
 	}
-	private void createBoardPanel() {
-
-		boardPanel.setLayout(new GridBagLayout());
-        boardPanel.setPreferredSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
-	    boardPanel.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-	    boardPanel.setMaximumSize(new Dimension(Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT));
-		boardPanel.setBackground(Color.black);
-		
-		exitLabel = new JLabel();
-		exitLabel.setForeground(Color.WHITE);
-		exitLabel.setAlignmentX(SwingConstants.CENTER);
-		exitLabel.setAlignmentY(SwingConstants.CENTER);
-		Font font = new Font("Helvetica", Font.BOLD,50);
-		
-		exitLabel.setFont(font);
-		boardPanel.add(exitLabel);
-		boardPanel.setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
-		mainPanel.add(boardPanel);
-		elementList.add(boardPanel);
-	}
+	
 	private void initializeUI() {
        mainPanel = new JPanel();
        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));       
        mainPanel.add(timerPanel);
-       elementList.add(timerPanel);
-       mainPanel.add(boardPanel);    
-       createBoardPanel();
+       mainPanel.add(boardPanel);
+       
        add(mainPanel);
 	   mainPanel.setPreferredSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
 	   mainPanel.setFocusable(true);
@@ -89,11 +65,7 @@ public class GUI extends JFrame implements Element{
 	   setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	   setResizable(false);	
 	}
-	public void changeUI() {
-		//boardPanel.repaint();
-		boardPanel.paintImmediately(0, 0, Constants.BOARD_PANEL_WIDTH, Constants.BOARD_PANEL_HEIGHT);
-		timerPanel.repaint();
-	}
+
 	public GamePanel getBoardPanel() {
 		return boardPanel;
 	}
@@ -114,21 +86,26 @@ public class GUI extends JFrame implements Element{
 
 	@Override
 	public void draw(Graphics g) {
-				
+		for(Element element : elements) {
+			element.draw(g);
+		}	
 	}
 
 	@Override
 	public void reset() {
+		for(Element element : elements) {
+			element.reset();
+		}
 	}
 
 	@Override
 	public void addComponent(Element e) {
-	
+		elements.add(e);
 	}
 
 	@Override
 	public void removeComponent(Element e) {
-	
+		elements.remove(e);
 	}
 
 	@Override
@@ -137,25 +114,26 @@ public class GUI extends JFrame implements Element{
 		jsonObject = new JsonObject();
 		try {
 			c = new JFileChooser();
-			int rVal = c.showSaveDialog(boardPanel);
+			c.setDialogType(JFileChooser.SAVE_DIALOG);
+			c.setFileFilter(new FileNameExtensionFilter("json file","json"));
+			int rVal = c.showSaveDialog(this);
 		      if (rVal == JFileChooser.APPROVE_OPTION) {
-		        filename.setText(c.getSelectedFile().getName());
-		        dir.setText(c.getCurrentDirectory().toString());
-		        for (Element element : elementList) {
+		        String name = c.getSelectedFile().toString();
+		    	if (!name.endsWith(".json"))
+		    	        name += ".json";
+		    	setFilePath(name);
+		        for (Element element : elements) {
 					jsonObject.put(element.getClass().toString(), element.save());
 		        }
-		        file = new FileWriter(dir.getText() + "\\" + filename.getText());
-				file.write(jsonObject.toJson());				
-				file.flush();
+		        
 		      }
 		      if (rVal == JFileChooser.CANCEL_OPTION) {
-		        filename.setText("You pressed cancel");
-		        dir.setText("");
+		        setFilePath("");
+		        jsonObject = null;
 		      }
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		} 
-		
 		return jsonObject;
 	}
 
@@ -164,28 +142,44 @@ public class GUI extends JFrame implements Element{
 		int brickCount = 0;
 		try {
 			c = new JFileChooser();
+			c.setFileFilter(new FileNameExtensionFilter("json file","json"));
 			int rVal = c.showOpenDialog(boardPanel);
-		      if (rVal == JFileChooser.APPROVE_OPTION) {
-		        filename.setText(c.getSelectedFile().getName());
-		        dir.setText(c.getCurrentDirectory().toString());
-				Object obj = Jsoner.deserialize(new FileReader(dir.getText() + "\\" + filename.getText()));
+		    if (rVal == JFileChooser.APPROVE_OPTION) {
+		    	String name = c.getSelectedFile().toString();
+		    	setFilePath(name);
+		    	setFileReader(new FileReader(filePath));
+				Object obj = Jsoner.deserialize(getFileReader());
 				jsonObject = (JsonObject) obj;
-				for (Element element : elementList) {
+				for (Element element : elements) {
 					if(element.getClass().toString().contains("GamePanel")) {
 						brickCount = element.load(jsonObject.get(element.getClass().toString()));
 					}else {
 						element.load(jsonObject.get(element.getClass().toString()));
 					}
 				}
-		      }
-		      if (rVal == JFileChooser.CANCEL_OPTION) {
-		        filename.setText("You pressed cancel");
-		        dir.setText("");
-		      }
+		     }
+		     if (rVal == JFileChooser.CANCEL_OPTION) {
+		    	 setFilePath("");
+		     }
 			
 		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 		return brickCount;
-	}		
+	}
+
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}	
+	public FileReader getFileReader() {
+		return fileReader;
+	}
+
+	public void setFileReader(FileReader fileReader) {
+		this.fileReader = fileReader;
+	}
 }

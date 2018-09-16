@@ -26,7 +26,12 @@ public class Ball implements Element{
 		this.setDelta(delta);
 		this.color = color;
 	}
-    
+	//Copy Constructor
+    public Ball(Ball ball) {
+    	Circle c = ball.getCircle();
+    	this.circle = new  Circle(c.getRadius(), c.getCenter().getX(),  c.getCenter().getY());
+    	this.delta = new Coordinate (ball.getDelta().getX(),ball.getDelta().getY());
+    }
 	public void draw(Graphics g){
     	int radius =  circle.getRadius();
         int upperLeftX = circle.getCenter().getX() - radius;
@@ -58,6 +63,11 @@ public class Ball implements Element{
 		this.setDelta(new Coordinate(Constants.BALL_DELTA_X, Constants.BALL_DELTA_Y));
 	}
 
+	public void reset(Ball ball) {
+		Circle c = ball.getCircle();
+    	this.circle = new  Circle(c.getRadius(), c.getCenter().getX(),  c.getCenter().getY());
+    	this.delta = new Coordinate (ball.getDelta().getX(),ball.getDelta().getY());
+	}
 	
 	@Override
 	public void addComponent(Element e) {

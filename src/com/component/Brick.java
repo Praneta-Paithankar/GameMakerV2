@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
 
+import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -16,12 +17,21 @@ public class Brick implements Element{
 	private boolean visible;
 	private Color color;
 	private JsonObject jsonObject;
+	
 	public Brick(Rectangle rectangle, boolean visible,Color color) {
 		this.setRectangle(rectangle);
 		this.setVisible(visible);
 		this.color = color;
 	}
-	
+	//copy constructor
+	public Brick(Brick brick)
+	{
+		Rectangle r = brick.getRectangle();
+		Coordinate t = new Coordinate(r.getTopLeftCoordinate().getX(), r.getTopLeftCoordinate().getY());
+		this.rectangle = new Rectangle(r.getWidth(), r.getHeight(), t);
+		this.visible = brick.isVisible();
+		
+	}
 	public boolean isVisible() {
 		return visible;
 	}
@@ -53,6 +63,13 @@ public class Brick implements Element{
 		// TODO Auto-generated method stub
 		this.setVisible(true);
 		
+	}
+	public void reset(Brick brick)
+	{
+		Rectangle r = brick.getRectangle();
+		Coordinate t = new Coordinate(r.getTopLeftCoordinate().getX(), r.getTopLeftCoordinate().getY());
+		this.rectangle = new Rectangle(r.getWidth(), r.getHeight(), t);
+		this.visible = brick.isVisible();
 	}
 
 
