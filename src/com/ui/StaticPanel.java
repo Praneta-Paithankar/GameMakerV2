@@ -1,11 +1,13 @@
 package com.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -17,6 +19,7 @@ import org.json.simple.JsonObject;
 
 import com.behavior.BoxLayoutXAxisBehavior;
 import com.behavior.BoxLayoutYAxisBehavior;
+import com.behavior.GridBagLayoutBehavior;
 import com.component.Clock;
 import com.controller.GameController;
 import com.infrastruture.AbstractPanel;
@@ -33,9 +36,11 @@ public class StaticPanel extends AbstractPanel implements Element{
 	private JsonObject jsonObject;
 	
 	public StaticPanel() {
+		setBorder(BorderFactory.createLoweredBevelBorder());
+		
 		setLayoutBehavior(new BoxLayoutYAxisBehavior());
+//		setLayoutBehavior(new GridLayoutBehavior());
 		performUpdateLayout(this, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT);
-
 //		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
 //        this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
         elements = new ArrayList<>();
@@ -139,6 +144,7 @@ public class StaticPanel extends AbstractPanel implements Element{
 	}
 
 	
+	/*
 	@Override
 	public void paintComponent(Graphics g){
 //		System.out.println("StaticPanel::paintComponent");
@@ -158,11 +164,22 @@ public class StaticPanel extends AbstractPanel implements Element{
 		}
 		
 	}
-	
-	
+	*/
+
+	/*
+	@Override
+	public JSONObject save() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
+	}
+	*/
 	public void addComponent(Element e) {
-//		System.out.println("Add component in Static(timerPanel)");
-		this.add((Component)e);
+		this.add((AbstractPanel)e);
 		elements.add(e);
 	}
 
@@ -174,7 +191,10 @@ public class StaticPanel extends AbstractPanel implements Element{
 	@Override
 	public void draw(Graphics g) {
 //		System.out.println("StaticPanel::draw");
-		repaint();
+//		repaint();
+	for(Element component : elements) {
+		component.draw(null);
+	}
 	}
 	@Override
 	public void reset() {

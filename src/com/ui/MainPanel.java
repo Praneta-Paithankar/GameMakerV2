@@ -1,5 +1,6 @@
 package com.ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Panel;
 import java.util.ArrayList;
@@ -7,8 +8,12 @@ import java.util.ArrayList;
 //import org.json.JSONObject;
 
 import org.json.simple.JsonObject;
+import javax.swing.BorderFactory;
+
+//import org.json.JSONObject;
 
 import com.behavior.BoxLayoutXAxisBehavior;
+import com.behavior.BoxLayoutYAxisBehavior;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -20,6 +25,7 @@ public class MainPanel extends AbstractPanel implements Element {
 
 	
 	public MainPanel() {
+//		setBorder(BorderFactory.createLineBorder(Color.black));
         elements = new ArrayList<>();
 		setLayoutBehavior(new BoxLayoutXAxisBehavior());
 		performUpdateLayout(this, Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT);
@@ -52,7 +58,6 @@ public class MainPanel extends AbstractPanel implements Element {
 
 	@Override
 	public void addComponent(Element e) {
-//		System.out.println("Add component in MainPanel (mainPanel)");
 		elements.add(e);
 		this.add((AbstractPanel)e);
 	}

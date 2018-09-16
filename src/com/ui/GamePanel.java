@@ -38,6 +38,7 @@ public class GamePanel extends AbstractPanel implements Element {
 	
 	public GamePanel()
 	{
+//		setBorder(BorderFactory.createLoweredBevelBorder());
 	    elements = new ArrayList<Element>();
         try {
             image = ImageIO.read(new File("./src/com/image/nature.jpg"));
@@ -73,22 +74,10 @@ public class GamePanel extends AbstractPanel implements Element {
 		setMaximumSize(new Dimension(Constants.FRAME_WIDTH,Constants.FRAME_HEIGHT));
 		*/
 	}
-
-	
-	public void performUpdateLayout(AbstractPanel abstractPanel, int width, int height) {
-		super.performUpdateLayout(abstractPanel, width, height);
-        try {
-            image = ImageIO.read(new File("./src/com/image/nature.jpg"));
-            image = resize(image, width, height);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }		
-	}
-	
 	
 	private BufferedImage resize(BufferedImage img, int width, int height) {
         Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        System.out.println("Width: " + width + " Height: " + height);
         BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = resized.createGraphics();
         g2d.drawImage(tmp, 0, 0, null);
@@ -98,6 +87,13 @@ public class GamePanel extends AbstractPanel implements Element {
 	
 	public ArrayList<Element> getElements(){
 		return elements;
+	}
+	public void addElement(Element element){
+		elements.add(element);
+		
+	}
+	public void removeElement(Element element){
+		elements.remove(element);
 	}
 	
 	@Override
