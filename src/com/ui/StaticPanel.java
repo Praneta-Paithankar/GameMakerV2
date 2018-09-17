@@ -37,12 +37,8 @@ public class StaticPanel extends AbstractPanel implements Element{
 	
 	public StaticPanel() {
 		setBorder(BorderFactory.createLoweredBevelBorder());
-		
 		setLayoutBehavior(new BoxLayoutYAxisBehavior());
-//		setLayoutBehavior(new GridLayoutBehavior());
 		performUpdateLayout(this, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT);
-//		this.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_HEIGHT));
-//        this.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT));
         elements = new ArrayList<>();
 	}
 	public ArrayList<Element> getElements(){
@@ -144,40 +140,7 @@ public class StaticPanel extends AbstractPanel implements Element{
 	}
 
 	
-	/*
-	@Override
-	public void paintComponent(Graphics g){
-//		System.out.println("StaticPanel::paintComponent");
-
-		super.paintComponent(g);
-		for(Element component : elements)
-		{
-			double X = this.getComponent(0).getX();
-			double Y = this.getComponent(0).getY();
-//			System.out.println("X: " + X + " Y: " + Y);
-//			System.out.println("Width: " + Integer.toString(this.getComponent(0).getWidth()));
-//			System.out.println("Height: " + Integer.toString(this.getComponent(0).getHeight()));
-			Graphics2D g2d = (Graphics2D) g.create();
-			g2d.translate(X, Y); 
-			component.draw(g2d);
-			g2d.dispose();
-		}
-		
-	}
-	*/
-
-	/*
-	@Override
-	public JSONObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-		
-	}
-	*/
+	
 	public void addComponent(Element e) {
 		this.add((AbstractPanel)e);
 		elements.add(e);
@@ -190,8 +153,7 @@ public class StaticPanel extends AbstractPanel implements Element{
 
 	@Override
 	public void draw(Graphics g) {
-//		System.out.println("StaticPanel::draw");
-//		repaint();
+
 	for(Element component : elements) {
 		component.draw(null);
 	}

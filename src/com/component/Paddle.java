@@ -4,17 +4,13 @@ import java.awt.Graphics;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JsonObject;
-import javax.swing.JComponent;
-
-//import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
-public class Paddle extends JComponent implements Element{
+public class Paddle  implements Element{
 	protected Logger log = Logger.getLogger(Paddle.class);
 	private Rectangle rectangle;
 	private int deltaX;

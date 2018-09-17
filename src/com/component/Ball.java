@@ -4,20 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import org.apache.log4j.Logger;
-import org.json.simple.DeserializationException;
 import org.json.simple.JsonObject;
-import org.json.simple.Jsoner;
-import javax.swing.JComponent;
 
-//import org.json.JSONObject;
-import org.json.simple.parser.JSONParser;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
 
-public class Ball extends JComponent implements Element{
+public class Ball implements Element{
 	
 	protected Logger log = Logger.getLogger(Ball.class);
     private Circle circle;

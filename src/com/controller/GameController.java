@@ -7,16 +7,16 @@ import java.awt.event.KeyListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
-import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+
+import org.apache.log4j.Logger;
+import org.json.simple.JsonObject;
 
 import com.breakout.Breakout;
 import com.commands.BallChangeXDirectionCommand;
@@ -52,7 +52,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
     private Clock clock;
     private boolean isGamePaused ;
     private CollisionChecker collisionChecker;
-    private JsonObject jsonObject;
+   
     private Deque<Command> commandQueue;
     private BallChangeXDirectionCommand ballChangeXDirectionCommand;
     private BallChangeYDirectionCommand ballChangeYDirectionCommand;
@@ -64,7 +64,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
     private Ball startBall;
     private Paddle startPaddle;
     private ArrayList<Brick> startBricks;
-    private Clock startClock;
+  
     
 	public GameController(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock,CollisionChecker collisionChecker) {
 		
@@ -278,7 +278,6 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	public void createCopy() {
 		startBall = new Ball(ball);
 		startPaddle = new Paddle(paddle);
-		startClock = new Clock(clock);
 		this.noOfBricks = bricks.size();
 		startBricks = new ArrayList<>();
 		for(Brick b : bricks) {
@@ -442,8 +441,9 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	}
 	public BrickEnactCommand[] getBrickActCommands() {
 			return brickActCommands;
-		}
-		public void setBrickActCommands(BrickEnactCommand[] brickActCommands) {
+    }
+	public void setBrickActCommands(BrickEnactCommand[] brickActCommands) {
 			this.brickActCommands = brickActCommands;
-		}
+	}
+		
 }

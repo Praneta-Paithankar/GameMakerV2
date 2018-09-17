@@ -17,17 +17,5 @@ public class BoxLayoutYAxisBehavior implements LayoutBehavior {
 		
 		abstractPanel.setLayout(new BoxLayout(abstractPanel, BoxLayout.Y_AXIS));
 		Component[] comp = abstractPanel.getComponents();
-		
-		/*
-		for (int i = 0;i<comp.length;i++) {
-			if (comp[i] instanceof JButton) {
-				abstractPanel.add(Box.createRigidArea(new Dimension(30,30)));
-			}
-		}
-		*/
-//		abstractPanel.setMaximumSize(new Dimension(width, height));
-//		abstractPanel.setMinimumSize(new Dimension(width, height));
-//		abstractPanel.setPreferredSize(new Dimension(width, height));
-		
 	}
 }

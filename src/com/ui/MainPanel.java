@@ -29,11 +29,10 @@ public class MainPanel extends AbstractPanel implements Element {
 
 	
 	public MainPanel() {
-//		setBorder(BorderFactory.createLineBorder(Color.black));
+
         elements = new ArrayList<>();
 		setLayoutBehavior(new BoxLayoutXAxisBehavior());
 		performUpdateLayout(this, Constants.MAIN_PANEL_WIDTH,Constants.MAIN_PANEL_HEIGHT);
-//		performUpdateLayout(this, Constants.BOARD_PANEL_WIDTH,Constants.BOARD_PANEL_HEIGHT);
 		setFocusable(true);
 		requestFocusInWindow();
 	}
@@ -50,7 +49,6 @@ public class MainPanel extends AbstractPanel implements Element {
 	@Override
 	public void draw(Graphics g) {
 		repaint();
-//		System.out.println("MainPanel::draw");
 	}
 
 	@Override
@@ -101,14 +99,5 @@ public class MainPanel extends AbstractPanel implements Element {
 		return brickCount;
 	}
 
-	/*
-	@Override
-	public void load() {
-	}
-
-	@Override
-	public JSONObject save() {
-		return null;
-	}
-	*/
+	
 }
