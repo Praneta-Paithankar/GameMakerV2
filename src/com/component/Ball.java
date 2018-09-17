@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import com.dimension.Circle;
 import com.dimension.Coordinate;
@@ -18,7 +17,6 @@ public class Ball implements Element{
     private Circle circle;
     private Coordinate delta;
     private Color color;
-    private JsonObject jsonObject;
     
 	public Ball(Circle circle, Coordinate delta,Color color) {
 		this.setCircle(circle); 
@@ -79,35 +77,4 @@ public class Ball implements Element{
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public JsonObject save() {
-		jsonObject = new JsonObject();
-		try {
-			jsonObject.put("BallX", this.getCircle().getCenter().getX());
-			jsonObject.put("BallY", this.getCircle().getCenter().getY());
-			jsonObject.put("BallDeltaX", this.getDelta().getX());
-			jsonObject.put("BallDeltaY", this.getDelta().getY());
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		return jsonObject;
-	}
-
-	@Override
-	public int load(Object object) {
-		// TODO Auto-generated method stub
-			jsonObject = (JsonObject)object;
-			
-			this.getCircle().getCenter().setX((jsonObject.getInteger("BallX")));
-			this.getCircle().getCenter().setY((jsonObject.getInteger("BallY")));
-			this.getDelta().setX((jsonObject.getInteger("BallDeltaX")));
-			this.getDelta().setY((jsonObject.getInteger("BallDeltaY")));
-		
-		return 1;
-	}
-
-
-	
-
 }

@@ -6,7 +6,6 @@ import java.awt.Graphics;
 import javax.swing.JComponent;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import com.infrastruture.Element;
 
@@ -14,7 +13,6 @@ public class Clock extends JComponent implements Element{
 
 	protected Logger log = Logger.getLogger(Clock.class);
 	private long milisecondsElapsed;
-	private JsonObject jsonObject;
 	public Clock() {
 		milisecondsElapsed = 0;
 	}
@@ -74,24 +72,5 @@ public class Clock extends JComponent implements Element{
 	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public JsonObject save() {
-		jsonObject = new JsonObject();
-		try {
-			jsonObject.put("Clock", this.getMilisecondsElapsed());
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		return jsonObject;
-	}
-
-	@Override
-	public int load(Object object) {
-		// TODO Auto-generated method stub
-			jsonObject = (JsonObject) object;
-			this.setMilisecondsElapsed((jsonObject.getLong("Clock")));
-		return 1;
 	}
 }

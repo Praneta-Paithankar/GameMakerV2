@@ -2,9 +2,6 @@ package com.ui;
 
 import java.awt.Graphics;
 
-//import org.json.JSONObject;
-import org.json.simple.JsonObject;
-
 import com.behavior.FlowLayoutBehavior;
 import com.controller.GameController;
 import com.infrastruture.AbstractPanel;
@@ -94,18 +91,4 @@ public class ControlPanel  extends AbstractPanel implements Element {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public JsonObject save() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public int load(Object object) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-
 }

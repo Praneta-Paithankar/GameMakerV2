@@ -16,7 +16,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import com.breakout.Breakout;
 import com.commands.BallChangeXDirectionCommand;
@@ -265,10 +264,10 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	}
 	public void save() {
 		pause();
-		JsonObject jsonObject=  gui.save();
+//		JsonObject jsonObject=  gui.save();
         try {
 			setFile(new FileWriter(gui.getFilePath()));
-			file.write(jsonObject.toJson());				
+//			file.write(jsonObject.toJson());				
 			file.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -288,7 +287,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		pause();
 		commandQueue.clear();
 		isGameLoaded = true;
-		this.noOfBricks = gui.load(null);
+//		this.noOfBricks = gui.load(null);
 		clock.reset();
 		createCopy();
 	}

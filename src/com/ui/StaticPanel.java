@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import com.behavior.BoxLayoutXAxisBehavior;
 import com.behavior.BoxLayoutYAxisBehavior;
@@ -33,7 +32,6 @@ public class StaticPanel extends AbstractPanel implements Element{
 	private JLabel score;
 	private GameController driver;
 	private ArrayList<Element> elements;
-	private JsonObject jsonObject;
 	
 	public StaticPanel() {
 		setBorder(BorderFactory.createLoweredBevelBorder());
@@ -163,26 +161,5 @@ public class StaticPanel extends AbstractPanel implements Element{
 		for(Element element : elements) {
 			element.reset();
 		}
-	}
-	@Override
-	public JsonObject save() {
-		// TODO Auto-generated method stub
-		jsonObject = new JsonObject();
-		try {
-			for (Element element : elements) {
-					jsonObject.put(element.getClass().toString(), element.save());
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		return jsonObject;
-	}
-	@Override
-	public int load(Object object) {
-		jsonObject = (JsonObject) object;
-		for (Element element : elements) {
-			element.load(jsonObject.get(element.getClass().toString()));
-		}
-		return 1;
 	}
 }

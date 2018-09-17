@@ -11,8 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
-import org.json.simple.Jsoner;
 
 import com.behavior.BoxLayoutXAxisBehavior;
 import com.behavior.BoxLayoutYAxisBehavior;
@@ -31,7 +29,6 @@ public class GUI extends JFrame implements Element{
 
 	private GameController driver;
 	private MainPanel mainPanel;
-	private JsonObject jsonObject;
 	private JFileChooser c;
 	private FileWriter fileWriter;
 	private String filePath;
@@ -104,62 +101,6 @@ public class GUI extends JFrame implements Element{
 		elementList.remove(e);
 	}
 
-	@Override
-	public JsonObject save() {
-		// TODO Auto-generated method stub
-		jsonObject = new JsonObject();
-		try {
-			c = new JFileChooser();
-			c.setDialogType(JFileChooser.SAVE_DIALOG);
-			c.setFileFilter(new FileNameExtensionFilter("json file","json"));
-			int rVal = c.showSaveDialog(this);
-		      if (rVal == JFileChooser.APPROVE_OPTION) {
-		        String name = c.getSelectedFile().toString();
-		    	if (!name.endsWith(".json"))
-		    	        name += ".json";
-		    	setFilePath(name);
-		        for (Element element : elementList) {
-					jsonObject.put(element.getClass().toString(), element.save());
-		        }
-		        
-		      }
-		      if (rVal == JFileChooser.CANCEL_OPTION) {
-		        setFilePath("");
-		        jsonObject = null;
-		      }
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		} 
-		return jsonObject;
-	}
-
-	@Override
-	public int load(Object object) {
-		int brickCount = 0;
-		try {
-			c = new JFileChooser();
-			c.setFileFilter(new FileNameExtensionFilter("json file","json"));
-			int rVal = c.showOpenDialog(boardPanel);
-		    if (rVal == JFileChooser.APPROVE_OPTION) {
-		    	String name = c.getSelectedFile().toString();
-		    	setFilePath(name);
-		    	setFileReader(new FileReader(filePath));
-				Object obj = Jsoner.deserialize(getFileReader());
-				jsonObject = (JsonObject) obj;
-				for (Element element : elementList) {
-						brickCount = element.load(jsonObject.get(element.getClass().toString()));
-					}
-				}
-		    
-		     if (rVal == JFileChooser.CANCEL_OPTION) {
-		    	 setFilePath("");
-		     }
-			
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		return brickCount;
-	}
 
 	public String getFilePath() {
 		return filePath;
