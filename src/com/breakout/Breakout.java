@@ -61,9 +61,7 @@ public class Breakout {
 		Clock clock = new Clock();
 		clock.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH));
 		clock.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH));
-//		clock.setPreferredSize(new Dimension(50, 50));
-//		clock.setMaximumSize(new Dimension(50, 50));
-		
+
 		// Start - Create StaticPanel
 		StaticPanel staticPanel = new StaticPanel();
 

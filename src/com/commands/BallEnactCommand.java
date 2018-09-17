@@ -27,7 +27,6 @@ public class BallEnactCommand implements Command {
         int newCenterY = circle.getCenter().getY() + ball.getDelta().getY() ;
         Coordinate currentCenter = new Coordinate(newCenterX, newCenterY);
         circle.setCenter(currentCenter);
-		//checkBounds();
 	}
 	@Override
 	public void undo() { 

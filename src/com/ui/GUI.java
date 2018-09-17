@@ -1,14 +1,10 @@
 package com.ui;
 
-import java.awt.Dimension;
-
-import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
