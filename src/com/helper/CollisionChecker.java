@@ -10,7 +10,7 @@ import com.infrastruture.Constants;
 import com.infrastruture.Direction;
 
 public class CollisionChecker {
-	protected Logger log = Logger.getLogger(CollisionChecker.class);
+	protected static Logger log = Logger.getLogger(CollisionChecker.class);
 	public  Direction checkCollisionBetweenBallAndWall(Ball ball) {
 		//Collision between ball and wall
 		

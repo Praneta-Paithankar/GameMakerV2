@@ -1,14 +1,16 @@
 package com.infrastruture;
 
 import java.awt.Graphics;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-import org.json.simple.JsonObject;
 
-public interface Element {
+public interface Element extends Serializable {
 	 void draw(Graphics g);
 	 void reset();  
 	 void addComponent(Element e);
 	 void removeComponent(Element e);
-	 public JsonObject save();
-	 public int load(Object object);
+	 void save(ObjectOutputStream op);
+	 Element load(ObjectInputStream ip);
 }

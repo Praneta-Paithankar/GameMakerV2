@@ -1,21 +1,23 @@
 package com.component;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
-public class Paddle  implements Element{
-	protected Logger log = Logger.getLogger(Paddle.class);
+public class Paddle  implements Element,Serializable{
+	protected static Logger log = Logger.getLogger(Paddle.class);
 	private Rectangle rectangle;
 	private int deltaX;
 	private Color color;
-	private JsonObject jsonObject;
 	
 	public Paddle(Rectangle rectangle, int deltaX, Color color) {
 		this.rectangle = rectangle;
@@ -84,31 +86,24 @@ public class Paddle  implements Element{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public JsonObject save() {
-		jsonObject = new JsonObject();
-		
+	public void save(ObjectOutputStream op) {
 		try {
-			jsonObject.put("PaddleX", this.getRectangle().getTopLeftCoordinate().getX());
-			jsonObject.put("PaddleY", this.getRectangle().getTopLeftCoordinate().getY());
-			jsonObject.put("PaddleDeltaX", this.getDeltaX());
-		} catch (Exception e) {
+			op.writeObject(this);
+		} catch (IOException e) {
 			log.error(e.getMessage());
 		}
-		
-		return jsonObject;
 	}
 
 	@Override
-	public int load(Object object) {
-		// TODO Auto-generated method stub
-		jsonObject = (JsonObject) object;
-		
-		this.getRectangle().getTopLeftCoordinate().setX(jsonObject.getInteger("PaddleX"));
-		this.getRectangle().getTopLeftCoordinate().setY(jsonObject.getInteger("PaddleY"));
-		this.setDeltaX(jsonObject.getInteger("PaddleDeltaX"));
-		
-		return 1;
+	public Element load(ObjectInputStream ip) {
+		try {
+			Paddle obj = (Paddle)ip.readObject();
+			return obj;
+		} catch (ClassNotFoundException | IOException e) {
+			log.error(e.getMessage());
+		}
+		return null;
 	}
 }

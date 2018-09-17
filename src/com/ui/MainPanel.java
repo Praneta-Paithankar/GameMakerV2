@@ -3,16 +3,13 @@ package com.ui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Panel;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
-//import org.json.JSONObject;
-
-import org.json.simple.JsonObject;
 import javax.swing.BorderFactory;
-
-//import org.json.JSONObject;
 
 import com.behavior.BoxLayoutXAxisBehavior;
 import com.behavior.BoxLayoutYAxisBehavior;
@@ -24,8 +21,7 @@ import com.infrastruture.Element;
 public class MainPanel extends AbstractPanel implements Element {
 
 	private ArrayList<Element> elements;
-	private JsonObject jsonObject;
-	protected Logger log = Logger.getLogger(MainPanel.class);
+	protected static Logger log = Logger.getLogger(MainPanel.class);
 
 	
 	public MainPanel() {
@@ -68,36 +64,19 @@ public class MainPanel extends AbstractPanel implements Element {
 	public void removeComponent(Element e) {
 		elements.remove(e);
 	}
-
-	@Override
-	public JsonObject save() {
-		// TODO Auto-generated method stub
-		jsonObject = new JsonObject();
-		try {
-			for (Element element : elements) {
-					jsonObject.put(element.getClass().toString(), element.save());
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		return jsonObject;
-	}
-
-	@Override
-	public int load(Object object) {
-		// TODO Auto-generated method stub
-		jsonObject = (JsonObject) object;
-		int brickCount = 0;
-		
-		for (Element element : elements) {
-			if(element.getClass().toString().contains("GamePanel")) {
-				brickCount = element.load(jsonObject.get(element.getClass().toString()));
-			}else {
-				element.load(jsonObject.get(element.getClass().toString()));
-			}
-		}
-		return brickCount;
-	}
-
 	
+	@Override
+	public void save(ObjectOutputStream op) {
+		for (Element element : elements) {
+			element.save(op);
+		}
+	}
+
+	@Override
+	public Element load(ObjectInputStream ip) {
+		for (Element element : elements) {
+			element.load(ip);
+		}
+		return null;
+	}
 }

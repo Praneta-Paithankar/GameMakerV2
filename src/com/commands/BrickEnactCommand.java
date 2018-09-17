@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import com.component.Brick;
 
 public class BrickEnactCommand implements Command {
-	protected Logger log = Logger.getLogger(BrickEnactCommand.class);
+	protected static Logger log = Logger.getLogger(BrickEnactCommand.class);
 	Brick brick;
 
 	

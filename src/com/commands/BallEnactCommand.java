@@ -10,7 +10,7 @@ import com.dimension.Circle;
 import com.dimension.Coordinate; 
 
 public class BallEnactCommand implements Command {
-	protected Logger log = Logger.getLogger(BallEnactCommand.class);
+	protected static Logger log = Logger.getLogger(BallEnactCommand.class);
 	Ball ball;
 	
 	public BallEnactCommand(Ball ball) {

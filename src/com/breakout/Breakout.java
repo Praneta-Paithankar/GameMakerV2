@@ -29,7 +29,7 @@ import com.ui.StaticPanel;
 import com.ui.TimerPanel;
 
 public class Breakout {
-	protected Logger log = Logger.getLogger(Breakout.class);
+	protected static Logger log = Logger.getLogger(Breakout.class);
 	public static void startGame(boolean isRestart){
 		
 		BreakoutTimer observable  = new BreakoutTimer();

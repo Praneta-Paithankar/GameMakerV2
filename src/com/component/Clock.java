@@ -2,19 +2,21 @@ package com.component;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.swing.JComponent;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import com.infrastruture.Element;
 
-public class Clock extends JComponent implements Element{
+public class Clock extends JComponent implements Element,Serializable{
 
-	protected Logger log = Logger.getLogger(Clock.class);
+	protected static Logger log = Logger.getLogger(Clock.class);
 	private long milisecondsElapsed;
-	private JsonObject jsonObject;
 	public Clock() {
 		milisecondsElapsed = 0;
 	}
@@ -75,23 +77,23 @@ public class Clock extends JComponent implements Element{
 		// TODO Auto-generated method stub
 		
 	}
-
 	@Override
-	public JsonObject save() {
-		jsonObject = new JsonObject();
+	public void save(ObjectOutputStream op) {
 		try {
-			jsonObject.put("Clock", this.getMilisecondsElapsed());
-		} catch (Exception e) {
-			log.error(e.getMessage());
+			op.writeObject(this);
+		} catch (IOException e) {
+			log.error(e.getLocalizedMessage());
 		}
-		return jsonObject;
 	}
 
 	@Override
-	public int load(Object object) {
-		// TODO Auto-generated method stub
-			jsonObject = (JsonObject) object;
-			this.setMilisecondsElapsed((jsonObject.getLong("Clock")));
-		return 1;
+	public Element load(ObjectInputStream ip){
+		try {
+			Clock obj = (Clock)ip.readObject();
+			return obj;
+		} catch (ClassNotFoundException | IOException e) {
+			log.error(e.getMessage());
+		}
+		return null;
 	}
 }

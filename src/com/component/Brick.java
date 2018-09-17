@@ -2,22 +2,24 @@ package com.component;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
-public class Brick  implements Element{
+public class Brick  implements Element,Serializable{
 
-	protected Logger log = Logger.getLogger(Brick.class);
+	protected static Logger log = Logger.getLogger(Brick.class);
 	private Rectangle rectangle;
 	private boolean visible;
 	private Color color;
-	private JsonObject jsonObject;
 	
 	public Brick(Rectangle rectangle, boolean visible,Color color) {
 		this.setRectangle(rectangle);
@@ -85,32 +87,24 @@ public class Brick  implements Element{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public JsonObject save() {
-		jsonObject = new JsonObject();
+	public void save(ObjectOutputStream op) {
 		try {
-			jsonObject.put("Brick", this.isVisible());
-			jsonObject.put("BrickX", this.getRectangle().getTopLeftCoordinate().getX());
-			jsonObject.put("BrickY", this.getRectangle().getTopLeftCoordinate().getY());
-		} catch (Exception e) {
+			op.writeObject(this);
+		} catch (IOException e) {
 			log.error(e.getMessage());
 		}
-		return jsonObject;
 	}
 
 	@Override
-	public int load(Object object) {
-		// TODO Auto-generated method stub'
-		jsonObject = (JsonObject) object;
-		this.setVisible((Boolean)jsonObject.getBoolean("Brick"));
-		this.getRectangle().getTopLeftCoordinate().setX((int)(long)jsonObject.getInteger("BrickX"));
-		this.getRectangle().getTopLeftCoordinate().setY((int)(long)jsonObject.getInteger("BrickY"));
-		
-		if(this.isVisible() == true) {
-			return 1;
-		}else {
-			return 0;
+	public Element load(ObjectInputStream ip) {
+		try {
+			Brick obj = (Brick)ip.readObject();
+			return obj;
+		} catch (ClassNotFoundException | IOException e) {
+			log.error(e.getMessage());
 		}
+		return null;
 	}	
 }

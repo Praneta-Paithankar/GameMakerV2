@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -15,7 +17,6 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import com.behavior.BoxLayoutXAxisBehavior;
 import com.behavior.BoxLayoutYAxisBehavior;
@@ -29,11 +30,10 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class StaticPanel extends AbstractPanel implements Element{
-	protected Logger log = Logger.getLogger(StaticPanel.class);
+	protected static Logger log = Logger.getLogger(StaticPanel.class);
 	private JLabel score;
 	private GameController driver;
 	private ArrayList<Element> elements;
-	private JsonObject jsonObject;
 	
 	public StaticPanel() {
 		setBorder(BorderFactory.createLoweredBevelBorder());
@@ -165,24 +165,18 @@ public class StaticPanel extends AbstractPanel implements Element{
 		}
 	}
 	@Override
-	public JsonObject save() {
-		// TODO Auto-generated method stub
-		jsonObject = new JsonObject();
-		try {
-			for (Element element : elements) {
-					jsonObject.put(element.getClass().toString(), element.save());
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
+	public void save(ObjectOutputStream op) {
+		for (Element element : elements) {
+			element.save(op);
 		}
-		return jsonObject;
+		
 	}
 	@Override
-	public int load(Object object) {
-		jsonObject = (JsonObject) object;
+	public Element load(ObjectInputStream ip) {
 		for (Element element : elements) {
-			element.load(jsonObject.get(element.getClass().toString()));
+			element.load(ip);
 		}
-		return 1;
+		return null;
 	}
+	
 }

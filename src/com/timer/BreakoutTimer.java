@@ -13,7 +13,7 @@ import com.infrastruture.Observable;
 
 
 public class BreakoutTimer implements Observable{
-	protected Logger log = Logger.getLogger(BreakoutTimer.class);
+	protected static Logger log = Logger.getLogger(BreakoutTimer.class);
 	private Timer timer;
 	ArrayList<Observer> observers = new ArrayList<>();
 

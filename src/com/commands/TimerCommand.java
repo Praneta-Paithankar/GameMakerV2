@@ -9,7 +9,7 @@ import com.timer.BreakoutTimer;
 import com.ui.StaticPanel;
 
 public class TimerCommand implements Command {
-	protected Logger log = Logger.getLogger(TimerCommand.class);
+	protected static Logger log = Logger.getLogger(TimerCommand.class);
 	private Clock clock;
 	
 	public TimerCommand(Clock clock) {

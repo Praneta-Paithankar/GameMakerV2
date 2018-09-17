@@ -1,8 +1,10 @@
 package com.dimension;
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
 
-public class Rectangle {
-	protected Logger log = Logger.getLogger(Rectangle.class);
+public class Rectangle implements Serializable{
+	protected  static Logger log = Logger.getLogger(Rectangle.class);
 	private int width;
 	private int height;
 	private Coordinate topLeft;

@@ -6,7 +6,7 @@ import com.component.Ball;
 import com.infrastruture.Command;
 
 public class BallChangeYDirectionCommand implements Command {
-	protected Logger log = Logger.getLogger(BallChangeYDirectionCommand.class);
+	protected static Logger log = Logger.getLogger(BallChangeYDirectionCommand.class);
 	private Ball ball;
 	
 	public BallChangeYDirectionCommand(Ball ball) {

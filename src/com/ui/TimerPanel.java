@@ -1,12 +1,13 @@
 package com.ui;
 
 import java.awt.Graphics;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JsonObject;
 
 import com.behavior.FlowLayoutBehavior;
 import com.infrastruture.AbstractPanel;
@@ -15,9 +16,8 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class TimerPanel extends AbstractPanel implements Element {
-	protected Logger log = Logger.getLogger(TimerPanel.class);
+	protected static Logger log = Logger.getLogger(TimerPanel.class);
 	private ArrayList<Element> components;
-	private JsonObject jsonObject;
 
 	public TimerPanel() {
 
@@ -62,33 +62,26 @@ public class TimerPanel extends AbstractPanel implements Element {
 	public void removeComponent(Element e) {
 		components.remove(e);		
 	}
-
-
 	@Override
-	public JsonObject save() {
-		// TODO Auto-generated method stub
-		jsonObject = new JsonObject();
-		try {
-			for (Element element : components) {
-					jsonObject.put(element.getClass().toString(), element.save());
-			}
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-		return jsonObject;
-	}
-
-
-	@Override
-	public int load(Object object) {
-		// TODO Auto-generated method stub
-		jsonObject = (JsonObject) object;
+	public void save(ObjectOutputStream op) {
 		for (Element element : components) {
-			element.load(jsonObject.get(element.getClass().toString()));
+			element.save(op);
 		}
-		return 1;
 	}
 
-	
 
+	@Override
+	public Element load(ObjectInputStream ip) {
+		ArrayList<Element> loadComponents = new ArrayList<>();
+		for (Element element : components) {
+			loadComponents.add(element.load(ip));
+		}
+		components.clear();
+		components.addAll(loadComponents);
+		return null;
+	}
+	
+	public ArrayList<Element> getElements(){
+		return components;
+	}
 }
