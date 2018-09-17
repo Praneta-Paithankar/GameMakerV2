@@ -1,3 +1,5 @@
+/**
+ *This interface is implements by all the components of our  view(UI)*/
 package com.infrastruture;
 
 import java.awt.Graphics;

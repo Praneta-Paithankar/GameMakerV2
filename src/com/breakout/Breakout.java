@@ -1,3 +1,5 @@
+/**
+ *This is our main application class which creates and initializes all the game components*/
 package com.breakout;
 
 import java.awt.BorderLayout;

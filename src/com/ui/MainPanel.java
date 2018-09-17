@@ -1,3 +1,5 @@
+/**
+ *This class contains two panels*/
 package com.ui;
 
 import java.awt.Color;

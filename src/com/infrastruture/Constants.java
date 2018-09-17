@@ -1,3 +1,5 @@
+/**
+ *This class is used to define all the constants used in our application*/
 package com.infrastruture;
 
 import java.awt.Color;

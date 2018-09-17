@@ -1,3 +1,5 @@
+/**
+ *This class is used to check collision between ball and other components*/
 package com.helper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

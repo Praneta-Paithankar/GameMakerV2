@@ -1,3 +1,6 @@
+/**
+ *This is our controller class which manages the interaction between model(ball,brick,paddle,clock)
+ *and view(frame and panels)*/
 package com.controller;
 
 import java.awt.event.ActionEvent;

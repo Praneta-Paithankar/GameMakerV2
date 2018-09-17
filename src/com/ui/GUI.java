@@ -1,3 +1,5 @@
+/**
+ *This class is used to draw the components on the screen */
 package com.ui;
 
 import java.awt.Graphics;

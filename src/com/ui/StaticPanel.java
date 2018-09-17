@@ -1,3 +1,5 @@
+/**
+ *This class contains timer and control panel*/
 package com.ui;
 
 import java.awt.Color;
