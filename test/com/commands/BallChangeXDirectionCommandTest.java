@@ -34,7 +34,6 @@ class BallChangeXDirectionCommandTest {
 	void ShouldChangeBallDirectionWhenExecuteCalled (){
 		Coordinate cord = mock(Coordinate.class);
 		when(ball.getDelta()).thenReturn(cord);
-//		when(cord.getY()).thenReturn(30);
 		when(cord.getX()).thenReturn(40);
 		
 		ballChangeXDirectionCommand.execute();
@@ -46,7 +45,6 @@ class BallChangeXDirectionCommandTest {
 	void ShouldChangeBallDirectionWhenUndoCalled (){
 		Coordinate cord = mock(Coordinate.class);
 		when(ball.getDelta()).thenReturn(cord);
-//		when(cord.getY()).thenReturn(30);
 		when(cord.getX()).thenReturn(40);
 		
 		ballChangeXDirectionCommand.undo();

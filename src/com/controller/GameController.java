@@ -313,7 +313,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			this.noOfBricks = brickNum;
 			
 			commandQueue.clear();
-			Deque<Command> loadCmdQueue = (Deque<Command>)in.readObject();
+			Deque<Command> loadCmdQueue = (Deque<Command>) in.readObject();
 			commandQueue.addAll(loadCmdQueue);
 			initCommands();
 			in.close();
@@ -398,7 +398,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		pause();
 		Object[] options = {  "Reset", "Exit", "Replay"}; 
 		String outputMsg = new String();
-		outputMsg = "Your Score is " + clock.getTime();
+		outputMsg = "Your Score is " + Integer.toString(clock.getMinutes()*60 + clock.getSeconds());
 		int a = JOptionPane.showOptionDialog(gui.getBoardPanel(), outputMsg, "Game Over", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
 				, null, options, null);
 		
