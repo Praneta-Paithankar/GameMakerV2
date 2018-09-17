@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -28,7 +30,7 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class StaticPanel extends AbstractPanel implements Element{
-	protected Logger log = Logger.getLogger(StaticPanel.class);
+	protected static Logger log = Logger.getLogger(StaticPanel.class);
 	private JLabel score;
 	private GameController driver;
 	private ArrayList<Element> elements;
@@ -162,4 +164,19 @@ public class StaticPanel extends AbstractPanel implements Element{
 			element.reset();
 		}
 	}
+	@Override
+	public void save(ObjectOutputStream op) {
+		for (Element element : elements) {
+			element.save(op);
+		}
+		
+	}
+	@Override
+	public Element load(ObjectInputStream ip) {
+		for (Element element : elements) {
+			element.load(ip);
+		}
+		return null;
+	}
+	
 }

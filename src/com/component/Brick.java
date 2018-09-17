@@ -2,6 +2,10 @@ package com.component;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
@@ -10,9 +14,9 @@ import com.dimension.Rectangle;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
-public class Brick  implements Element{
+public class Brick  implements Element,Serializable{
 
-	protected Logger log = Logger.getLogger(Brick.class);
+	protected static Logger log = Logger.getLogger(Brick.class);
 	private Rectangle rectangle;
 	private boolean visible;
 	private Color color;
@@ -83,4 +87,24 @@ public class Brick  implements Element{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void save(ObjectOutputStream op) {
+		try {
+			op.writeObject(this);
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+	}
+
+	@Override
+	public Element load(ObjectInputStream ip) {
+		try {
+			Brick obj = (Brick)ip.readObject();
+			return obj;
+		} catch (ClassNotFoundException | IOException e) {
+			log.error(e.getMessage());
+		}
+		return null;
+	}	
 }

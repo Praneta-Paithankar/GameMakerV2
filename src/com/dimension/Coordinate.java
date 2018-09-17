@@ -1,9 +1,11 @@
 package com.dimension;
 
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
 
-public class Coordinate {
-	protected Logger log = Logger.getLogger(Coordinate.class);
+public class Coordinate implements Serializable{
+	protected static  Logger log = Logger.getLogger(Coordinate.class);
 	private int x;
 	private int y;
 	

@@ -1,6 +1,8 @@
 package com.ui;
 
 import java.awt.Graphics;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import com.behavior.FlowLayoutBehavior;
 import com.controller.GameController;
@@ -90,5 +92,17 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void save(ObjectOutputStream op) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Element load(ObjectInputStream ip) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

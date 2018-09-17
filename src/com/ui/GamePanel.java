@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -21,7 +23,7 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class GamePanel extends AbstractPanel implements Element {
-	protected Logger log = Logger.getLogger(GamePanel.class);
+	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private BufferedImage image;
 	private ArrayList<Element> elements;
 	
@@ -96,5 +98,27 @@ public class GamePanel extends AbstractPanel implements Element {
 	@Override
 	public void removeComponent(Element e) {
 		elements.remove(e);
+	}
+
+
+
+	@Override
+	public void save(ObjectOutputStream op) {
+		// TODO Auto-generated method stub
+		for (Element element : elements) {
+			element.save(op);
+		}
+	}
+
+	@Override
+	public Element load(ObjectInputStream ip) {
+		// TODO Auto-generated method stub
+		ArrayList<Element> loadComponents = new ArrayList<>();
+		for (Element element : elements) {
+			loadComponents.add(element.load(ip));
+		}
+		elements.clear();
+		elements.addAll(loadComponents);
+		return null;
 	}
 }

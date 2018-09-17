@@ -3,6 +3,8 @@ package com.ui;
 import java.awt.Graphics;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
@@ -23,7 +25,7 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class GUI extends JFrame implements Element{
-	protected Logger log = Logger.getLogger(GUI.class);	
+	protected static Logger log = Logger.getLogger(GUI.class);	
 	private GamePanel boardPanel;
 	private ArrayList<Element> elementList;
 
@@ -58,9 +60,6 @@ public class GUI extends JFrame implements Element{
 	   setResizable(false);	
 	}
 
-	public GamePanel getBoardPanel() {
-		return boardPanel;
-	}
 	public void removeKeyListner() {
 		mainPanel.removeKeyListener(driver);
 	}
@@ -156,4 +155,65 @@ public class GUI extends JFrame implements Element{
 		contentPane.revalidate();
 		this.pack();
 	}
+	
+	public String showSaveDialog() {
+		try {
+			c = new JFileChooser();
+			c.setDialogType(JFileChooser.SAVE_DIALOG);
+			c.setFileFilter(new FileNameExtensionFilter("serialize file","ser"));
+			int rVal = c.showSaveDialog(this);
+		      if (rVal == JFileChooser.APPROVE_OPTION) {
+		        String name = c.getSelectedFile().toString();
+		    	if (!name.endsWith(".ser"))
+		    	        name += ".ser";
+		    	return name;
+		      }
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+	     return "";
+	}
+	
+	public String showOpenDialog() {
+		try {
+		c = new JFileChooser();
+		c.setFileFilter(new FileNameExtensionFilter("serialize file","ser"));
+		int rVal = c.showOpenDialog(boardPanel);
+	    if (rVal == JFileChooser.APPROVE_OPTION) {
+	    	String name = c.getSelectedFile().toString();
+	    	return name;
+	    }
+	    }catch(Exception e) {
+	    	log.error(e.getMessage());
+	    }
+		return "";
+	}
+	
+	
+	@Override
+	public void save(ObjectOutputStream op) {
+		// TODO Auto-generated method stub
+		for (Element element : elementList) {
+			element.save(op);
+		}
+	}
+	
+	@Override
+	public Element load(ObjectInputStream ip) {
+		// TODO Auto-generated method stub
+		for (Element element : elementList) {
+			element.load(ip);
+		}
+		return null;
+	}
+
+	public GamePanel getBoardPanel() {
+		return boardPanel;
+	}
+	
+	public TimerPanel getTimerPanel() {
+		return timerPanel;
+	}
+
+		
 }

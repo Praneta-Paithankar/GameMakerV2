@@ -1,6 +1,8 @@
 package com.ui;
 
 import java.awt.Graphics;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import javax.swing.JComponent;
@@ -14,7 +16,7 @@ import com.infrastruture.Element;
 
 @SuppressWarnings("serial")
 public class TimerPanel extends AbstractPanel implements Element {
-	protected Logger log = Logger.getLogger(TimerPanel.class);
+	protected static Logger log = Logger.getLogger(TimerPanel.class);
 	private ArrayList<Element> components;
 
 	public TimerPanel() {
@@ -59,5 +61,27 @@ public class TimerPanel extends AbstractPanel implements Element {
 	@Override
 	public void removeComponent(Element e) {
 		components.remove(e);		
+	}
+	@Override
+	public void save(ObjectOutputStream op) {
+		for (Element element : components) {
+			element.save(op);
+		}
+	}
+
+
+	@Override
+	public Element load(ObjectInputStream ip) {
+		ArrayList<Element> loadComponents = new ArrayList<>();
+		for (Element element : components) {
+			loadComponents.add(element.load(ip));
+		}
+		components.clear();
+		components.addAll(loadComponents);
+		return null;
+	}
+	
+	public ArrayList<Element> getElements(){
+		return components;
 	}
 }

@@ -2,6 +2,10 @@ package com.component;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import javax.swing.JComponent;
 
@@ -9,9 +13,9 @@ import org.apache.log4j.Logger;
 
 import com.infrastruture.Element;
 
-public class Clock extends JComponent implements Element{
+public class Clock extends JComponent implements Element,Serializable{
 
-	protected Logger log = Logger.getLogger(Clock.class);
+	protected static Logger log = Logger.getLogger(Clock.class);
 	private long milisecondsElapsed;
 	public Clock() {
 		milisecondsElapsed = 0;
@@ -72,5 +76,24 @@ public class Clock extends JComponent implements Element{
 	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void save(ObjectOutputStream op) {
+		try {
+			op.writeObject(this);
+		} catch (IOException e) {
+			log.error(e.getLocalizedMessage());
+		}
+	}
+
+	@Override
+	public Element load(ObjectInputStream ip){
+		try {
+			Clock obj = (Clock)ip.readObject();
+			return obj;
+		} catch (ClassNotFoundException | IOException e) {
+			log.error(e.getMessage());
+		}
+		return null;
 	}
 }

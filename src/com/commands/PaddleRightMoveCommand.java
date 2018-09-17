@@ -9,7 +9,7 @@ import com.infrastruture.Command;
 import com.infrastruture.Constants;
 
 public class PaddleRightMoveCommand implements Command{
-	protected Logger log = Logger.getLogger(PaddleRightMoveCommand.class);
+	protected static Logger log = Logger.getLogger(PaddleRightMoveCommand.class);
 	Paddle paddle;
 	Coordinate prevTopLeft;
 	

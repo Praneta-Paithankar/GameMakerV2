@@ -2,6 +2,10 @@ package com.component;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 import org.apache.log4j.Logger;
 
@@ -11,9 +15,9 @@ import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
 
-public class Ball implements Element{
+public class Ball implements Element,Serializable{
 	
-	protected Logger log = Logger.getLogger(Ball.class);
+	protected static Logger log = Logger.getLogger(Ball.class);
     private Circle circle;
     private Coordinate delta;
     private Color color;
@@ -76,5 +80,24 @@ public class Ball implements Element{
 	public void removeComponent(Element e) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void save(ObjectOutputStream op) {
+		try {
+			op.writeObject(this);
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+	}
+
+	@Override
+	public Element load(ObjectInputStream ip) {
+		try {
+			Ball obj = (Ball)ip.readObject();
+			return obj;
+		} catch (ClassNotFoundException | IOException e) {
+			log.error(e.getMessage());
+		}
+		return null;
 	}
 }

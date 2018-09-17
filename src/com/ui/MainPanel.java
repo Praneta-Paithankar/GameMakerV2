@@ -3,6 +3,8 @@ package com.ui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Panel;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
@@ -19,7 +21,7 @@ import com.infrastruture.Element;
 public class MainPanel extends AbstractPanel implements Element {
 
 	private ArrayList<Element> elements;
-	protected Logger log = Logger.getLogger(MainPanel.class);
+	protected static Logger log = Logger.getLogger(MainPanel.class);
 
 	
 	public MainPanel() {
@@ -61,5 +63,20 @@ public class MainPanel extends AbstractPanel implements Element {
 	@Override
 	public void removeComponent(Element e) {
 		elements.remove(e);
+	}
+	
+	@Override
+	public void save(ObjectOutputStream op) {
+		for (Element element : elements) {
+			element.save(op);
+		}
+	}
+
+	@Override
+	public Element load(ObjectInputStream ip) {
+		for (Element element : elements) {
+			element.load(ip);
+		}
+		return null;
 	}
 }

@@ -1,8 +1,10 @@
 package com.dimension;
 
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
-public class Circle {
-	protected Logger log = Logger.getLogger(Circle.class);
+public class Circle implements Serializable{
+	protected static Logger log = Logger.getLogger(Circle.class);
 	private int radius;
 	private Coordinate center;
 

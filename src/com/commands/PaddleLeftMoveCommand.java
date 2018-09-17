@@ -8,7 +8,7 @@ import com.dimension.Rectangle;
 import com.infrastruture.Command;
 
 public class PaddleLeftMoveCommand implements Command {
-	protected Logger log = Logger.getLogger(PaddleLeftMoveCommand.class);
+	protected static Logger log = Logger.getLogger(PaddleLeftMoveCommand.class);
 	Paddle paddle;
 	Coordinate prevTopLeft;
 	

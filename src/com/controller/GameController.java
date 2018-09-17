@@ -4,8 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -33,12 +37,13 @@ import com.helper.CollisionChecker;
 import com.infrastruture.Command;
 import com.infrastruture.Constants;
 import com.infrastruture.Direction;
+import com.infrastruture.Element;
 import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
 public class GameController implements Observer, KeyListener,ActionListener{
-	protected Logger log = Logger.getLogger(GameController.class);	
+	protected static Logger log = Logger.getLogger(GameController.class);	
 	private Ball ball;
 	private Paddle paddle;
 	private ArrayList<Brick> bricks;
@@ -59,10 +64,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
     private PaddleRightMoveCommand paddleRightMoveCommand;
     private FileWriter file;
     
-    private boolean isGameLoaded;
-    private Ball startBall;
-    private Paddle startPaddle;
-    private ArrayList<Brick> startBricks;
+
   
     
 	public GameController(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock,CollisionChecker collisionChecker) {
@@ -76,7 +78,6 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		this.collisionChecker = collisionChecker;
 		this.noOfBricks = bricks.size();
 		isGamePaused = false;
-		isGameLoaded = false;
 		brickActCommands = new BrickEnactCommand [noOfBricks];
 		commandQueue = new ArrayDeque<Command>();
 		timerCommand = new TimerCommand(clock);	
@@ -262,50 +263,72 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		isGamePaused = false;
 		observable.registerObserver(this);
 	}
+
 	public void save() {
 		pause();
-//		JsonObject jsonObject=  gui.save();
-        try {
-			setFile(new FileWriter(gui.getFilePath()));
-//			file.write(jsonObject.toJson());				
-			file.flush();
+		try {
+			String fileName = gui.showSaveDialog();
+			if(!fileName.isEmpty()) {
+			FileOutputStream fileOut = new FileOutputStream(fileName);
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			
+			gui.save(out);
+			out.writeObject(commandQueue);
+			out.close();
+			fileOut.close();
+			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
+	
 	}
-	public void createCopy() {
-		startBall = new Ball(ball);
-		startPaddle = new Paddle(paddle);
-		this.noOfBricks = bricks.size();
-		startBricks = new ArrayList<>();
-		for(Brick b : bricks) {
-			startBricks.add(new Brick(b));
-		}
-	}
+
+
+	
+
 	public void load() {
 		pause();
 		commandQueue.clear();
-		isGameLoaded = true;
-//		this.noOfBricks = gui.load(null);
-		clock.reset();
-		createCopy();
+		try {
+			int brickNum = 0;
+			String fileName = gui.showOpenDialog();
+			if(!fileName.isEmpty()) {
+			FileInputStream fileIn =new FileInputStream(fileName);
+
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			
+			gui.load(in);
+			
+			this.clock = (Clock) gui.getTimerPanel().getElements().get(0);
+			this.ball = (Ball) gui.getBoardPanel().getElements().get(0);
+			this.paddle = (Paddle) gui.getBoardPanel().getElements().get(1);
+			this.bricks.clear();
+			for (int i = 2; i < gui.getBoardPanel().getElements().size(); i++) {
+				Brick brick = (Brick)gui.getBoardPanel().getElements().get(i);
+				this.bricks.add(brick);
+				if(brick.isVisible()) {
+					brickNum ++ ;
+				}
+			}
+			this.noOfBricks = brickNum;
+			
+			commandQueue.clear();
+			Deque<Command> loadCmdQueue = (Deque<Command>)in.readObject();
+			commandQueue.addAll(loadCmdQueue);
+			initCommands();
+			in.close();
+			fileIn.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			log.error(e.getMessage());
+		}
+		gui.draw(null);
 	}
 	
-	public void gameResetAfterLoad() {
-		ball.reset(startBall);
-		paddle.reset(startPaddle);
-		clock.reset( );
-		this.noOfBricks = startBricks.size();
-		Iterator<Brick> brickItr= bricks.iterator();
-		Iterator<Brick> saveBrickItr= startBricks.iterator();
-		while(brickItr.hasNext() && saveBrickItr.hasNext()) {
-			Brick brick = brickItr.next();
-			Brick saveBrick = saveBrickItr.next();
-			brick.reset(saveBrick);
-		}
-		
-	}
 	//Switch between actions when a button is pressed
 	
 	@Override
@@ -356,10 +379,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 	
 	public void replay() {
 		pause();
-		if(isGameLoaded)
-			gameResetAfterLoad();
-		else
-			gameReset();
+		gameReset();
 		replayAction();
 		gui.changeFocus();
 	}

@@ -4,7 +4,7 @@ import com.component.Ball;
 import com.infrastruture.Command;
 
 public class BallChangeXDirectionCommand implements Command {
-	protected Logger log = Logger.getLogger(BallChangeXDirectionCommand.class);
+	protected static Logger log = Logger.getLogger(BallChangeXDirectionCommand.class);
 	private Ball ball;
 	
 	public BallChangeXDirectionCommand(Ball ball) {
