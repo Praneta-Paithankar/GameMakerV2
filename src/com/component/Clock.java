@@ -58,11 +58,11 @@ public class Clock extends JComponent implements Element,Serializable{
 		this.milisecondsElapsed = milisecondsElapsed;
 	}
 
-	private int getMinutes() {
+	public int getMinutes() {
 		return (int) (milisecondsElapsed / 60000);
 	}
 
-	private int getSeconds() {
+	public int getSeconds() {
 		return (int) ((milisecondsElapsed / 1000) % 60);
 	}
 
