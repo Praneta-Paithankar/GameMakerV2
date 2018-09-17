@@ -1,3 +1,5 @@
+/**
+ *This class contains all the buttons*/
 package com.ui;
 
 import java.awt.Graphics;

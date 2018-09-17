@@ -1,3 +1,5 @@
+/**
+ *This panel holds all the graphic objects like brick, ball and paddle*/
 package com.ui;
 
 import java.awt.Component;
