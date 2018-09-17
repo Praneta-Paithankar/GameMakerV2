@@ -54,7 +54,6 @@ public class TimerPanel extends AbstractPanel implements Element {
 
 	@Override
 	public void addComponent(Element e) {
-		System.out.println("Add component in TimerPanel");
 		components.add(e);
 		add((JComponent)e);
 	}
