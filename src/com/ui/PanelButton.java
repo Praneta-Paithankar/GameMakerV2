@@ -7,13 +7,24 @@ import javax.swing.JButton;
 import com.controller.GameController;
 
 @SuppressWarnings("serial")
-public class ControlPanelButton extends JButton {
+public class PanelButton extends JButton {
 	private int width = 100;
 	private int height = 30;
-	public ControlPanelButton(String name, String command, GameController driver) {
+	public PanelButton(String name, String command, GameController driver) {
 		setText(name);
 		setActionCommand(command);
 		addActionListener(driver);
+		setVisible(true);
+		setAlignmentX(CENTER_ALIGNMENT);
+		setAlignmentY(CENTER_ALIGNMENT);
+		setMinimumSize(new Dimension(width, height));
+		setPreferredSize(new Dimension(width, height));
+		setMaximumSize(new Dimension(width, height));
+	}
+	
+	public PanelButton(String name, String command) {
+		setText(name);
+		setActionCommand(command);
 		setVisible(true);
 		setAlignmentX(CENTER_ALIGNMENT);
 		setAlignmentY(CENTER_ALIGNMENT);

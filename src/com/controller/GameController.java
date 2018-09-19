@@ -24,7 +24,6 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
-import com.breakout.Breakout;
 import com.commands.BallChangeXDirectionCommand;
 import com.commands.BallChangeYDirectionCommand;
 import com.commands.BallEnactCommand;
@@ -36,6 +35,7 @@ import com.component.Ball;
 import com.component.Brick;
 import com.component.Clock;
 import com.component.Paddle;
+import com.gamemaker.GameMaker;
 import com.helper.CollisionChecker;
 import com.infrastruture.Command;
 import com.infrastruture.Constants;
@@ -358,7 +358,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			}else {
 				gui.dispose();
 				gui.revalidate();
-				Breakout.startGame(true);
+				GameMaker.start(true);
 			}
 		}else if(commandText.equals("pause")) {
 			pause();
@@ -408,7 +408,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		if(a == JOptionPane.YES_OPTION) {
 			gui.dispose();
 			gui.revalidate();
-			Breakout.startGame(true);			
+			GameMaker.start(true);			
 		}
 		else if(a == JOptionPane.CANCEL_OPTION) {
 			replay();

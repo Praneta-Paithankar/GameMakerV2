@@ -36,39 +36,39 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	}
 	
 	public void createReplay() {
-		ControlPanelButton replayButton = new ControlPanelButton("Replay", "replay", driver);
+		PanelButton replayButton = new PanelButton("Replay", "replay", driver);
 		this.add(replayButton);
 
 	}
 	
 	public void createUndo() {
-		ControlPanelButton undoButton = new ControlPanelButton("Undo", "undo", driver);
+		PanelButton undoButton = new PanelButton("Undo", "undo", driver);
 		this.add(undoButton);
 
 	}
 	
 	public void createStart() {
-		ControlPanelButton startButton = new ControlPanelButton("Start", "start", driver);
+		PanelButton startButton = new PanelButton("Start", "start", driver);
 		this.add(startButton);
 	}
 	
 	public void createPause() {
-		ControlPanelButton pauseButton = new ControlPanelButton("Pause", "pause", driver);
+		PanelButton pauseButton = new PanelButton("Pause", "pause", driver);
 		this.add(pauseButton);
 	}
 
 	public void createLayout() {
-		ControlPanelButton layoutButton = new ControlPanelButton("Layout", "layout", driver);
+		PanelButton layoutButton = new PanelButton("Layout", "layout", driver);
 		this.add(layoutButton);
 	}
 
 	public void createLoad() {
-		ControlPanelButton layoutButton = new ControlPanelButton("Load", "load", driver);
+		PanelButton layoutButton = new PanelButton("Load", "load", driver);
 		this.add(layoutButton);
 	}
 
 	public void createSave() {
-		ControlPanelButton layoutButton = new ControlPanelButton("Save", "save", driver);
+		PanelButton layoutButton = new PanelButton("Save", "save", driver);
 		this.add(layoutButton);
 	}
 	@Override

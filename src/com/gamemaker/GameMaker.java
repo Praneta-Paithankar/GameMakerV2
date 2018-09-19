@@ -1,6 +1,6 @@
 /**
  *This is our main application class which creates and initializes all the game components*/
-package com.breakout;
+package com.gamemaker;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -27,17 +27,20 @@ import com.ui.ControlPanel;
 import com.ui.GUI;
 import com.ui.GamePanel;
 import com.ui.MainPanel;
+import com.ui.MakePanel;
 import com.ui.StaticPanel;
 import com.ui.TimerPanel;
 
-public class Breakout {
-	protected static Logger log = Logger.getLogger(Breakout.class);
-	public static void startGame(boolean isRestart){
+public class GameMaker {
+	protected static Logger log = Logger.getLogger(GameMaker.class);
+	public static void start(boolean isRestart){
+		
+		PropertyConfigurator.configure("log4j.properties");
 		
 		BreakoutTimer observable  = new BreakoutTimer();
 		GamePanel boardPanel =new GamePanel();
 		
-		Circle c = new Circle(Constants.BALL_RADIUS, Constants.BALL_POS_X,Constants.BALL_POS_Y);
+		/*Circle c = new Circle(Constants.BALL_RADIUS, Constants.BALL_POS_X,Constants.BALL_POS_Y);
 		Ball ball = new Ball(c, new Coordinate(Constants.BALL_DELTA_X, Constants.BALL_DELTA_Y), Constants.BALL_COLOR);
 		boardPanel.addComponent(ball);
         
@@ -62,50 +65,38 @@ public class Breakout {
 		
 		Clock clock = new Clock();
 		clock.setPreferredSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH));
-		clock.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH));
+		clock.setMaximumSize(new Dimension(Constants.TIMER_PANEL_WIDTH, Constants.TIMER_PANEL_WIDTH)); */
 
 		// Start - Create StaticPanel
 		StaticPanel staticPanel = new StaticPanel();
 
 		TimerPanel timerPanel = new TimerPanel();
-		timerPanel.addComponent(clock);
+		//timerPanel.addComponent();
 		
 		ControlPanel controlPanel = new ControlPanel();
-
+		MakePanel makePanel = new MakePanel();
+		
 		staticPanel.addComponent(timerPanel);
 		staticPanel.addComponent(controlPanel);
 		// End - Create StaticPanel
 		MainPanel mainPanel = new MainPanel();
 		mainPanel.addComponent(staticPanel);
 		mainPanel.addComponent(boardPanel);
+		mainPanel.addComponent(makePanel);
 
 		GUI gui = new GUI(mainPanel, boardPanel, staticPanel, timerPanel, controlPanel);
 		
 		gui.addComponent(mainPanel);
 
-		CollisionChecker checker = new CollisionChecker();
+		//CollisionChecker checker = new CollisionChecker();
 		
-		GameController driver = new GameController(ball, paddle, bricks, gui,observable, clock,checker);
+		//GameController driver = new GameController(ball, paddle, bricks, gui,observable, clock,checker);
 		
-		gui.addDriver(driver);
+		//gui.addDriver(driver);
 		observable.startTimer();
 		gui.setVisible(true);
 
 		gui.draw(null);
 		gui.pack();
-		if(isRestart)
-			observable.registerObserver(driver);
-		else
-			driver.pause();
-	}
-	public static void main(String args[]) {
-		PropertyConfigurator.configure("log4j.properties");
-		SwingUtilities.invokeLater(new Runnable() {
-
-			@Override
-			public void run() {
-				startGame(false);	
-			}
-		});
 	}
 }
