@@ -1,4 +1,4 @@
-package com.behavior;
+package com.ui;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -6,11 +6,13 @@ import java.awt.FlowLayout;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.LayoutBehavior;
 
-public class FlowLayoutBehavior implements LayoutBehavior {
+public class NullLayoutBehavior implements LayoutBehavior{
+
 	@Override
 	public void updateLayoutBehavior(AbstractPanel abstractPanel, int width, int height) {
-		abstractPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		abstractPanel.setLayout(null);
 		abstractPanel.setPreferredSize(new Dimension(width, height));
+		
 	}
 
 }
