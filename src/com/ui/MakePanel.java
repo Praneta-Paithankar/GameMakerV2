@@ -1,10 +1,13 @@
 package com.ui;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
 import org.apache.log4j.Logger;
@@ -19,11 +22,14 @@ public class MakePanel extends AbstractPanel implements Element{
 	private List<String> sprites;
 	private List<String> actions;
 	private List<String> events;
+	JComboBox<String> spriteSelection;
 	
 	public MakePanel() {
 		setLayoutBehavior(new FlowLayoutBehavior());
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
 		createButtons();
+		sprites = new ArrayList<>(Constants.spriteTypes);
+		createSpriteSelectionList();
 	}
 	
 	public void createButtons() {
@@ -31,12 +37,29 @@ public class MakePanel extends AbstractPanel implements Element{
 		this.add(createPlayButton());
 	}
 	
+	public void createSpriteSelectionList() {
+		spriteSelection = new JComboBox<>();
+		spriteSelection.addItem("Select Sprite");
+		for (String sprite: sprites) {
+			spriteSelection.addItem(sprite);
+		}
+		spriteSelection.setBounds(1050, 200, 100, 100);
+		this.add(spriteSelection);
+		spriteSelection.setPreferredSize(new Dimension(100, 100));
+		spriteSelection.setVisible(false);
+	}
+	
 	public PanelButton createMakeButton() {
-		return new PanelButton("Make", "make");
+		PanelButton make = new PanelButton("Make", "make");
+		make.addActionListener(al ->{
+			this.spriteSelection.setVisible(true);
+		});
+		return make;
 	}
 	
 	public PanelButton createPlayButton() {
-		return new PanelButton("Play", "play");
+		PanelButton play = new PanelButton("Play", "play");
+		return play;
 	}
 	
 	@Override

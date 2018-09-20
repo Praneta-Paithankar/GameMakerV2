@@ -3,6 +3,8 @@
 package com.infrastruture;
 
 import java.awt.Color;
+import java.util.Arrays;
+import java.util.List;
 
 public class Constants {
 	public final static int FRAME_WIDTH = 1400;
@@ -41,5 +43,7 @@ public class Constants {
 	public final static int PADDLE_HEIGHT = 40;
 	public final static int PADDLE_DELTA_X = 20;
 	public final static Color PADDLE_COLOR = new Color(91,33,91);
+	
+	public final static List<String> spriteTypes = Arrays.asList("Ball", "Brick", "Paddle");
 	
 }
