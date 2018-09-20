@@ -41,15 +41,17 @@ public class GUI extends JFrame implements Element{
 	private StaticPanel staticPanel;
 	private TimerPanel timerPanel;
 	private ControlPanel controlPanel;
+	private MakePanel makePanel;
 	private boolean toggleLayout;
 	
-	public GUI(MainPanel mainPanel, GamePanel boardPanel, StaticPanel staticPanel, TimerPanel timerPanel, ControlPanel controlPanel) {
+	public GUI(MainPanel mainPanel, GamePanel boardPanel, StaticPanel staticPanel, TimerPanel timerPanel, ControlPanel controlPanel,MakePanel makePanel) {
 		super("Breakout Game");
 		this.mainPanel = mainPanel;
 		this.boardPanel = boardPanel;
 		this.staticPanel = staticPanel;
 		this.timerPanel = timerPanel;
 		this.controlPanel = controlPanel;
+		this.makePanel = makePanel;
 		toggleLayout = false;
 		initializeUI();
 		elementList = new ArrayList<>();
@@ -69,6 +71,7 @@ public class GUI extends JFrame implements Element{
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
         controlPanel.createButtons(driver);
+       // makePanel.createButtons(controller);
 	}
 
 	public void changeFocus()

@@ -13,6 +13,9 @@ import javax.swing.JComponent;
 import org.apache.log4j.Logger;
 
 import com.behavior.FlowLayoutBehavior;
+import com.controller.GameController;
+import com.controller.GameMakerController;
+import com.gamemaker.GameMaker;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -23,18 +26,21 @@ public class MakePanel extends AbstractPanel implements Element{
 	private List<String> actions;
 	private List<String> events;
 	JComboBox<String> spriteSelection;
+	private GameMakerController controller;
 	
 	public MakePanel() {
 		setLayoutBehavior(new FlowLayoutBehavior());
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
-		createButtons();
+		//createButtons();
 		sprites = new ArrayList<>(Constants.spriteTypes);
 		createSpriteSelectionList();
 	}
 	
-	public void createButtons() {
-		this.add(createMakeButton());
-		this.add(createPlayButton());
+	public void createButtons(GameMakerController controller) {
+		this.controller = controller;
+		createMakeButton();
+		createPlayButton();
+		createSpriteSelectionList();
 	}
 	
 	public void createSpriteSelectionList() {
@@ -47,6 +53,7 @@ public class MakePanel extends AbstractPanel implements Element{
 		this.add(spriteSelection);
 		spriteSelection.setPreferredSize(new Dimension(100, 100));
 		spriteSelection.setVisible(false);
+		spriteSelection.addActionListener(controller);
 	}
 	
 	public PanelButton createMakeButton() {
