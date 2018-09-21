@@ -18,6 +18,14 @@ public class CreateSpriteRequest {
 	
 	public void addEventAction(String event, String action) {
 		eventAction.put(event, action);
+		System.out.println("in create sprite :: " + eventAction);
 	}
 	
+	public Map<String, String> getEventAction() {
+		return eventAction;
+	}
+
+	public void setEventAction(Map<String, String> eventAction) {
+		this.eventAction = eventAction;
+	}
 }
