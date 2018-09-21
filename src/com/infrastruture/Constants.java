@@ -49,6 +49,8 @@ public class Constants {
 	public final static Color PADDLE_COLOR = new Color(91,33,91);
 	
 	public final static List<String> spriteTypes = Arrays.asList("Ball", "Brick", "Paddle", "Clock");
+	public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed"};
+	public final static String[] AVAILABLE_ACTIONS = {"moveHorizontal", "moveVertical", "shoot"};
 	
 	public final static String BALL_IMAGE = "./src/com/image/ball.png";
 	public final static String BRICK_IMAGE = "./src/com/image/brick.jpg";

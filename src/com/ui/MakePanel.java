@@ -5,12 +5,15 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -20,7 +23,9 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
@@ -29,7 +34,7 @@ import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
-public class MakePanel extends AbstractPanel implements Element{
+public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private List<String> sprites;
 	private List<String> actions;
@@ -39,17 +44,21 @@ public class MakePanel extends AbstractPanel implements Element{
 	private BufferedImage ballImage;
 	private BufferedImage brickImage;
 	private BufferedImage paddleImage;
-	
+	private List<JCheckBox> checkBox = new ArrayList<>();
+	private CreateSpriteRequest newSprite;
+	HashMap<String, CreateSpriteRequest> spriteRequestMap;
+
 	public MakePanel() {
 		setLayoutBehavior(new NullLayoutBehavior());
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
 		//createButtons();
 		sprites = new ArrayList<>(Constants.spriteTypes);
-		createSpriteSelectionList();
+		spriteRequestMap = new HashMap<>();
+		//createSpriteSelectionList();
 		createImage();
 		createCheckbox();
-		createBallActions();
-		createBallEvents();
+		//createBallActions();
+		//createBallEvents();
 	}
 	
 	public void createButtons(GameMakerController controller) {
@@ -60,20 +69,28 @@ public class MakePanel extends AbstractPanel implements Element{
 	}
 	
 	public void createCheckbox() {
-		JCheckBox ballCheckBox = new JCheckBox("Ball", true);
+		JCheckBox ballCheckBox = new JCheckBox("Ball");
 		ballCheckBox.setBounds(10, 100, 200, 100);
 		ballCheckBox.setIcon(new ImageIcon(ballImage));
 		ballCheckBox.setFont(new Font("Serif", Font.BOLD, 20));
+		ballCheckBox.addItemListener(this);
+		checkBox.add(ballCheckBox);
 		this.add(ballCheckBox);
+		
 		JCheckBox brickCheckBox = new JCheckBox("Brick", true);
 		brickCheckBox.setBounds(10, 250, 200, 100);
 		brickCheckBox.setIcon(new ImageIcon(brickImage));
 		brickCheckBox.setFont(new Font("Serif", Font.BOLD, 20));
+		brickCheckBox.addItemListener(this);
+		checkBox.add(brickCheckBox);
 		this.add(brickCheckBox);
+		
 		JCheckBox paddleCheckBox = new JCheckBox("Paddle", true);
 		paddleCheckBox.setBounds(10, 400, 200, 100);
 		paddleCheckBox.setIcon(new ImageIcon(paddleImage));
 		paddleCheckBox.setFont(new Font("Serif", Font.BOLD, 20));
+		paddleCheckBox.addItemListener(this);
+		checkBox.add(paddleCheckBox);
 		this.add(paddleCheckBox);
 	}
 	
@@ -225,11 +242,56 @@ public class MakePanel extends AbstractPanel implements Element{
 		
 	}
 
-	public JComboBox<String> getSpriteSelection() {
-		return spriteSelection;
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		int sel = e.getStateChange();
+        if (sel == ItemEvent.SELECTED) {
+        	for (JCheckBox c: checkBox) {
+        		if (c==e.getSource()) {
+        			
+        			JTextField x = new JTextField();
+        			JTextField y = new JTextField();
+        			JComboBox<String> eventBox = new JComboBox<>(Constants.AVAILABLE_EVENTS);
+        			JComboBox<String> actionBox = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
+        			actionBox.setVisible(true);
+        			JOptionPane pane = new JOptionPane();
+        			Object[] message = {
+        			    "X Coordinate:", x,
+        			    "Y Coordinate:", y,
+        			    "Events:", eventBox,
+        			    "Actions:", actionBox
+        			};
+        			
+//        			eventBox.addActionListener(al -> {
+//        				actionBox.setName("Actions:");
+//        				actionBox.setVisible(true);
+//        				
+//        			});
+//        			
+        			int option = pane.showConfirmDialog(null, message, "Sprite Details", pane.OK_CANCEL_OPTION);
+        			System.out.println(x.getText()+ " "+ y.getText());
+        			if (option == JOptionPane.OK_OPTION) {
+//        				int xVal = -1;
+//        				int yVal = -1;
+//        				if(Integer.parseInt(x.getText()) >= 0)
+//        					if(xVal <= 0)
+//        					
+        				if(spriteRequestMap.containsKey(c.getText()))
+        					newSprite = spriteRequestMap.get(c.getText());
+        				else
+        					newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
+        				newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
+        				newSprite.getEventAction().put(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
+        				spriteRequestMap.put(c.getText(), newSprite);
+        			}      			
+        		}
+        	}
+        } else {
+
+        }
 	}
 
-	public void setSpriteSelection(JComboBox<String> spriteSelection) {
-		this.spriteSelection = spriteSelection;
-	}
 }
+

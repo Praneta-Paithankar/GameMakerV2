@@ -45,7 +45,7 @@ public class CollisionChecker {
  	
 	}
 	
-	public Direction checkCollisionBetweenCircleAndCircle() {
+	public Direction checkCollisionBetweenCircleAndCircle(Circle firstCircle,Circle secondCircle) {
 		return Direction.NONE;
 	}
 
