@@ -44,7 +44,7 @@ public class GameDriver {
 	public void InitPlay() {
 		
 		for(SpriteElement sprite: sprites) {
-			sprite.draw();
+//			sprite.draw();
 		}
 	}
 	
