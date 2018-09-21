@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +23,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 import org.apache.log4j.Logger;
 
@@ -32,7 +36,7 @@ import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
-public class MakePanel extends AbstractPanel implements Element{
+public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private List<String> sprites;
 	private List<String> actions;
@@ -41,17 +45,18 @@ public class MakePanel extends AbstractPanel implements Element{
 	private BufferedImage ballImage;
 	private BufferedImage brickImage;
 	private BufferedImage paddleImage;
+	private List<JCheckBox> checkBox = new ArrayList<>();
 	
 	public MakePanel() {
 		setLayoutBehavior(new NullLayoutBehavior());
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
 		createButtons();
 		sprites = new ArrayList<>(Constants.spriteTypes);
-		createSpriteSelectionList();
+		//createSpriteSelectionList();
 		createImage();
 		createCheckbox();
-		createBallActions();
-		createBallEvents();
+		//createBallActions();
+		//createBallEvents();
 	}
 	
 	public void createButtons() {
@@ -60,20 +65,28 @@ public class MakePanel extends AbstractPanel implements Element{
 	}
 	
 	public void createCheckbox() {
-		JCheckBox ballCheckBox = new JCheckBox("Ball", true);
+		JCheckBox ballCheckBox = new JCheckBox("Ball");
 		ballCheckBox.setBounds(10, 100, 200, 100);
 		ballCheckBox.setIcon(new ImageIcon(ballImage));
 		ballCheckBox.setFont(new Font("Serif", Font.BOLD, 20));
+		ballCheckBox.addItemListener(this);
+		checkBox.add(ballCheckBox);
 		this.add(ballCheckBox);
+		
 		JCheckBox brickCheckBox = new JCheckBox("Brick", true);
 		brickCheckBox.setBounds(10, 250, 200, 100);
 		brickCheckBox.setIcon(new ImageIcon(brickImage));
 		brickCheckBox.setFont(new Font("Serif", Font.BOLD, 20));
+		brickCheckBox.addItemListener(this);
+		checkBox.add(brickCheckBox);
 		this.add(brickCheckBox);
+		
 		JCheckBox paddleCheckBox = new JCheckBox("Paddle", true);
 		paddleCheckBox.setBounds(10, 400, 200, 100);
 		paddleCheckBox.setIcon(new ImageIcon(paddleImage));
 		paddleCheckBox.setFont(new Font("Serif", Font.BOLD, 20));
+		paddleCheckBox.addItemListener(this);
+		checkBox.add(paddleCheckBox);
 		this.add(paddleCheckBox);
 	}
 	
@@ -218,6 +231,30 @@ public class MakePanel extends AbstractPanel implements Element{
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		int sel = e.getStateChange();
+
+        if (sel == ItemEvent.SELECTED) {
+        	for (JCheckBox c: checkBox) {
+        		if (c==e.getSource()) {
+        			JTextField x = new JTextField();
+        			JTextField y = new JTextField();
+        			Object[] message = {
+        			    "X Coordinate:", x,
+        			    "Y Coordinate:", y
+        			};
+        			int option = JOptionPane.showConfirmDialog(null, message, "Location", JOptionPane.OK_CANCEL_OPTION);
+        			System.out.println(x.getText()+ " "+ y.getText());
+        		}
+        	}
+        } else {
+
+        }
 		
 	}
 
