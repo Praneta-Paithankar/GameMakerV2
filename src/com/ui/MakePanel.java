@@ -46,12 +46,14 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	private BufferedImage brickImage;
 	private BufferedImage paddleImage;
 	private List<JCheckBox> checkBox = new ArrayList<>();
+	private CreateSpriteRequest newSprite;
 	
 	public MakePanel() {
 		setLayoutBehavior(new NullLayoutBehavior());
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
 		createButtons();
 		sprites = new ArrayList<>(Constants.spriteTypes);
+		
 		//createSpriteSelectionList();
 		createImage();
 		createCheckbox();
@@ -242,14 +244,33 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
         if (sel == ItemEvent.SELECTED) {
         	for (JCheckBox c: checkBox) {
         		if (c==e.getSource()) {
+        			
         			JTextField x = new JTextField();
         			JTextField y = new JTextField();
+        			JComboBox<String> eventBox = new JComboBox<>(Constants.AVAILABLE_EVENTS);
+        			JComboBox<String> actionBox = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
+        			/*actionBox.setVisible(false);
+        			eventBox.addActionListener(al -> {
+        				actionBox.setVisible(true);
+        			});*/
         			Object[] message = {
         			    "X Coordinate:", x,
-        			    "Y Coordinate:", y
+        			    "Y Coordinate:", y,
+        			    "Events:", eventBox,
+        			    "Actions:", actionBox
         			};
-        			int option = JOptionPane.showConfirmDialog(null, message, "Location", JOptionPane.OK_CANCEL_OPTION);
+        			
+        			int option = JOptionPane.showConfirmDialog(null, message, "Sprite Details", JOptionPane.OK_CANCEL_OPTION);
         			System.out.println(x.getText()+ " "+ y.getText());
+        			if (option == JOptionPane.OK_OPTION) {
+        				newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
+        				newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
+        			}
+        			
+        			
+        			
+        			
+        			
         		}
         	}
         } else {
