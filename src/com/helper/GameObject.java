@@ -48,7 +48,9 @@ public class GameObject {
 	
 	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne) throws IOException {
 		BufferedImage image = ImageIO.read(new File(imagePath));
-		CircularSprite sprite = new CircularSprite(image, elementX,elementY, dimensionOne);
+		int centerX = elementX+dimensionOne;
+		int centerY = elementY+dimensionOne;
+		CircularSprite sprite = new CircularSprite(image, centerX, centerY, dimensionOne);
 		return sprite;
 	}
 	

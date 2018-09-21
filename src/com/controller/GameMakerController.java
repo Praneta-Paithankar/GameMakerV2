@@ -29,13 +29,13 @@ public class GameMakerController implements  KeyListener,ActionListener {
 	
 	/*This method is called from action performed method .. when user clicks Done on make panel.*/
 	public void done() {
-		String spriteName = (String)gui.getMakePanel().getSpriteSelection().getSelectedItem();
-		System.out.println("-----  "+spriteName);
+		/*String spriteName = (String)gui.getMakePanel().getSpriteSelection().getSelectedItem();
+		System.out.println("-----  "+spriteName);*/
 	}
 	
-	public void make() {
+	/*public void make() {
 		gui.getMakePanel().getSpriteSelection().setVisible(true);
-	}
+	}*/
 	
 	
 	@Override
@@ -47,7 +47,7 @@ public class GameMakerController implements  KeyListener,ActionListener {
 		if(commandText.equals("done")) {
 			done();
 		}else if(commandText.equals("make")) {
-			make();
+			//make();
 		}
 	}
 	

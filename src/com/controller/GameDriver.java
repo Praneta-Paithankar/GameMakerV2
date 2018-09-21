@@ -45,6 +45,7 @@ public class GameDriver {
 		
 		for(SpriteElement sprite: sprites) {
 			//sprite.draw(sprite);
+
 		}
 	}
 	

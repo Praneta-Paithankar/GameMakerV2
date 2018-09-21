@@ -3,12 +3,9 @@
  */
 package com.component;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-
-import com.infrastruture.Element;
 
 public abstract class SpriteElement{
 	
@@ -30,8 +27,13 @@ public abstract class SpriteElement{
 		this.height = radius *2;
 	}
 
-	public SpriteElement(BufferedImage image2, int elementX2, int elementY2, int width2, int height2) {
+	public SpriteElement(BufferedImage image, int elementX, int elementY, int width, int height) {
 		// TODO Auto-generated constructor stub
+		this.image = image;
+		this.elementX = elementX;
+		this.elementY = elementY;
+		this.width = width;
+		this.height = height;
 	}
 
 	public int getRadius() {

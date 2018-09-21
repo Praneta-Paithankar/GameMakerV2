@@ -57,7 +57,7 @@ public class Constants {
 	public final static String PADDLE_IMAGE = "./src/com/image/paddle.png";
 
 	
-	public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed"};
-	public final static String[] AVAILABLE_ACTIONS = {"moveHorizontal", "moveVertical", "shoot"};
+	//public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed"};
+	//public final static String[] AVAILABLE_ACTIONS = {"moveHorizontal", "moveVertical", "shoot"};
 	
 }
