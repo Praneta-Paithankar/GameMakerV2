@@ -40,8 +40,7 @@ public class GameMaker {
 		
 		BreakoutTimer observable  = new BreakoutTimer();
 		GamePanel boardPanel =new GamePanel();
-		
-		
+
 		// Start - Create StaticPanel
 		StaticPanel staticPanel = new StaticPanel();
 
@@ -66,6 +65,7 @@ public class GameMaker {
 		//gui.addDriver(driver);
 		GameMakerController makerController = new GameMakerController(gui);
 		gui.addGameMakerDriver(makerController);
+
 		observable.startTimer();
 		gui.setVisible(true);
 

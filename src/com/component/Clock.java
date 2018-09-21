@@ -33,7 +33,6 @@ public class Clock implements Element,Serializable{
 		}
 	}
 	
-	@Override
 	public void draw(Graphics g) {
 		// TODO center box around the time 
 		g.drawRect(0, 150, 250, 100);

@@ -1,44 +1,61 @@
 package com.helper;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
+import com.component.CircularSprite;
+import com.component.RectangularSprite;
+import com.component.SpriteElement;
+import com.infrastruture.Constants;
+
 public class GameObject {
-	private String element;
-	private String elementX;
-	private String elementY;
+
+	String element;  // String denoting SpriteType
+	int elementX; // String denoting X coordinate of Sprite obtained from MakerEngine
+	int elementY; // String denoting Y coordinate of Sprite obtained from MakerEngine
+
 	
-	private Map<String, String> eventActions;
-
-	public String getElement() {
-		return element;
-	}
-
-	public void setElement(String element) {
+	GameObject(String element, int elementX, int elementY){
 		this.element = element;
-	}
-
-	public String getElementX() {
-		return elementX;
-	}
-
-	public void setElementX(String elementX) {
 		this.elementX = elementX;
-	}
-
-	public String getElementY() {
-		return elementY;
-	}
-
-	public void setElementY(String elementY) {
 		this.elementY = elementY;
 	}
-
-	public Map<String, String> getEventActions() {
-		return eventActions;
+	
+	public SpriteElement spriteDecoder(String element) throws IOException {
+		
+		switch(element) {
+		
+		case "ball":
+			return spriteCreator("circular",Constants.BALL_IMAGE,Constants.BALL_RADIUS);
+			
+		case "brick":
+			return spriteCreator("rectangular",Constants.BRICK_IMAGE, Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
+	
+		case "paddle":
+			return spriteCreator("rectangular",Constants.PADDLE_IMAGE, Constants.PADDLE_WIDTH, Constants.PADDLE_HEIGHT);	
+			
+		}
+		return null;
+		
 	}
-
-	public void setEventActions(Map<String, String> eventActions) {
-		this.eventActions = eventActions;
+	
+	
+	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne) throws IOException {
+		BufferedImage image = ImageIO.read(new File(imagePath));
+		CircularSprite sprite = new CircularSprite(image, elementX,elementY, dimensionOne);
+		return sprite;
 	}
+	
+	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne, int dimensionTwo) throws IOException {
+		BufferedImage image = ImageIO.read(new File(imagePath));
+		RectangularSprite sprite = new RectangularSprite(image,elementX, elementY,dimensionOne, dimensionTwo);
+		return sprite;
+	}
+		
 }
