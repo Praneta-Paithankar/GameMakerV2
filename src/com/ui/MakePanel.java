@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -47,13 +48,14 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	private BufferedImage paddleImage;
 	private List<JCheckBox> checkBox = new ArrayList<>();
 	private CreateSpriteRequest newSprite;
-	
+	HashMap<String, CreateSpriteRequest> spriteRequestMap;
+
 	public MakePanel() {
 		setLayoutBehavior(new NullLayoutBehavior());
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
 		createButtons();
 		sprites = new ArrayList<>(Constants.spriteTypes);
-		
+		spriteRequestMap = new HashMap<>();
 		//createSpriteSelectionList();
 		createImage();
 		createCheckbox();
@@ -240,7 +242,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
 		int sel = e.getStateChange();
-
         if (sel == ItemEvent.SELECTED) {
         	for (JCheckBox c: checkBox) {
         		if (c==e.getSource()) {
@@ -249,10 +250,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
         			JTextField y = new JTextField();
         			JComboBox<String> eventBox = new JComboBox<>(Constants.AVAILABLE_EVENTS);
         			JComboBox<String> actionBox = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
-        			/*actionBox.setVisible(false);
-        			eventBox.addActionListener(al -> {
-        				actionBox.setVisible(true);
-        			});*/
+        			actionBox.setVisible(true);
+        			JOptionPane pane = new JOptionPane();
         			Object[] message = {
         			    "X Coordinate:", x,
         			    "Y Coordinate:", y,
@@ -260,23 +259,34 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
         			    "Actions:", actionBox
         			};
         			
-        			int option = JOptionPane.showConfirmDialog(null, message, "Sprite Details", JOptionPane.OK_CANCEL_OPTION);
+//        			eventBox.addActionListener(al -> {
+//        				actionBox.setName("Actions:");
+//        				actionBox.setVisible(true);
+//        				
+//        			});
+//        			
+        			int option = pane.showConfirmDialog(null, message, "Sprite Details", pane.OK_CANCEL_OPTION);
         			System.out.println(x.getText()+ " "+ y.getText());
         			if (option == JOptionPane.OK_OPTION) {
-        				newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
+//        				int xVal = -1;
+//        				int yVal = -1;
+//        				if(Integer.parseInt(x.getText()) >= 0)
+//        					if(xVal <= 0)
+//        					
+        				if(spriteRequestMap.containsKey(c.getText()))
+        					newSprite = spriteRequestMap.get(c.getText());
+        				else
+        					newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
         				newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
-        			}
-        			
-        			
-        			
-        			
-        			
+        				newSprite.getEventAction().put(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
+        				spriteRequestMap.put(c.getText(), newSprite);
+        			}      			
         		}
         	}
         } else {
 
         }
-		
 	}
 
 }
+
