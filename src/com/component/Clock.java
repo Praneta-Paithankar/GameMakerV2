@@ -33,7 +33,6 @@ public class Clock extends JComponent implements Element,Serializable{
 		}
 	}
 	
-	@Override
 	public void draw(Graphics g) {
 				
 		// TODO center box around the time 

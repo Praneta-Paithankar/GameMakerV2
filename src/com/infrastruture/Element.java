@@ -15,4 +15,5 @@ public interface Element extends Serializable {
 	 void removeComponent(Element e);
 	 void save(ObjectOutputStream op);
 	 Element load(ObjectInputStream ip);
+
 }

@@ -3,8 +3,12 @@
 package com.infrastruture;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 public class Constants {
 	public final static int FRAME_WIDTH = 1400;
@@ -45,5 +49,13 @@ public class Constants {
 	public final static Color PADDLE_COLOR = new Color(91,33,91);
 	
 	public final static List<String> spriteTypes = Arrays.asList("Ball", "Brick", "Paddle", "Clock");
+	
+	public final static String BALL_IMAGE = "./src/com/image/ball.png";
+	public final static String BRICK_IMAGE = "./src/com/image/brick.jpg";
+	public final static String PADDLE_IMAGE = "./src/com/image/paddle.png";
+
+	
+	public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed"};
+	public final static String[] AVAILABLE_ACTIONS = {"moveHorizontal", "moveVertical", "shoot"};
 	
 }
