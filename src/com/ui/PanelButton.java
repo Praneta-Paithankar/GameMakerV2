@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import javax.swing.JButton;
 
 import com.controller.GameController;
+import com.controller.GameMakerController;
 
 @SuppressWarnings("serial")
 public class PanelButton extends JButton {

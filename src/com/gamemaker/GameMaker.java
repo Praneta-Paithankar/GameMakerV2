@@ -17,6 +17,7 @@ import com.component.Brick;
 import com.component.Clock;
 import com.component.Paddle;
 import com.controller.GameController;
+import com.controller.GameMakerController;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
@@ -40,6 +41,7 @@ public class GameMaker {
 		BreakoutTimer observable  = new BreakoutTimer();
 		GamePanel boardPanel =new GamePanel();
 		
+		
 		// Start - Create StaticPanel
 		StaticPanel staticPanel = new StaticPanel();
 
@@ -62,6 +64,8 @@ public class GameMaker {
 		gui.addComponent(mainPanel);
 
 		//gui.addDriver(driver);
+		GameMakerController makerController = new GameMakerController(gui);
+		gui.addGameMakerDriver(makerController);
 		observable.startTimer();
 		gui.setVisible(true);
 

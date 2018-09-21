@@ -1,7 +1,6 @@
 package com.ui;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,20 +16,15 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JRadioButton;
 
 import org.apache.log4j.Logger;
 
-import com.behavior.BoxLayoutXAxisBehavior;
-import com.behavior.BoxLayoutYAxisBehavior;
-import com.behavior.FlowLayoutBehavior;
-import com.controller.GameController;
 import com.controller.GameMakerController;
-import com.gamemaker.GameMaker;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -60,9 +54,9 @@ public class MakePanel extends AbstractPanel implements Element{
 	
 	public void createButtons(GameMakerController controller) {
 		this.controller = controller;
-		createMakeButton();
-		createPlayButton();
-		createSpriteSelectionList();
+		this.add(createMakeButton());
+		this.add(createPlayButton());
+		createDoneButton();
 	}
 	
 	public void createCheckbox() {
@@ -86,11 +80,11 @@ public class MakePanel extends AbstractPanel implements Element{
 	public void createImage() {
 		try {
             ballImage = ImageIO.read(new File("./src/com/image/ball.png"));
-            ballImage = resize(ballImage, 100, 100);
+            ballImage = resize(ballImage, 50, 70);
             brickImage = ImageIO.read(new File("./src/com/image/brick.jpg"));
-            brickImage = resize(brickImage, 100, 100);
+            brickImage = resize(brickImage, 50, 70);
             paddleImage = ImageIO.read(new File("./src/com/image/paddle.png"));
-            paddleImage = resize(paddleImage, 100, 100);
+            paddleImage = resize(paddleImage, 50, 70);
         } catch (IOException e) {
             // TODO Auto-generated catch block
         	log.error(e.getMessage());
@@ -143,10 +137,6 @@ public class MakePanel extends AbstractPanel implements Element{
 		this.add(ballEventLabel);
 	}
 	
-	public void createBallEvent() {
-		
-	}
-	
 	public void createSpriteSelectionList() {
 		spriteSelection = new JComboBox<>();
 		spriteSelection.addItem("Select Sprite");
@@ -162,17 +152,24 @@ public class MakePanel extends AbstractPanel implements Element{
 	
 	public PanelButton createMakeButton() {
 		PanelButton make = new PanelButton("Make", "make");
-		make.setBounds(150, 10, 100, 50);
-		make.addActionListener(al ->{
-			this.spriteSelection.setVisible(true);
-		});
+		make.setBounds(50, 10, 100, 50);
+		make.addActionListener(controller);
 		return make;
 	}
 	
 	public PanelButton createPlayButton() {
 		PanelButton play = new PanelButton("Play", "play");
-		play.setBounds(300, 10, 100, 50);
+		play.setBounds(200, 10, 100, 50);
 		return play;
+	}
+	
+	public void createDoneButton() {
+		JButton doneButton = new JButton("Done");
+		doneButton.setBounds(350, 10, 100, 50);
+		doneButton.setActionCommand("done");
+		doneButton.addActionListener(controller);
+		doneButton.setVisible(true);
+		this.add(doneButton);
 	}
 	
 	@Override
@@ -228,4 +225,11 @@ public class MakePanel extends AbstractPanel implements Element{
 		
 	}
 
+	public JComboBox<String> getSpriteSelection() {
+		return spriteSelection;
+	}
+
+	public void setSpriteSelection(JComboBox<String> spriteSelection) {
+		this.spriteSelection = spriteSelection;
+	}
 }

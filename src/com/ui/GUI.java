@@ -20,6 +20,7 @@ import com.behavior.BoxLayoutXAxisBehavior;
 import com.behavior.BoxLayoutYAxisBehavior;
 import com.behavior.FlowLayoutBehavior;
 import com.behavior.GridBagLayoutBehavior;
+import com.controller.GameMakerController;
 import com.controller.GameController;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
@@ -32,6 +33,7 @@ public class GUI extends JFrame implements Element{
 	private ArrayList<Element> elementList;
 
 	private GameController driver;
+	private GameMakerController controller;
 	private MainPanel mainPanel;
 	private JFileChooser c;
 	private FileWriter fileWriter;
@@ -67,11 +69,16 @@ public class GUI extends JFrame implements Element{
 	public void removeKeyListner() {
 		mainPanel.removeKeyListener(driver);
 	}
+	
 	public void addDriver(GameController driver){
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
         controlPanel.createButtons(driver);
-       // makePanel.createButtons(controller);
+        //makePanel.createButtons();
+	}
+	
+	public void addGameMakerDriver(GameMakerController controller) {
+		makePanel.createButtons(controller);
 	}
 
 	public void changeFocus()
@@ -220,5 +227,8 @@ public class GUI extends JFrame implements Element{
 		return timerPanel;
 	}
 
+	public MakePanel getMakePanel() {
+		return makePanel;
+	}
 		
 }
