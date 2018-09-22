@@ -78,23 +78,28 @@ public class GameDriver implements Observer, KeyListener{
 	public void checkCollision() {
 		MacroCommand macroCommand = new MacroCommand();
 		List<ActionLink> actionObservers = eventMap.get("onCollision");
+		Direction d;
 		for(ActionLink actionObserver: actionObservers) {
+			d = checkCollisionToWall(actionObserver.getSprite());
+			actionForCollision(actionObserver.getAction(), d, macroCommand);
 			for(SpriteElement element: sprites) {
-				Direction ret  = checkCollisionOfSprite(actionObserver.getSprite(),element);
-				if(ret != Direction.NONE) {
-					switch(actionObserver.getAction()) {
-					case "blow": macroCommand.addCommand(blow);break;
-					case "bounce":macroCommand.addCommand(bounce);break;
-					case "shoot": macroCommand.addCommand(shoot);break;
-					case "move": macroCommand.addCommand(move);break;
-					default: break;
-					}
-				}
+				 ret = checkCollisionOfSprite(actionObserver.getSprite(),element);
+				 actionForCollision(actionObserver.getAction(), d, macroCommand);
 			}
 		}
-		
 		macroCommand.execute();
-		
+	}
+	
+	public void actionForCollision(String action, Direction d, MacroCommand macroCommand) {
+		if(d != Direction.NONE) {
+			switch(action) {
+			case "blow": macroCommand.addCommand(blow);break;
+			case "bounce":macroCommand.addCommand(bounce);break;
+			case "shoot": macroCommand.addCommand(shoot);break;
+			case "move": macroCommand.addCommand(move);break;
+			default: break;
+			}
+		}
 	}
 
 	public void eventHandler(String event) {
