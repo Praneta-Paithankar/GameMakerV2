@@ -12,6 +12,7 @@ import com.commands.MoveCommand;
 import com.commands.SpriteBlowCommand;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
+import com.helper.SpriteCollision;
 import com.infrastruture.Constants;
 import com.infrastruture.Direction;
 import com.infrastruture.Observer;
@@ -23,12 +24,14 @@ public class GameDriver implements Observer, KeyListener{
 	private Map<String, List<ActionLink>> eventMap;
 	private GUI gui;
 	private BreakoutTimer timer;
+	private SpriteCollision collision;
 
 	public GameDriver(GUI gui, BreakoutTimer timer){
 		this.sprites = new ArrayList<SpriteElement>();
 		this.eventMap = new HashMap<>();
 		this.gui = gui;
 		this.timer = timer;
+		this.collision = new SpriteCollision();
 	}
 
 	public void addSpriteElements(SpriteElement sprite) {
@@ -60,7 +63,7 @@ public class GameDriver implements Observer, KeyListener{
 
 		System.out.println("InitPlay ::: "+sprites.toString());
 		gui.draw(null);
-		
+		System.out.println(eventMap.get("OnCollision").size());
 		timer.registerObserver(this);
 	}
 
@@ -74,16 +77,17 @@ public class GameDriver implements Observer, KeyListener{
 
 	public void checkCollision() {
 		MacroCommand macroCommand = new MacroCommand();
-		
 		Direction d;
-		if (eventMap.containsKey("onCollision")) {
-			List<ActionLink> eventObservers = eventMap.get("onCollision");
+		if (eventMap.containsKey("OnCollision")) {
+			List<ActionLink> eventObservers = eventMap.get("OnCollision");
 			for(ActionLink actionObserver: eventObservers) {
-				//d = checkCollisionToWall(actionObserver.getSprite());
-				//actionForCollision(actionObserver, d, macroCommand);
+				
+				d = collision.checkCollisionOfSprites(actionObserver.getSprite());
+				System.out.println(d);
+				actionForCollision(actionObserver, d, macroCommand);
 				for(SpriteElement element: sprites) {
-					//d = checkCollisionOfSprite(actionObserver.getSprite(),element);
-					//actionForCollision(actionObserver, d, macroCommand);
+					d = collision.checkCollisionOfSprites(actionObserver.getSprite(),element);
+					actionForCollision(actionObserver, d, macroCommand);
 				}
 			}
 			macroCommand.execute();
@@ -97,6 +101,7 @@ public class GameDriver implements Observer, KeyListener{
 				macroCommand.addCommand(new SpriteBlowCommand(action.getSprite()));
 				break;
 			case "bounce":
+				System.out.println("in bounce");
 				macroCommand.addCommand(new BounceCommand(action.getSprite(), d));
 				break;
 			case "shoot": 

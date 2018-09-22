@@ -9,28 +9,29 @@ import com.infrastruture.Direction;
 public class SpriteCollision {
 protected static Logger log = Logger.getLogger(CollisionChecker.class);
 	
-	public void checkCollisionOfSprites(SpriteElement sourceSprite) {
+	public Direction checkCollisionOfSprites(SpriteElement sourceSprite) {
 		if(sourceSprite.getClass().getClass().toString().contains("CircularSprite")) {
-			checkCollisionBetweenBallAndWall(sourceSprite);
+			return checkCollisionBetweenBallAndWall(sourceSprite);
 		}else {
-			checkCollisionBetweenRectangleAndWall(sourceSprite);
+			return checkCollisionBetweenRectangleAndWall(sourceSprite);
 		}
 	}
 	
-	public void checkCollisionOfSprites(SpriteElement sourceSprite,SpriteElement destinationSprite) {
+	public Direction checkCollisionOfSprites(SpriteElement sourceSprite,SpriteElement destinationSprite) {
 
 		if(sourceSprite.getClass().getClass().toString().contains("CircularSprite") && destinationSprite.getClass().toString().contains("CircularSprite")) {
-			checkCollisionBetweenTwoCircles(sourceSprite, destinationSprite);
+			return checkCollisionBetweenTwoCircles(sourceSprite, destinationSprite);
 		}
 		else if(sourceSprite.getClass().getClass().toString().contains("RectangularSprite") && destinationSprite.getClass().toString().contains("RectangularSprite")) {
-			checkCollisionBetweenTwoRectangles(sourceSprite, destinationSprite);
+			return checkCollisionBetweenTwoRectangles(sourceSprite, destinationSprite);
 		}
 		else if(sourceSprite.getClass().getClass().toString().contains("CircularSprite") && destinationSprite.getClass().toString().contains("RectangularSprite")) {
-			checkCollisionBetweenTwoRectangles(sourceSprite, destinationSprite);
+			return checkCollisionBetweenTwoRectangles(sourceSprite, destinationSprite);
 		}
 		else if(sourceSprite.getClass().getClass().toString().contains("RectangularSprite") && destinationSprite.getClass().toString().contains("CircularSprite")) {
-			checkCollisionBetweenTwoRectangles(sourceSprite, destinationSprite);
+			return checkCollisionBetweenTwoRectangles(sourceSprite, destinationSprite);
 		}
+		return Direction.NONE;
 		
 	}
 	
