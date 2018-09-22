@@ -56,7 +56,7 @@ public class GameMakerController implements  KeyListener,ActionListener {
 		try {
 			System.out.println("in done");
 			this.sprite = gui.getMakePanel().getNewSprite();
-			this.newSprite = gameObject.spriteDecoder(sprite.getElementName());
+			this.newSprite = gameObject.spriteDecoder(sprite.getElementName(), sprite.getXlocation(), sprite.getYlocation());
 			this.gameDriver.addSpriteElements(newSprite);
 			this.gui.addSpriteToPanel(newSprite);
 			//this.spriteList.add(newSprite);

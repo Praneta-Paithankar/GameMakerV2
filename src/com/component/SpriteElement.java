@@ -104,6 +104,7 @@ public abstract class SpriteElement{
 //		 //Image tmp = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 //	     BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 //	        	g = resized.createGraphics();
+		System.out.println(elementX+" "+elementY);
 	   g.drawImage(this.image, elementX, elementY, null);
 	        //g.dispose();
 	}
