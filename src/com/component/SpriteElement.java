@@ -44,6 +44,8 @@ public abstract class SpriteElement{
 		this.elementY = elementY;
 		this.width = width;
 		this.height = height;
+		this.XVel = Constants.X_Velocity;
+		this.YVel = Constants.Y_Velocity;
 		this.image = resize(image, width, height);
 		this.visible = true;
 	}
@@ -135,7 +137,6 @@ public abstract class SpriteElement{
 		//	     BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		//	        	g = resized.createGraphics();
 		if(this.visible) {
-			System.out.println(elementX+" "+elementY);
 			g.drawImage(this.image, elementX, elementY, null);
 		}
 		//g.dispose();

@@ -30,7 +30,7 @@ import com.timer.BreakoutTimer;
 import com.ui.CreateSpriteRequest;
 import com.ui.GUI;
 
-public class GameMakerController implements  KeyListener,ActionListener {
+public class GameMakerController implements  ActionListener {
 	protected static Logger log = Logger.getLogger(GameMakerController.class);
     private GUI gui;
 	private CreateSpriteRequest sprite;
@@ -107,25 +107,6 @@ public class GameMakerController implements  KeyListener,ActionListener {
 		}else if(commandText.equals("make")) {
 			make();
 		}
-	}
-	
-
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

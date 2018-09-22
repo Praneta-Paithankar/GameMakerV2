@@ -72,7 +72,6 @@ public class GamePanel extends AbstractPanel implements Element {
 		if (image != null) {
 	        g.drawImage(image, 0, 0, this);
 	    }
-		System.out.println("printing game panel no of elements" + elements.size());
 		for(SpriteElement element:elements)
 		{
 			element.draw(g);

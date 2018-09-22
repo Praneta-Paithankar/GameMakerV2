@@ -59,14 +59,8 @@ public class GameDriver implements Observer, KeyListener{
 	public void InitPlay() {
 
 		System.out.println("InitPlay ::: "+sprites.toString());
-		for(SpriteElement sprite: sprites) {
-			System.out.println("sprite -- "+sprite.toString());
-		}
 		gui.draw(null);
-		for (Map.Entry<String,List<ActionLink>> entry:eventMap.entrySet()) {
-			System.out.println(entry.getKey()+": "+entry.getValue().size());
-		}
-
+		
 		timer.registerObserver(this);
 	}
 
@@ -119,8 +113,7 @@ public class GameDriver implements Observer, KeyListener{
 	public void eventHandler(String event) {
 		
 		MacroCommand macroCommand = new MacroCommand();
-		
-		
+
 		if (eventMap.containsKey(event)) {
 			List<ActionLink> eventObservers = eventMap.get(event);
 			for(ActionLink actionObserver: eventObservers) {
@@ -150,8 +143,7 @@ public class GameDriver implements Observer, KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println("keyPressed");
-		// TODO Auto-generated method stub		
+				
 		MacroCommand macroCommand = new MacroCommand();
 		
 		if (eventMap.containsKey("keyPressed")) {

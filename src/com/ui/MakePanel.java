@@ -77,6 +77,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 			c.setBounds(Constants.CHECKBOX_X, y, Constants.CHECKBOX_WIDTH, Constants.CHECKBOX_HEIGHT);
 			c.setFont(f);
 			c.addItemListener(this);
+			c.setFocusable(false);
 			checkBox.add(c);
 			this.add(c);
 			y += 150;
@@ -101,6 +102,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		PanelButton make = new PanelButton("Make", "make");
 		make.setBounds(50, 10, 100, 50);
 		make.addActionListener(controller);
+		make.setFocusable(false);
 		return make;
 	}
 	
@@ -108,6 +110,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		PanelButton play = new PanelButton("Play", "play");
 		play.setBounds(200, 10, 100, 50);
 		play.addActionListener(controller);
+		play.setFocusable(false);
 		return play;
 	}
 	
@@ -117,6 +120,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		doneButton.setActionCommand("done");
 		doneButton.addActionListener(controller);
 		doneButton.setVisible(true);
+		doneButton.setFocusable(false);
 		this.add(doneButton);
 	}
 	
