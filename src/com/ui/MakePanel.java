@@ -40,14 +40,14 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	private List<String> sprites;
 	private List<String> actions;
 	private List<String> events;
-	JComboBox<String> spriteSelection;
+	private JComboBox<String> spriteSelection;
 	private GameMakerController controller;
 	private BufferedImage ballImage;
 	private BufferedImage brickImage;
 	private BufferedImage paddleImage;
 	private List<JCheckBox> checkBox = new ArrayList<>();
 	private CreateSpriteRequest newSprite;
-	HashMap<String, CreateSpriteRequest> spriteRequestMap;
+	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
 
 	public MakePanel() {
 		setLayoutBehavior(new NullLayoutBehavior());
@@ -56,7 +56,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		sprites = new ArrayList<>(Constants.spriteTypes);
 		spriteRequestMap = new HashMap<>();
 		//createSpriteSelectionList();
-		createImage();
+		//createImage();
 		createCheckbox();
 		//createBallActions();
 		//createBallEvents();
@@ -107,6 +107,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	public PanelButton createPlayButton() {
 		PanelButton play = new PanelButton("Play", "play");
 		play.setBounds(200, 10, 100, 50);
+		play.addActionListener(controller);
 		return play;
 	}
 	
@@ -186,7 +187,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
         if (sel == ItemEvent.SELECTED) {
         	for (JCheckBox c: checkBox) {
         		if (c==e.getSource()) {
-        			
         			JTextField x = new JTextField();
         			JTextField y = new JTextField();
         			JComboBox<String> eventBox = new JComboBox<>(Constants.AVAILABLE_EVENTS);
@@ -200,25 +200,20 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
         			    "Actions:", actionBox
         			};
         			
-//        			eventBox.addActionListener(al -> {
-//        				actionBox.setName("Actions:");
-//        				actionBox.setVisible(true);
-//        				
-//        			});
         			Object[] options = {"More Action", "Ok", "Exit"}; 
         			UIManager.put("OptionPane.yesButtonText", "Save");
         			UIManager.put("OptionPane.noButtonText", "More Event-Action");
         			UIManager.put("OptionPane.cancelButtonText", "Cancel");
         			int option = pane.showConfirmDialog(null, message, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
-        			//System.out.println(x.getText()+ " "+ y.getText());
-        			if (option == JOptionPane.YES_OPTION || option == JOptionPane.NO_OPTION) {	
-        				if(spriteRequestMap.containsKey(c.getText()))
+        			if (option == JOptionPane.YES_OPTION || option == JOptionPane.NO_OPTION) {
+        				if(spriteRequestMap.containsKey(c.getText())) {
         					newSprite = spriteRequestMap.get(c.getText());
-        				else
+        				}
+        				else {
         					newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
-        				newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
-        				//newSprite.getEventAction().put(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
-        				//spriteRequestMap.put(c.getText(), newSprite);
+        				}
+        					newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
+        					//spriteRequestMap.put(c.getText(), newSprite);
         			} 
         			if (option == JOptionPane.NO_OPTION) {
         				Object[] eventMessage = {
@@ -233,12 +228,34 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
         					newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
         				}
         			}
+        			
+        			if(option != JOptionPane.CANCEL_OPTION)
+        	        	controller.done();
         		}
         	}
+        	
         } else {
-
+        	
         }
 	}
+
+	public CreateSpriteRequest getNewSprite() {
+		return newSprite;
+	}
+
+	public void setNewSprite(CreateSpriteRequest newSprite) {
+		this.newSprite = newSprite;
+	}
+
+	public HashMap<String, CreateSpriteRequest> getSpriteRequestMap() {
+		return spriteRequestMap;
+	}
+
+	public void setSpriteRequestMap(HashMap<String, CreateSpriteRequest> spriteRequestMap) {
+		this.spriteRequestMap = spriteRequestMap;
+	}
+	
+	
 
 }
 

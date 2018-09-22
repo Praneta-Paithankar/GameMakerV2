@@ -4,51 +4,84 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.events.EventTarget;
 
 import com.component.Ball;
 import com.component.Brick;
 import com.component.Paddle;
+import com.component.SpriteElement;
+import com.helper.ActionLink;
+import com.helper.GameObject;
+import com.infrastruture.Constants;
 import com.infrastruture.Element;
+import com.ui.CreateSpriteRequest;
 import com.ui.GUI;
 
 public class GameMakerController implements  KeyListener,ActionListener {
 	protected static Logger log = Logger.getLogger(GameMakerController.class);
     private GUI gui;
+	private CreateSpriteRequest sprite;
+	private GameObject gameObject;
+	private SpriteElement newSprite;
+	private ActionLink actionLink;
+	private List<SpriteElement> spriteList  ;
+	private Map<String, ActionLink> eventMap;
+	private GameDriver gameDriver;
 	
 	public GameMakerController(GUI gui) {
 		this.gui = gui;
-		//this.noOfBricks = brickList.size();
+		this.spriteList = new ArrayList<>();
+		this.gameObject = new GameObject();
+		this.eventMap = new HashMap<String, ActionLink>();
+		this.gameDriver = new GameDriver();
+		this.actionLink = new ActionLink();
 	}
 	
 	public void addElementToGame(ArrayList<Element> elementList) {
 		
 	}
 	
-	/*This method is called from action performed method .. when user clicks Done on make panel.*/
+	/*This method is called from action performed method .. when user clicks Save on make panel.*/
 	public void done() {
-		/*String spriteName = (String)gui.getMakePanel().getSpriteSelection().getSelectedItem();
-		System.out.println("-----  "+spriteName);*/
+		try {
+			this.sprite = gui.getMakePanel().getNewSprite();
+			this.newSprite = gameObject.spriteDecoder(sprite.getElementName());
+			this.spriteList.add(newSprite);
+			this.actionLink = new ActionLink(newSprite,sprite.getEventAction().values().toString().replace("[", "").replace("]", ""));
+			this.eventMap.put(sprite.getEventAction().keySet().toString().replace("[", "").replace("]", ""), this.actionLink);
+			this.gameDriver.setEventMap(eventMap);
+			this.gameDriver.setSprites(spriteList);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	/*public void make() {
-		gui.getMakePanel().getSpriteSelection().setVisible(true);
-	}*/
-	
+	public void play() {
+		System.out.println("In Play =========");
+		this.gameDriver.InitPlay();
+	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		
 		String commandText= e.getActionCommand();
 		System.out.println("GMController - action -- "+commandText);
-		if(commandText.equals("done")) {
-			done();
-		}else if(commandText.equals("make")) {
+		if(commandText.equals("play")) {
+			play();
+		}/*else if(commandText.equals("make")) {
 			//make();
-		}
+		}*/
 	}
 	
 

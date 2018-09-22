@@ -18,7 +18,6 @@ public class CreateSpriteRequest {
 	
 	public void addEventAction(String event, String action) {
 		eventAction.put(event, action);
-		System.out.println("in create sprite :: " + eventAction);
 	}
 	
 	public Map<String, String> getEventAction() {
@@ -28,4 +27,30 @@ public class CreateSpriteRequest {
 	public void setEventAction(Map<String, String> eventAction) {
 		this.eventAction = eventAction;
 	}
+
+	public String getElementName() {
+		return elementName;
+	}
+
+	public void setElementName(String elementName) {
+		this.elementName = elementName;
+	}
+
+	public int getXlocation() {
+		return xlocation;
+	}
+
+	public void setXlocation(int xlocation) {
+		this.xlocation = xlocation;
+	}
+
+	public int getYlocation() {
+		return ylocation;
+	}
+
+	public void setYlocation(int ylocation) {
+		this.ylocation = ylocation;
+	}
+	
+	
 }

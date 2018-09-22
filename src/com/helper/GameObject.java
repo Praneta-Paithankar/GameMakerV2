@@ -21,11 +21,11 @@ public class GameObject {
 	int elementY; // String denoting Y coordinate of Sprite obtained from MakerEngine
 
 	
-	GameObject(String element, int elementX, int elementY){
+	/*GameObject(String element, int elementX, int elementY){
 		this.element = element;
 		this.elementX = elementX;
 		this.elementY = elementY;
-	}
+	}*/
 	
 	public SpriteElement spriteDecoder(String element) throws IOException {
 		
@@ -42,7 +42,6 @@ public class GameObject {
 			
 		}
 		return null;
-		
 	}
 	
 	

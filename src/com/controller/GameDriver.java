@@ -8,9 +8,8 @@ import com.component.*;
 import com.helper.ActionLink;
 
 public class GameDriver {
-	
-	List<SpriteElement> sprites  ;
-	Map<String, ActionLink> eventMap;
+	private List<SpriteElement> sprites  ;
+	private Map<String, ActionLink> eventMap;
 	
 	public GameDriver(){
 		this.sprites = new ArrayList<SpriteElement>();
@@ -42,10 +41,10 @@ public class GameDriver {
 	}
 
 	public void InitPlay() {
-		
+		System.out.println("InitPlay ::: "+sprites.toString());
 		for(SpriteElement sprite: sprites) {
 			//sprite.draw(sprite);
-
+			System.out.println("sprite -- "+sprite.toString());
 		}
 	}
 	
