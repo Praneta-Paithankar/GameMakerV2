@@ -23,6 +23,7 @@ import com.behavior.GridBagLayoutBehavior;
 import com.component.SpriteElement;
 import com.controller.GameMakerController;
 import com.controller.GameController;
+import com.controller.GameDriver;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -33,7 +34,7 @@ public class GUI extends JFrame implements Element{
 	private GamePanel boardPanel;
 	private ArrayList<Element> elementList;
 
-	private GameController driver;
+	private GameDriver driver;
 	private GameMakerController controller;
 	private MainPanel mainPanel;
 	private JFileChooser c;
@@ -71,10 +72,11 @@ public class GUI extends JFrame implements Element{
 		mainPanel.removeKeyListener(driver);
 	}
 	
-	public void addDriver(GameController driver){
+	public void addDriver(GameDriver driver){
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
-        controlPanel.createButtons(driver);
+		mainPanel.setFocusable(true);
+        //controlPanel.createButtons(driver);
         //makePanel.createButtons();
 	}
 	
@@ -235,6 +237,10 @@ public class GUI extends JFrame implements Element{
 	public void addSpriteToPanel(SpriteElement e) {
 		System.out.println("adding to panel");
 		this.boardPanel.addComponent(e);
+	}
+	
+	public void paintView() {
+		this.repaint();
 	}
 		
 }
