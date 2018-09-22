@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 
@@ -69,102 +70,31 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	}
 	
 	public void createCheckbox() {
-		JCheckBox ballCheckBox = new JCheckBox("Ball");
-		ballCheckBox.setBounds(10, 100, 200, 100);
-		ballCheckBox.setIcon(new ImageIcon(ballImage));
-		ballCheckBox.setFont(new Font("Serif", Font.BOLD, 20));
-		ballCheckBox.addItemListener(this);
-		checkBox.add(ballCheckBox);
-		this.add(ballCheckBox);
-		
-		JCheckBox brickCheckBox = new JCheckBox("Brick", true);
-		brickCheckBox.setBounds(10, 250, 200, 100);
-		brickCheckBox.setIcon(new ImageIcon(brickImage));
-		brickCheckBox.setFont(new Font("Serif", Font.BOLD, 20));
-		brickCheckBox.addItemListener(this);
-		checkBox.add(brickCheckBox);
-		this.add(brickCheckBox);
-		
-		JCheckBox paddleCheckBox = new JCheckBox("Paddle", true);
-		paddleCheckBox.setBounds(10, 400, 200, 100);
-		paddleCheckBox.setIcon(new ImageIcon(paddleImage));
-		paddleCheckBox.setFont(new Font("Serif", Font.BOLD, 20));
-		paddleCheckBox.addItemListener(this);
-		checkBox.add(paddleCheckBox);
-		this.add(paddleCheckBox);
+		int y = Constants.CHECKBOX_Y;
+		Font f = new Font("Serif", Font.BOLD, 20);
+		for (String s: sprites) {
+			JCheckBox c = new JCheckBox(s);
+			c.setBounds(Constants.CHECKBOX_X, y, Constants.CHECKBOX_WIDTH, Constants.CHECKBOX_HEIGHT);
+			c.setFont(f);
+			c.addItemListener(this);
+			checkBox.add(c);
+			this.add(c);
+			y += 150;
+		}
 	}
 	
 	public void createImage() {
 		try {
-            ballImage = ImageIO.read(new File("./src/com/image/ball.png"));
-            ballImage = resize(ballImage, 50, 70);
-            brickImage = ImageIO.read(new File("./src/com/image/brick.jpg"));
-            brickImage = resize(brickImage, 50, 70);
-            paddleImage = ImageIO.read(new File("./src/com/image/paddle.png"));
-            paddleImage = resize(paddleImage, 50, 70);
+            ballImage = ImageIO.read(new File(Constants.BALL_IMAGE));
+            ballImage = resize(ballImage, 80, 70);
+            brickImage = ImageIO.read(new File(Constants.BRICK_IMAGE));
+            brickImage = resize(brickImage, 70, 70);
+            paddleImage = ImageIO.read(new File(Constants.PADDLE_IMAGE));
+            paddleImage = resize(paddleImage, 80, 50);
         } catch (IOException e) {
             // TODO Auto-generated catch block
         	log.error(e.getMessage());
         }
-	}
-	
-	public void createBallActions() {
-		JLabel ballAction = new JLabel("Action");
-		ballAction.setBounds(180,100,150,30);
-		ButtonGroup ball_action=new ButtonGroup();
-		JRadioButton moveLeftRight=new JRadioButton("Move Left Right");
-		moveLeftRight.setBounds(180,120,150,30);
-		ball_action.add(moveLeftRight);
-		
-		JRadioButton moveUpDown=new JRadioButton("Move Up Down");
-		moveUpDown.setBounds(180,140,150,30);
-		ball_action.add(moveUpDown);
-		
-		JRadioButton shoot=new JRadioButton("Shoot");
-		shoot.setBounds(180,160,150,30);
-		ball_action.add(shoot);
-		
-		this.add(ballAction);
-		this.add(moveLeftRight);
-		this.add(moveUpDown);
-		this.add(shoot);
-	}
-	
-	public void createBallEvents() {
-		JLabel ballEventLabel = new JLabel("Event");
-		ballEventLabel.setBounds(330,100,150,30);
-		
-		ButtonGroup ball_events=new ButtonGroup();
-		
-		JRadioButton onTick=new JRadioButton("On Tick");
-		onTick.setBounds(330,120,150,30);
-		ball_events.add(onTick);
-		
-		JRadioButton onCollision=new JRadioButton("On collision");
-		onCollision.setBounds(330,140,150,30);
-		ball_events.add(onCollision);
-		
-		JRadioButton keyPressed=new JRadioButton("On Key Pressed");
-		keyPressed.setBounds(330,160,150,30);
-		ball_events.add(keyPressed);
-		
-		this.add(onCollision);
-		this.add(onTick);
-		this.add(keyPressed);
-		this.add(ballEventLabel);
-	}
-	
-	public void createSpriteSelectionList() {
-		spriteSelection = new JComboBox<>();
-		spriteSelection.addItem("Select Sprite");
-		for (String sprite: sprites) {
-			spriteSelection.addItem(sprite);
-		}
-		spriteSelection.setBounds(100, 70, 200, 50);
-		spriteSelection.setPreferredSize(new Dimension(300, 100));
-		this.add(spriteSelection);
-		spriteSelection.setVisible(false);
-		spriteSelection.addActionListener(controller);
 	}
 	
 	public PanelButton createMakeButton() {
@@ -193,8 +123,14 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		if (ballImage != null) {
-	       // g.drawImage(ballImage, 10, 200, this);
+			g.drawImage(ballImage, 100, 100, this);
 	    }
+		if (ballImage != null) {
+			g.drawImage(brickImage, 100, 250, this);
+		}
+		if (ballImage != null) {
+			g.drawImage(paddleImage, 100, 400, this);
+		}
 	}
 	
 	private BufferedImage resize(BufferedImage img, int width, int height) {
@@ -269,23 +205,34 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 //        				actionBox.setVisible(true);
 //        				
 //        			});
-//        			
-        			int option = pane.showConfirmDialog(null, message, "Sprite Details", pane.OK_CANCEL_OPTION);
-        			System.out.println(x.getText()+ " "+ y.getText());
-        			if (option == JOptionPane.OK_OPTION) {
-//        				int xVal = -1;
-//        				int yVal = -1;
-//        				if(Integer.parseInt(x.getText()) >= 0)
-//        					if(xVal <= 0)
-//        					
+        			Object[] options = {"More Action", "Ok", "Exit"}; 
+        			UIManager.put("OptionPane.yesButtonText", "Save");
+        			UIManager.put("OptionPane.noButtonText", "More Event-Action");
+        			UIManager.put("OptionPane.cancelButtonText", "Cancel");
+        			int option = pane.showConfirmDialog(null, message, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
+        			//System.out.println(x.getText()+ " "+ y.getText());
+        			if (option == JOptionPane.YES_OPTION || option == JOptionPane.NO_OPTION) {	
         				if(spriteRequestMap.containsKey(c.getText()))
         					newSprite = spriteRequestMap.get(c.getText());
         				else
         					newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
         				newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
-        				newSprite.getEventAction().put(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
-        				spriteRequestMap.put(c.getText(), newSprite);
-        			}      			
+        				//newSprite.getEventAction().put(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
+        				//spriteRequestMap.put(c.getText(), newSprite);
+        			} 
+        			if (option == JOptionPane.NO_OPTION) {
+        				Object[] eventMessage = {
+                			    "Events:", eventBox,
+                			    "Actions:", actionBox
+                		};
+        				while (option == JOptionPane.NO_OPTION) {
+        					option = pane.showConfirmDialog(null, eventMessage, "Add event-action Details", pane.YES_NO_CANCEL_OPTION);
+        					if (option == JOptionPane.CANCEL_OPTION) {
+        						break;
+        					}
+        					newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
+        				}
+        			}
         		}
         	}
         } else {
