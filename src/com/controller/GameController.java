@@ -107,7 +107,7 @@ public class GameController implements Observer, KeyListener,ActionListener{
 		timerCommand.execute();
 		ballActCommand.execute();
 		commandQueue.addLast(timerCommand);
-		commandQueue.addLast(ballActCommand);		
+		commandQueue.addLast(ballActCommand);
 		Direction result = collisionChecker.checkCollisionBetweenBallAndWall(ball);
 		changeBallDirectionCommand(result);
 		int i= 0;
