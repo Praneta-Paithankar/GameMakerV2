@@ -93,6 +93,7 @@ public class GameMakerController implements  KeyListener,ActionListener {
 	
 	public void make() {
 		this.gameDriver = new GameDriver(this.gui, timer);
+		gui.addDriver(gameDriver);
 
 	}
 	

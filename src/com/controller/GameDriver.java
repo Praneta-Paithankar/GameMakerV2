@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.commands.BounceCommand;
 import com.commands.MacroCommand;
+import com.commands.MoveCommand;
+import com.commands.SpriteBlowCommand;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
 import com.infrastruture.Constants;
@@ -72,31 +75,42 @@ public class GameDriver implements Observer, KeyListener{
 		// TODO Auto-generated method stub
 		checkCollision();
 		eventHandler("OnTick");
-
+		gui.paintView();
 	}
 
 	public void checkCollision() {
 		MacroCommand macroCommand = new MacroCommand();
-		List<ActionLink> actionObservers = eventMap.get("onCollision");
+		
 		Direction d;
-		for(ActionLink actionObserver: actionObservers) {
-			d = checkCollisionToWall(actionObserver.getSprite());
-			actionForCollision(actionObserver.getAction(), d, macroCommand);
-			for(SpriteElement element: sprites) {
-				 ret = checkCollisionOfSprite(actionObserver.getSprite(),element);
-				 actionForCollision(actionObserver.getAction(), d, macroCommand);
+		if (eventMap.containsKey("onCollision")) {
+			List<ActionLink> eventObservers = eventMap.get("onCollision");
+			for(ActionLink actionObserver: eventObservers) {
+				//d = checkCollisionToWall(actionObserver.getSprite());
+				//actionForCollision(actionObserver, d, macroCommand);
+				for(SpriteElement element: sprites) {
+					//d = checkCollisionOfSprite(actionObserver.getSprite(),element);
+					//actionForCollision(actionObserver, d, macroCommand);
+				}
 			}
+			macroCommand.execute();
 		}
-		macroCommand.execute();
 	}
 	
-	public void actionForCollision(String action, Direction d, MacroCommand macroCommand) {
+	public void actionForCollision(ActionLink action, Direction d, MacroCommand macroCommand) {
 		if(d != Direction.NONE) {
-			switch(action) {
-			case "blow": macroCommand.addCommand(blow);break;
-			case "bounce":macroCommand.addCommand(bounce);break;
-			case "shoot": macroCommand.addCommand(shoot);break;
-			case "move": macroCommand.addCommand(move);break;
+			switch(action.getAction()) {
+			case "blow": 
+				macroCommand.addCommand(new SpriteBlowCommand(action.getSprite()));
+				break;
+			case "bounce":
+				macroCommand.addCommand(new BounceCommand(action.getSprite(), d));
+				break;
+			case "shoot": 
+				//macroCommand.addCommand(shoot);
+				break;
+			case "move": 
+				macroCommand.addCommand(new MoveCommand(action.getSprite()));
+				break;
 			default: break;
 			}
 		}
@@ -105,18 +119,27 @@ public class GameDriver implements Observer, KeyListener{
 	public void eventHandler(String event) {
 		
 		MacroCommand macroCommand = new MacroCommand();
-		List<ActionLink> actionObservers = eventMap.get(event);
-		for(ActionLink actionObserver: actionObservers) {
-			switch(actionObserver.getAction()) {
-			case "blow": macroCommand.addCommand(blow);break;
-			case "shoot": macroCommand.addCommand(shoot);break;
-			case "move": macroCommand.addCommand(move);break;
-			default: break;
-			}
-		}
 		
-		macroCommand.execute();
+		
+		if (eventMap.containsKey(event)) {
+			List<ActionLink> eventObservers = eventMap.get(event);
+			for(ActionLink actionObserver: eventObservers) {
+				switch(actionObserver.getAction()) {
+				case "blow": 
+					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
+					break;
+				case "shoot": 
+					//macroCommand.addCommand(shoot);
+					break;
+				case "move": 
+					macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
+					break;
+				default: break;
+				}
+			}
 
+			macroCommand.execute();
+		}
 	}
 
 	@Override
@@ -127,22 +150,30 @@ public class GameDriver implements Observer, KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		System.out.println("keyPressed");
 		// TODO Auto-generated method stub		
 		MacroCommand macroCommand = new MacroCommand();
-		List<ActionLink> actionObservers = eventMap.get("keyPressed");
-		for(ActionLink actionObserver: actionObservers) {
-			switch(actionObserver.getAction()) {
-			case "blow": macroCommand.addCommand(blow);break;
-			case "shoot": macroCommand.addCommand(shoot);break;
-			case "move": 
-				setSpriteDirection(e, actionObserver.getSprite());
-				macroCommand.addCommand(move);
-				break;
-			default: break;
-			}
-		}
 		
-		macroCommand.execute();
+		if (eventMap.containsKey("keyPressed")) {
+			List<ActionLink> eventObservers = eventMap.get("keyPressed");
+			for(ActionLink actionObserver: eventObservers) {
+				switch(actionObserver.getAction()) {
+				case "blow": 
+					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
+					break;
+				case "shoot": 
+					//macroCommand.addCommand(shoot);
+					break;
+				case "move": 
+					setSpriteDirection(e, actionObserver.getSprite());
+					macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
+					break;
+				default: break;
+				}
+			}
+
+			macroCommand.execute();
+		}
 	}
 	
 	public void setSpriteDirection(KeyEvent e, SpriteElement element) {

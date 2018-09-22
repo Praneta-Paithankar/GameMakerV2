@@ -10,7 +10,7 @@ public class MoveCommand implements Command{
 	int elementX;
 	int elementY;
 
-	MoveCommand(SpriteElement sprite){
+	public MoveCommand(SpriteElement sprite){
 		this.sprite = sprite;
 	}
 
