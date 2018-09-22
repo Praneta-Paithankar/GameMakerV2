@@ -64,7 +64,7 @@ public class GameMaker {
 
 		//gui.addDriver(driver);
 		GameMakerController makerController = new GameMakerController(gui);
-		gui.addGameMakerDriver(controller);
+		gui.addGameMakerDriver(makerController);
 
 		observable.startTimer();
 		gui.setVisible(true);

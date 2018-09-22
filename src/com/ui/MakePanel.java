@@ -56,7 +56,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		sprites = new ArrayList<>(Constants.spriteTypes);
 		spriteRequestMap = new HashMap<>();
 		//createSpriteSelectionList();
-		//createImage();
+		createImage();
 		createCheckbox();
 		//createBallActions();
 		//createBallEvents();
@@ -206,12 +206,12 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
         			UIManager.put("OptionPane.cancelButtonText", "Cancel");
         			int option = pane.showConfirmDialog(null, message, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
         			if (option == JOptionPane.YES_OPTION || option == JOptionPane.NO_OPTION) {
-        				if(spriteRequestMap.containsKey(c.getText())) {
+        				/*if(spriteRequestMap.containsKey(c.getText())) {
         					newSprite = spriteRequestMap.get(c.getText());
         				}
-        				else {
+        				else {*/
         					newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
-        				}
+        				//}
         					newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
         					//spriteRequestMap.put(c.getText(), newSprite);
         			} 
@@ -229,8 +229,10 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
         				}
         			}
         			
-        			if(option != JOptionPane.CANCEL_OPTION)
+        			if(option != JOptionPane.CANCEL_OPTION) {
         	        	controller.done();
+        	        	System.out.println("Done");
+        			}
         		}
         	}
         	

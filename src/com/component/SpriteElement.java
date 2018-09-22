@@ -3,9 +3,14 @@
  */
 package com.component;
 
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
+import com.infrastruture.Element;
 
 public abstract class SpriteElement{
 	
@@ -25,6 +30,7 @@ public abstract class SpriteElement{
 		this.radius = radius;
 		this.width = radius *2;
 		this.height = radius *2;
+		this.image = resize(image, width, height);
 	}
 
 	public SpriteElement(BufferedImage image, int elementX, int elementY, int width, int height) {
@@ -34,6 +40,7 @@ public abstract class SpriteElement{
 		this.elementY = elementY;
 		this.width = width;
 		this.height = height;
+		this.image = resize(image, width, height);
 	}
 
 	public int getRadius() {
@@ -83,13 +90,37 @@ public abstract class SpriteElement{
 	public void setElementY(int elementY) {
 		this.elementY = elementY;
 	}
+	
+	private BufferedImage resize(BufferedImage img, int width, int height) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
+    }
+	
+	public void draw(Graphics g) {
+//		 //Image tmp = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+//	     BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+//	        	g = resized.createGraphics();
+	   g.drawImage(this.image, elementX, elementY, null);
+	        //g.dispose();
+	}
 
-	public void draw(Graphics2D g) {
-		 Image tmp = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-	        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	        	g = resized.createGraphics();
-	        g.drawImage(tmp, elementX, elementY, null);
-	        g.dispose();
+	public void reset() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void save(ObjectOutputStream op) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public SpriteElement load(ObjectInputStream ip) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

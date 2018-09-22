@@ -6,8 +6,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -33,18 +35,16 @@ public class GameMakerController implements  KeyListener,ActionListener {
 	private CreateSpriteRequest sprite;
 	private GameObject gameObject;
 	private SpriteElement newSprite;
-	private ActionLink actionLink;
-	private List<SpriteElement> spriteList  ;
-	private Map<String, ActionLink> eventMap;
+	//private ActionLink actionLink;
+	//private List<SpriteElement> spriteList  ;
+	private Map<String, List<ActionLink>> eventMap;
 	private GameDriver gameDriver;
 	
 	public GameMakerController(GUI gui) {
 		this.gui = gui;
-		this.spriteList = new ArrayList<>();
+		//this.spriteList = new ArrayList<>();
 		this.gameObject = new GameObject();
-		this.eventMap = new HashMap<String, ActionLink>();
-		this.gameDriver = new GameDriver();
-		this.actionLink = new ActionLink();
+		//this.actionLink = new ActionLink();
 	}
 	
 	public void addElementToGame(ArrayList<Element> elementList) {
@@ -54,13 +54,29 @@ public class GameMakerController implements  KeyListener,ActionListener {
 	/*This method is called from action performed method .. when user clicks Save on make panel.*/
 	public void done() {
 		try {
+			System.out.println("in done");
 			this.sprite = gui.getMakePanel().getNewSprite();
 			this.newSprite = gameObject.spriteDecoder(sprite.getElementName());
-			this.spriteList.add(newSprite);
-			this.actionLink = new ActionLink(newSprite,sprite.getEventAction().values().toString().replace("[", "").replace("]", ""));
-			this.eventMap.put(sprite.getEventAction().keySet().toString().replace("[", "").replace("]", ""), this.actionLink);
-			this.gameDriver.setEventMap(eventMap);
-			this.gameDriver.setSprites(spriteList);
+			this.gameDriver.addSpriteElements(newSprite);
+			this.gui.addSpriteToPanel(newSprite);
+			//this.spriteList.add(newSprite);
+			//this.actionLink = new ActionLink(newSprite,sprite.getEventAction().values().toString().replace("[", "").replace("]", ""));
+			//this.eventMap.put(sprite.getEventAction().keySet().toString().replace("[", "").replace("]", ""), this.actionLink);
+			//this.gameDriver.setEventMap(eventMap);
+			//this.gameDriver.setSprites(spriteList);
+			//this.gameDriver.setEventMap(eventMap);
+			eventMap = gameDriver.getEventMap();
+			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {
+				if (eventMap.containsKey(entry.getKey())) {
+					eventMap.get(entry.getKey()).add(new ActionLink(newSprite, entry.getValue()));
+				} else {
+					List<ActionLink> listAction = new ArrayList<>();
+					listAction.add(new ActionLink(newSprite, entry.getValue()));
+					eventMap.put(entry.getKey(), listAction);
+				}
+			}
+			this.gui.draw(null);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -72,6 +88,10 @@ public class GameMakerController implements  KeyListener,ActionListener {
 		this.gameDriver.InitPlay();
 	}
 	
+	public void make() {
+		this.gameDriver = new GameDriver(this.gui);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -79,9 +99,9 @@ public class GameMakerController implements  KeyListener,ActionListener {
 		System.out.println("GMController - action -- "+commandText);
 		if(commandText.equals("play")) {
 			play();
-		}/*else if(commandText.equals("make")) {
-			//make();
-		}*/
+		}else if(commandText.equals("make")) {
+			make();
+		}
 	}
 	
 

@@ -31,13 +31,13 @@ public class GameObject {
 		
 		switch(element) {
 		
-		case "ball":
+		case "Ball":
 			return spriteCreator("circular",Constants.BALL_IMAGE,Constants.BALL_RADIUS);
 			
-		case "brick":
+		case "Brick":
 			return spriteCreator("rectangular",Constants.BRICK_IMAGE, Constants.BRICK_WIDTH, Constants.BRICK_HEIGHT);
 	
-		case "paddle":
+		case "Paddle":
 			return spriteCreator("rectangular",Constants.PADDLE_IMAGE, Constants.PADDLE_WIDTH, Constants.PADDLE_HEIGHT);	
 			
 		}

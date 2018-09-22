@@ -6,17 +6,21 @@ import java.util.Map;
 
 import com.component.*;
 import com.helper.ActionLink;
+import com.ui.GUI;
 
 public class GameDriver {
 	private List<SpriteElement> sprites  ;
-	private Map<String, ActionLink> eventMap;
+	private Map<String, List<ActionLink>> eventMap;
+	private GUI gui;
 	
-	public GameDriver(){
+	public GameDriver(GUI gui){
 		this.sprites = new ArrayList<SpriteElement>();
-		this.eventMap = new HashMap<String, ActionLink>();
+		this.eventMap = new HashMap<>();
+		this.gui = gui;
 	}
 	
 	public void addSpriteElements(SpriteElement sprite) {
+		System.out.println("in sprite add " + sprite.toString());
 		sprites.add(sprite);
 	}
 	
@@ -32,25 +36,23 @@ public class GameDriver {
 		this.sprites = sprites;
 	}
 
-	public Map<String, ActionLink> getEventMap() {
+	public Map<String, List<ActionLink>> getEventMap() {
 		return eventMap;
 	}
 
-	public void setEventMap(Map<String, ActionLink> eventMap) {
+	public void setEventMap(Map<String, List<ActionLink>> eventMap) {
 		this.eventMap = eventMap;
 	}
 
 	public void InitPlay() {
 		System.out.println("InitPlay ::: "+sprites.toString());
 		for(SpriteElement sprite: sprites) {
-			//sprite.draw(sprite);
 			System.out.println("sprite -- "+sprite.toString());
 		}
+		gui.draw(null);
+		for (Map.Entry<String,List<ActionLink>> entry:eventMap.entrySet()) {
+			System.out.println(entry.getKey()+": "+entry.getValue().size());
+		}
 	}
-	
-	
-	
-	
-	
 	
 }

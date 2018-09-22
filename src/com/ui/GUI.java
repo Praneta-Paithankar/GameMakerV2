@@ -20,6 +20,7 @@ import com.behavior.BoxLayoutXAxisBehavior;
 import com.behavior.BoxLayoutYAxisBehavior;
 import com.behavior.FlowLayoutBehavior;
 import com.behavior.GridBagLayoutBehavior;
+import com.component.SpriteElement;
 import com.controller.GameMakerController;
 import com.controller.GameController;
 import com.infrastruture.AbstractPanel;
@@ -229,6 +230,11 @@ public class GUI extends JFrame implements Element{
 
 	public MakePanel getMakePanel() {
 		return makePanel;
+	}
+	
+	public void addSpriteToPanel(SpriteElement e) {
+		System.out.println("adding to panel");
+		this.boardPanel.addComponent(e);
 	}
 		
 }

@@ -303,16 +303,16 @@ public class GameController implements Observer, KeyListener,ActionListener{
 			gui.load(in);
 			
 			this.clock = (Clock) gui.getTimerPanel().getElements().get(0);
-			this.ball = (Ball) gui.getBoardPanel().getElements().get(0);
-			this.paddle = (Paddle) gui.getBoardPanel().getElements().get(1);
+			//this.ball = (Ball) gui.getBoardPanel().getElements().get(0);
+			//this.paddle = (Paddle) gui.getBoardPanel().getElements().get(1);
 			this.bricks.clear();
-			for (int i = 2; i < gui.getBoardPanel().getElements().size(); i++) {
+			/*for (int i = 2; i < gui.getBoardPanel().getElements().size(); i++) {
 				Brick brick = (Brick)gui.getBoardPanel().getElements().get(i);
 				this.bricks.add(brick);
 				if(brick.isVisible()) {
 					brickNum ++ ;
 				}
-			}
+			}*/
 			this.noOfBricks = brickNum;
 			
 			commandQueue.clear();
