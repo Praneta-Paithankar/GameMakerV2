@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
 public abstract class SpriteElement{
@@ -18,9 +19,10 @@ public abstract class SpriteElement{
 	private int radius;
 	private int width;
 	private int height;
+	private int XVel;
+	private int YVel;
 	private int elementX;
 	private int elementY;
-	
 	
 	public SpriteElement(BufferedImage image, int elementX, int elementY, int radius) {
 		// TODO Auto-generated constructor stub
@@ -30,6 +32,8 @@ public abstract class SpriteElement{
 		this.radius = radius;
 		this.width = radius *2;
 		this.height = radius *2;
+		this.XVel = Constants.X_Velocity;
+		this.YVel = Constants.Y_Velocity;
 		this.image = resize(image, width, height);
 	}
 
@@ -41,6 +45,21 @@ public abstract class SpriteElement{
 		this.width = width;
 		this.height = height;
 		this.image = resize(image, width, height);
+	}
+	public int getXVel() {
+		return XVel;
+	}
+
+	public void setXVel(int xVel) {
+		XVel = xVel;
+	}
+
+	public int getYVel() {
+		return YVel;
+	}
+
+	public void setYVel(int yVel) {
+		YVel = yVel;
 	}
 
 	public int getRadius() {

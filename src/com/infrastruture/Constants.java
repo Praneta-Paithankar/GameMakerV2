@@ -61,6 +61,8 @@ public class Constants {
 	public final static int CHECKBOX_X = 10;
 	public final static int CHECKBOX_Y = 80;
 	
+	public final static int X_Velocity = 5;
+	public final static int Y_Velocity = 5;
 	//public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed"};
 	//public final static String[] AVAILABLE_ACTIONS = {"moveHorizontal", "moveVertical", "shoot"};
 	

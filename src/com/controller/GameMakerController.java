@@ -26,6 +26,7 @@ import com.helper.ActionLink;
 import com.helper.GameObject;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
+import com.timer.BreakoutTimer;
 import com.ui.CreateSpriteRequest;
 import com.ui.GUI;
 
@@ -39,11 +40,13 @@ public class GameMakerController implements  KeyListener,ActionListener {
 	//private List<SpriteElement> spriteList  ;
 	private Map<String, List<ActionLink>> eventMap;
 	private GameDriver gameDriver;
+	private BreakoutTimer timer;
 	
 	public GameMakerController(GUI gui) {
 		this.gui = gui;
 		//this.spriteList = new ArrayList<>();
 		this.gameObject = new GameObject();
+		this.timer = new BreakoutTimer();
 		//this.actionLink = new ActionLink();
 	}
 	
@@ -89,7 +92,8 @@ public class GameMakerController implements  KeyListener,ActionListener {
 	}
 	
 	public void make() {
-		this.gameDriver = new GameDriver(this.gui);
+		this.gameDriver = new GameDriver(this.gui, timer);
+
 	}
 	
 	@Override
