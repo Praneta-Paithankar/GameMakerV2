@@ -51,7 +51,10 @@ public class ProjectileCommand implements Command{
 //		if(flag == false) {sprite.setElementX((int) (sprite.getElementX() - deltaY)); System.out.println("down");}
 //		else {sprite.setElementX((int) (sprite.getElementX() + deltaY));  System.out.println("Up");}
 		
-		
+//		if(flag == true) {sprite.setElementY(sprite.getElementY()+sprite.getYVel());}
+//		else {sprite.setElementY(sprite.getElementY()-sprite.getYVel());}
+//		
+//		sprite.setElementX(sprite.getElementX()+ sprite.getXVel());
 	
 		
 	}
