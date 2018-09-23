@@ -12,8 +12,11 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
 
 import com.commands.BounceCommand;
 import com.commands.MacroCommand;
@@ -24,6 +27,7 @@ import com.commands.TimerCommand;
 import com.component.Clock;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
+import com.helper.GameObject;
 import com.helper.SpriteCollision;
 import com.infrastruture.Command;
 import com.infrastruture.Constants;
@@ -38,6 +42,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	private GUI gui;
 	private BreakoutTimer timer;
 	private SpriteCollision collision;
+	private HashSet<SpriteElement> gameEndSet;
 
 	private MouseEvent e;
 	Boolean Projectileflag ;
@@ -56,6 +61,17 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		isGamePaused = false;
 		timerCommand = new TimerCommand(clock);	
 		commandQueue = new ArrayDeque<Command>();
+		this.gameEndSet = new HashSet<>();	
+	}
+	
+	public void addGameEndSprite(SpriteElement element) {
+		gameEndSet.add(element);
+	}
+	
+	public void removeGameEndSprite(SpriteElement element) {
+		if (gameEndSet.contains(element)) {
+			gameEndSet.remove(element);
+		}
 	}
 
 	public void addSpriteElements(SpriteElement sprite) {
@@ -84,11 +100,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	}
 
 	public void InitPlay() {
-
-		System.out.println("InitPlay ::: "+sprites.toString());
 		gui.paintView();
-//		gui.draw(null);
-//		System.out.println(eventMap.get("OnCollision").size());
 		timerCommand.execute();
 		timer.registerObserver(this);
 	}
@@ -96,11 +108,23 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	@Override
 	public void update() {
 		timerCommand.execute();
-
 		checkCollision();
 		eventHandler("OnTick");
 		eventHandler("OnClick");
+		checkIfGameEnd();
 		gui.paintView();
+	}
+
+	private void checkIfGameEnd() {
+		if (gameEndSet.isEmpty()) {
+			timer.removeObserver(this);
+			int option = JOptionPane.showConfirmDialog(null, 
+	                "Game Over!!", "Game Status", JOptionPane.DEFAULT_OPTION);
+			if (option==JOptionPane.OK_OPTION) {
+				System.exit(0);
+			}
+		}
+		
 	}
 
 	public void checkCollision() {
@@ -117,7 +141,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					if (element!=actionObserver.getSprite()) {
 						d = collision.checkCollisionOfSprites(actionObserver.getSprite(),element);
 						actionForCollision(actionObserver, d, macroCommand);
-						System.out.println(d);
 					}
 				}
 			}
@@ -129,15 +152,11 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		if(d != Direction.NONE) {
 			switch(action.getAction()) {
 			case "blow": 
-				System.out.println("blow");
 				macroCommand.addCommand(new SpriteBlowCommand(action.getSprite()));
+				removeGameEndSprite(action.getSprite());
 				break;
 			case "bounce":
-				System.out.println("in bounce");
 				macroCommand.addCommand(new BounceCommand(action.getSprite(), d));
-				break;
-			case "shoot": 
-				//macroCommand.addCommand(shoot);
 				break;
 			case "move": 
 				macroCommand.addCommand(new MoveCommand(action.getSprite()));
@@ -157,6 +176,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 				switch(actionObserver.getAction()) {
 				case "blow": 
 					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
+					removeGameEndSprite(actionObserver.getSprite());
 					break;
 				case "shoot":
 					if(e != null) {
@@ -194,6 +214,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 				switch(actionObserver.getAction()) {
 				case "blow": 
 					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
+					removeGameEndSprite(actionObserver.getSprite());
 					break;
 				case "shoot": 
 					//macroCommand.addCommand(shoot);

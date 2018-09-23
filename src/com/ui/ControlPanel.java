@@ -65,8 +65,6 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	public void createLoad() {
 		PanelButton layoutButton = new PanelButton("Load", "load", driver);
 		this.add(layoutButton);
-		System.out.println(layoutButton);
-		System.out.println(this.getComponentCount());
 	}
 
 	public void createSave() {

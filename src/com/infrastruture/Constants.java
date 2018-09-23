@@ -48,8 +48,8 @@ public class Constants {
 	public final static int PADDLE_DELTA_X = 20;
 	public final static Color PADDLE_COLOR = new Color(91,33,91);
 	
-	public final static List<String> spriteTypes = Arrays.asList("Ball", "Brick", "Paddle", "Clock");
-	public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed", "OnClick"};
+	public final static List<String> spriteTypes = Arrays.asList("Ball", "Brick", "Paddle");
+	public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed", "OnClick", "GameEnd"};
 	public final static String[] AVAILABLE_ACTIONS = {"move", "bounce", "shoot", "blow"};
 	
 	public final static String BALL_IMAGE = "./src/com/image/ball.png";
@@ -65,7 +65,5 @@ public class Constants {
 	public final static int Y_Velocity = 5;
 	
 	public final static int PROJECTILE_GRAVITY = 1;
-	//public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed"};
-	//public final static String[] AVAILABLE_ACTIONS = {"moveHorizontal", "moveVertical", "shoot"};
 	
 }

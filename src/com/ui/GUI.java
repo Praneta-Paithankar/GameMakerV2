@@ -233,7 +233,6 @@ public class GUI extends JFrame implements Element{
 	}
 	
 	public void addSpriteToPanel(SpriteElement e) {
-		System.out.println("adding to panel");
 		this.boardPanel.addComponent(e);
 	}
 	
