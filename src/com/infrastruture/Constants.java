@@ -22,7 +22,7 @@ public class Constants {
 	public final static int MAKE_PANEL_WIDTH =  495;
 	public final static int MAKE_PANEL_HEIGHT =  750;
 	
-	public final static int TIMER_COUNT = 25;
+	public final static int TIMER_COUNT = 15;
 	
 	public final static int BRICK_NO = 4;
 	public final static int BRICK_WIDTH = 75;
