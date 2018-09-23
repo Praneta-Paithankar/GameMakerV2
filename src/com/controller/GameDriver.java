@@ -13,6 +13,7 @@ import java.util.Map;
 import com.commands.BounceCommand;
 import com.commands.MacroCommand;
 import com.commands.MoveCommand;
+import com.commands.ProjectileCommand;
 import com.commands.SpriteBlowCommand;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
@@ -29,6 +30,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	private GUI gui;
 	private BreakoutTimer timer;
 	private SpriteCollision collision;
+	private MouseEvent e;
+	Boolean Projectileflag ;
 
 	public GameDriver(GUI gui, BreakoutTimer timer){
 		this.sprites = new ArrayList<SpriteElement>();
@@ -76,6 +79,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		// TODO Auto-generated method stub
 		checkCollision();
 		eventHandler("OnTick");
+		eventHandler("OnClick");
 		gui.paintView();
 	}
 
@@ -134,8 +138,13 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 				case "blow": 
 					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
 					break;
-				case "shoot": 
-					//macroCommand.addCommand(shoot);
+				case "shoot":
+					if(e != null) {
+						if(actionObserver.getSprite().getElementY() <= e.getY()) {
+							Projectileflag = false;
+						}
+						macroCommand.addCommand(new ProjectileCommand(actionObserver.getSprite(), e.getY(), Projectileflag));
+					}
 					break;
 				case "move": 
 					macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
@@ -215,9 +224,51 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		
 	}
 
+	
+	public void calculateProjectile(SpriteElement sprite, int heightX, int heightY) {
+		
+		double startY = (double) sprite.getElementY();
+		double startX = (double) sprite.getElementX();
+		
+		double tan = (startY- heightY)/(startX-heightX);
+		double Height = startY-heightY;
+		double Range = heightX - startX;
+		System.out.println("Height is "+ Height);
+		double gravity = Constants.PROJECTILE_GRAVITY;
+		double deltaY = Math.sqrt((Height) * 2* gravity);
+		double deltaX = deltaY/tan;
+		
+		if(Range >=0) {sprite.setXVel((int) -deltaX);}
+		else {sprite.setXVel((int) deltaX);}
+		
+		sprite.setYVel((int) deltaY);
+		
+	}
+	
+//	public void ProjectileVelocitySetter(SpriteElement sprite, int heightX, int heightY) {
+//		
+//	}
+	
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		
+		
 		// TODO Auto-generated method stub
+		
+		if (eventMap.containsKey("OnClick")) {
+			List<ActionLink> eventObservers = eventMap.get("OnClick");
+			for(ActionLink actionObserver: eventObservers) {
+				if (actionObserver.getAction() == "shoot") {
+					calculateProjectile(actionObserver.getSprite() ,e.getX(),e.getY());
+				}
+			}
+
+		}
+		this.Projectileflag = true;
+		this.e = e;
+		
+		
+//		ProjectileCommmand projectileCommand = 
 		System.out.println("x::" + e.getX());
 		System.out.println("y :: " + e.getY());
 		/************************change this******************************

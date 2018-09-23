@@ -42,7 +42,6 @@ public class TimerPanel extends AbstractPanel implements Element {
 
 	@Override
 	public void draw(Graphics g) {
-		System.out.println("TimerPanel draw is called");
 		repaint();
 	}
 
