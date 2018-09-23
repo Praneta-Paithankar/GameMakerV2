@@ -21,6 +21,9 @@ public class BounceCommand implements Command{
 			element.setXVel(-1 * element.getXVel());
 		} else if (d == Direction.Y) {
 			element.setYVel(-1 * element.getYVel());
+		} else if (d == Direction.BOTH) {
+			element.setXVel(-1 * element.getXVel());
+			element.setYVel(-1 * element.getYVel());
 		}
 		
 	}

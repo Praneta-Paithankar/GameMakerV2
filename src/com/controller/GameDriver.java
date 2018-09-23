@@ -83,11 +83,14 @@ public class GameDriver implements Observer, KeyListener{
 			for(ActionLink actionObserver: eventObservers) {
 				
 				d = collision.checkCollisionOfSprites(actionObserver.getSprite());
-				System.out.println(d);
 				actionForCollision(actionObserver, d, macroCommand);
+				
 				for(SpriteElement element: sprites) {
-					d = collision.checkCollisionOfSprites(actionObserver.getSprite(),element);
-					actionForCollision(actionObserver, d, macroCommand);
+					if (element!=actionObserver.getSprite()) {
+						d = collision.checkCollisionOfSprites(actionObserver.getSprite(),element);
+						actionForCollision(actionObserver, d, macroCommand);
+						System.out.println(d);
+					}
 				}
 			}
 			macroCommand.execute();
@@ -98,6 +101,7 @@ public class GameDriver implements Observer, KeyListener{
 		if(d != Direction.NONE) {
 			switch(action.getAction()) {
 			case "blow": 
+				System.out.println("blow");
 				macroCommand.addCommand(new SpriteBlowCommand(action.getSprite()));
 				break;
 			case "bounce":
