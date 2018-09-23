@@ -46,6 +46,7 @@ public class GUI extends JFrame implements Element{
 	
 	public GUI(MainPanel mainPanel, GamePanel boardPanel, StaticPanel staticPanel, TimerPanel timerPanel, ControlPanel controlPanel,MakePanel makePanel) {
 		super("Breakout Game");
+		 log.info("Initializing view");
 		this.mainPanel = mainPanel;
 		this.boardPanel = boardPanel;
 		this.staticPanel = staticPanel;
@@ -233,7 +234,6 @@ public class GUI extends JFrame implements Element{
 	}
 	
 	public void addSpriteToPanel(SpriteElement e) {
-		System.out.println("adding to panel");
 		this.boardPanel.addComponent(e);
 	}
 	

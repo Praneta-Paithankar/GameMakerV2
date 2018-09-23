@@ -2,7 +2,6 @@
  *This panel holds all the graphic objects like brick, ball and paddle*/
 package com.ui;
 
-import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -34,13 +33,12 @@ public class GamePanel extends AbstractPanel implements Element {
 	
 	public GamePanel()
 	{
-
+		 log.info("Initializing GamePanel");
 	    elements = new ArrayList<>();
         try {
             image = ImageIO.read(new File("./src/com/image/nature.jpg"));
             image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
         	log.error(e.getMessage());
         }
         setLayout();
@@ -66,7 +64,10 @@ public class GamePanel extends AbstractPanel implements Element {
 		return elements;
 	}
 
-	
+	public void setElements(ArrayList<SpriteElement> elements) {
+		this.elements = elements;
+	}
+
 	@Override
 	public void paintComponent(Graphics g){
 
@@ -93,7 +94,7 @@ public class GamePanel extends AbstractPanel implements Element {
 	}
 
 	public void addComponent(SpriteElement e) {
-		//this.add((Component)e);
+		System.out.println("in game panel adding sprites");
 		elements.add(e);
 	}
 	

@@ -19,13 +19,6 @@ public class GameObject {
 	String element;  // String denoting SpriteType
 	int elementX; // String denoting X coordinate of Sprite obtained from MakerEngine
 	int elementY; // String denoting Y coordinate of Sprite obtained from MakerEngine
-
-	
-//	GameObject(String element, int elementX, int elementY){
-//		this.element = element;
-//		this.elementX = elementX;
-//		this.elementY = elementY;
-//	}
 	
 	public SpriteElement spriteDecoder(String element, int elementX, int elementY) throws IOException {
 		this.elementX = elementX;
@@ -47,16 +40,14 @@ public class GameObject {
 	
 	
 	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne) throws IOException {
-		BufferedImage image = ImageIO.read(new File(imagePath));
 		int centerX = elementX+dimensionOne;
 		int centerY = elementY+dimensionOne;
-		CircularSprite sprite = new CircularSprite(image, centerX, centerY, dimensionOne);
+		CircularSprite sprite = new CircularSprite(imagePath, centerX, centerY, dimensionOne);
 		return sprite;
 	}
 	
 	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne, int dimensionTwo) throws IOException {
-		BufferedImage image = ImageIO.read(new File(imagePath));
-		RectangularSprite sprite = new RectangularSprite(image,elementX, elementY,dimensionOne, dimensionTwo);
+		RectangularSprite sprite = new RectangularSprite(imagePath,elementX, elementY,dimensionOne, dimensionTwo);
 		return sprite;
 	}
 		

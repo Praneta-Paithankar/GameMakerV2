@@ -1,8 +1,10 @@
 package com.helper;
 
+import java.io.Serializable;
+
 import com.component.SpriteElement;
 
-public class ActionLink {
+public class ActionLink implements Serializable{
 
 	
 	String action;

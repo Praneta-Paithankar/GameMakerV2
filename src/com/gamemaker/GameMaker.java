@@ -13,9 +13,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.Logger;import com.behavior.FlowLayoutBehavior;
 import com.component.Clock;
 import com.controller.GameMakerController;
-import com.dimension.Circle;
-import com.dimension.Coordinate;
-import com.dimension.Rectangle;
 import com.infrastruture.*;
 import com.timer.BreakoutTimer;
 import com.ui.ControlPanel;
@@ -31,7 +28,8 @@ public class GameMaker {
 	public static void start(boolean isRestart){
 		
 		PropertyConfigurator.configure("log4j.properties");
-		
+		 log.info("Initializing game-maker");
+
 		BreakoutTimer observable  = new BreakoutTimer();
 		GamePanel boardPanel =new GamePanel();
 
