@@ -109,8 +109,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	public void update() {
 		timerCommand.execute();
 		checkCollision();
+		
 		eventHandler("OnTick");
-		eventHandler("OnClick");
 		checkIfGameEnd();
 		gui.paintView();
 	}
@@ -118,6 +118,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	private void checkIfGameEnd() {
 		if (gameEndSet.isEmpty()) {
 			timer.removeObserver(this);
+			gui.paintView();
 			int option = JOptionPane.showConfirmDialog(null, 
 	                "Game Over!!", "Game Status", JOptionPane.DEFAULT_OPTION);
 			if (option==JOptionPane.OK_OPTION) {
@@ -179,12 +180,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					removeGameEndSprite(actionObserver.getSprite());
 					break;
 				case "shoot":
-					if(e != null) {
-						if(actionObserver.getSprite().getElementY() <= e.getY()) {
-							Projectileflag = false;
-						}
-						macroCommand.addCommand(new ProjectileCommand(actionObserver.getSprite(), e.getY(), Projectileflag));
-					}
 					break;
 				case "move": 
 					macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
@@ -350,24 +345,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	}
 
 	
-	public void calculateProjectile(SpriteElement sprite, int heightX, int heightY) {
-		
-		double startY = (double) sprite.getElementY();
-		double startX = (double) sprite.getElementX();
-		
-		double tan = (startY- heightY)/(startX-heightX);
-		double Height = startY-heightY;
-		double Range = heightX - startX;
-		System.out.println("Height is "+ Height);
-		double gravity = Constants.PROJECTILE_GRAVITY;
-		double deltaY = Math.sqrt((Height) * 2* gravity);
-		double deltaX = deltaY/tan;
-		System.out.println(Range);
 
-		sprite.setXVel((int) (-1* deltaX)); 
-		sprite.setYVel((int) deltaY);
-		
-	}
 	
 //	public void ProjectileVelocitySetter(SpriteElement sprite, int heightX, int heightY) {
 //		
@@ -376,20 +354,20 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		
-		
 		// TODO Auto-generated method stub
+		MacroCommand macroCommand = new MacroCommand();
 		
 		if (eventMap.containsKey("OnClick")) {
 			List<ActionLink> eventObservers = eventMap.get("OnClick");
 			for(ActionLink actionObserver: eventObservers) {
 				if (actionObserver.getAction() == "shoot") {
-					calculateProjectile(actionObserver.getSprite() ,e.getX(),e.getY());
+					macroCommand.addCommand(new ProjectileCommand(actionObserver.getSprite(), e.getX(), e.getY()));
 				}
 			}
-
+			macroCommand.execute();
 		}
-		this.Projectileflag = true;
-		this.e = e;
+//		this.Projectileflag = true;
+//		this.e = e;
 		
 		
 //		ProjectileCommmand projectileCommand = 
