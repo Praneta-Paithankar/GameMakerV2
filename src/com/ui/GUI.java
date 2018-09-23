@@ -4,7 +4,6 @@ package com.ui;
 
 import java.awt.Graphics;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ import com.behavior.FlowLayoutBehavior;
 import com.behavior.GridBagLayoutBehavior;
 import com.component.SpriteElement;
 import com.controller.GameMakerController;
-import com.controller.GameController;
 import com.controller.GameDriver;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
@@ -35,10 +33,8 @@ public class GUI extends JFrame implements Element{
 	private ArrayList<Element> elementList;
 
 	private GameDriver driver;
-	private GameMakerController controller;
 	private MainPanel mainPanel;
 	private JFileChooser c;
-	private FileWriter fileWriter;
 	private String filePath;
 	private FileReader fileReader;
 

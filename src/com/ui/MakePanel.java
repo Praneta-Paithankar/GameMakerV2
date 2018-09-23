@@ -1,6 +1,5 @@
 package com.ui;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,14 +16,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
@@ -38,9 +33,6 @@ import com.infrastruture.Element;
 public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private List<String> sprites;
-	private List<String> actions;
-	private List<String> events;
-	private JComboBox<String> spriteSelection;
 	private GameMakerController controller;
 	private BufferedImage ballImage;
 	private BufferedImage brickImage;
