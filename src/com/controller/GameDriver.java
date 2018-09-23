@@ -1,4 +1,6 @@
 package com.controller;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -19,7 +21,7 @@ import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
-public class GameDriver implements Observer, KeyListener{
+public class GameDriver implements Observer, KeyListener, ActionListener{
 	private List<SpriteElement> sprites  ;
 	private Map<String, List<ActionLink>> eventMap;
 	private GUI gui;
@@ -63,7 +65,7 @@ public class GameDriver implements Observer, KeyListener{
 
 		System.out.println("InitPlay ::: "+sprites.toString());
 		gui.draw(null);
-		System.out.println(eventMap.get("OnCollision").size());
+//		System.out.println(eventMap.get("OnCollision").size());
 		timer.registerObserver(this);
 	}
 
@@ -203,6 +205,12 @@ public class GameDriver implements Observer, KeyListener{
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

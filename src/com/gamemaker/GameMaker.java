@@ -10,8 +10,7 @@ import javax.swing.Box;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.Logger;
-
+import org.apache.log4j.Logger;import com.behavior.FlowLayoutBehavior;
 import com.component.Ball;
 import com.component.Brick;
 import com.component.Clock;
@@ -45,7 +44,7 @@ public class GameMaker {
 		StaticPanel staticPanel = new StaticPanel();
 
 		TimerPanel timerPanel = new TimerPanel();
-		//timerPanel.addComponent();
+		timerPanel.addComponent(new Clock());
 		
 		ControlPanel controlPanel = new ControlPanel();
 		MakePanel makePanel = new MakePanel();

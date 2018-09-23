@@ -75,8 +75,9 @@ public class GUI extends JFrame implements Element{
 	public void addDriver(GameDriver driver){
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
+	    controlPanel.createButtons(driver);
 		mainPanel.setFocusable(true);
-        //controlPanel.createButtons(driver);
+ 
         //makePanel.createButtons();
 	}
 	

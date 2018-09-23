@@ -7,7 +7,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.behavior.FlowLayoutBehavior;
-import com.controller.GameController;
+
+import com.controller.GameDriver;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -15,21 +16,20 @@ import com.infrastruture.Element;
 @SuppressWarnings("serial")
 public class ControlPanel  extends AbstractPanel implements Element {
 
-	private GameController driver;
+	private GameDriver driver;
 
 	public ControlPanel() {
 		setLayoutBehavior(new FlowLayoutBehavior());
 		performUpdateLayout(this, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_HEIGHT-Constants.TIMER_PANEL_WIDTH);
 	}
 	
-	public void createButtons(GameController driver)
+	public void createButtons(GameDriver driver)
 	{
 		this.driver = driver;
 	    createReplay();
 	    createUndo();
 	    createStart();
 	    createPause();
-	    
 	    createSave();
 	    createLoad();
 	    createLayout();
@@ -65,6 +65,8 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	public void createLoad() {
 		PanelButton layoutButton = new PanelButton("Load", "load", driver);
 		this.add(layoutButton);
+		System.out.println(layoutButton);
+		System.out.println(this.getComponentCount());
 	}
 
 	public void createSave() {
@@ -74,7 +76,7 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	@Override
 	public void draw(Graphics g) {
 		// TODO Auto-generated method stub
-		
+		revalidate();
 	}
 
 	@Override

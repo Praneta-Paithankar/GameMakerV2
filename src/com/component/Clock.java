@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.infrastruture.Element;
 
-public class Clock implements Element,Serializable{
+public class Clock extends JComponent implements Element,Serializable{
 
 	protected static Logger log = Logger.getLogger(Clock.class);
 	private long milisecondsElapsed;
@@ -35,6 +35,7 @@ public class Clock implements Element,Serializable{
 	
 	public void draw(Graphics g) {
 		// TODO center box around the time 
+		System.out.println("Clock is getting called");
 		g.drawRect(0, 150, 250, 100);
 		g.setFont(new Font("Arial", Font.BOLD, 40));
 		String time = getTime();
