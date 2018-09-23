@@ -32,6 +32,7 @@ public class TimerPanel extends AbstractPanel implements Element {
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
+		System.out.println("painting timer panel");
 		for(Element component : components)
 		{
 			component.draw(g);

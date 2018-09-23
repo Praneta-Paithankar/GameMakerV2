@@ -2,29 +2,17 @@ package com.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.File;
 import java.io.IOException;
-import java.sql.Driver;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-
 import org.apache.log4j.Logger;
-import org.w3c.dom.events.EventTarget;
 
-import com.component.Ball;
-import com.component.Brick;
-import com.component.Paddle;
+import com.component.Clock;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
 import com.helper.GameObject;
-import com.infrastruture.Constants;
 import com.infrastruture.Element;
 import com.timer.BreakoutTimer;
 import com.ui.CreateSpriteRequest;
@@ -41,12 +29,14 @@ public class GameMakerController implements  ActionListener {
 	private Map<String, List<ActionLink>> eventMap;
 	private GameDriver gameDriver;
 	private BreakoutTimer timer;
+	private Clock clock;
 	
-	public GameMakerController(GUI gui) {
+	public GameMakerController(GUI gui, Clock clock) {
 		this.gui = gui;
 		//this.spriteList = new ArrayList<>();
 		this.gameObject = new GameObject();
 		this.timer = new BreakoutTimer();
+		this.clock = clock;
 		//this.actionLink = new ActionLink();
 	}
 	
@@ -92,7 +82,7 @@ public class GameMakerController implements  ActionListener {
 	}
 	
 	public void make() {
-		this.gameDriver = new GameDriver(this.gui, timer);
+		this.gameDriver = new GameDriver(this.gui, timer, clock);
 		gui.addDriver(gameDriver);
 
 	}

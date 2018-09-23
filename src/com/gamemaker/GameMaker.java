@@ -44,12 +44,14 @@ public class GameMaker {
 		StaticPanel staticPanel = new StaticPanel();
 
 		TimerPanel timerPanel = new TimerPanel();
-		timerPanel.addComponent(new Clock());
+		Clock clock = new Clock();
+		timerPanel.addComponent(clock);
 		
 		ControlPanel controlPanel = new ControlPanel();
 		MakePanel makePanel = new MakePanel();
 		
 		staticPanel.addComponent(timerPanel);
+		staticPanel.revalidate();
 		staticPanel.addComponent(controlPanel);
 		// End - Create StaticPanel
 		MainPanel mainPanel = new MainPanel();
@@ -62,7 +64,7 @@ public class GameMaker {
 		gui.addComponent(mainPanel);
 
 		//gui.addDriver(driver);
-		GameMakerController makerController = new GameMakerController(gui);
+		GameMakerController makerController = new GameMakerController(gui, clock);
 		gui.addGameMakerDriver(makerController);
 
 		observable.startTimer();

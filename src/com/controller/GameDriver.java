@@ -3,7 +3,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +14,12 @@ import com.commands.BounceCommand;
 import com.commands.MacroCommand;
 import com.commands.MoveCommand;
 import com.commands.SpriteBlowCommand;
+import com.commands.TimerCommand;
+import com.component.Clock;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
 import com.helper.SpriteCollision;
+import com.infrastruture.Command;
 import com.infrastruture.Constants;
 import com.infrastruture.Direction;
 import com.infrastruture.Observer;
@@ -27,13 +32,19 @@ public class GameDriver implements Observer, KeyListener, ActionListener{
 	private GUI gui;
 	private BreakoutTimer timer;
 	private SpriteCollision collision;
+    private boolean isGamePaused ;
+    private Deque<Command> commandQueue;
+    private TimerCommand timerCommand;
 
-	public GameDriver(GUI gui, BreakoutTimer timer){
+	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock){
 		this.sprites = new ArrayList<SpriteElement>();
 		this.eventMap = new HashMap<>();
 		this.gui = gui;
 		this.timer = timer;
 		this.collision = new SpriteCollision();
+		isGamePaused = false;
+		timerCommand = new TimerCommand(clock);	
+		commandQueue = new ArrayDeque<Command>();
 	}
 
 	public void addSpriteElements(SpriteElement sprite) {
@@ -64,14 +75,17 @@ public class GameDriver implements Observer, KeyListener, ActionListener{
 	public void InitPlay() {
 
 		System.out.println("InitPlay ::: "+sprites.toString());
-		gui.draw(null);
+		gui.paintView();
+//		gui.draw(null);
 //		System.out.println(eventMap.get("OnCollision").size());
+		timerCommand.execute();
 		timer.registerObserver(this);
 	}
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+		timerCommand.execute();
+
 		checkCollision();
 		eventHandler("OnTick");
 		gui.paintView();
@@ -209,8 +223,92 @@ public class GameDriver implements Observer, KeyListener, ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		String commandText= e.getActionCommand();
+		if(commandText.equals("undo")) {
+			if(!isGamePaused) {
+				pause();
+				undoAction();
+				unPause();
+			} else {
+				undoAction();
+			}
+			gui.changeFocus();
+			gui.draw(null);
+
+		}/*else if(commandText.equals("replay")) {
+			replay();
+		}else*/ if(commandText.equals("start")) {
+			if(isGamePaused) {
+				System.out.println("in start if");
+				unPause();
+				gui.changeFocus();
+				gui.paintView();
+//				gui.draw(null);
+			}else {
+				System.out.println("in start if");
+//				gui.dispose();
+				InitPlay();
+//				gui.revalidate();
+//				gui.paintView();
+//				GameMaker.start(true);
+			}
+		}else if(commandText.equals("pause")) {
+			pause();
+			gui.changeFocus();
+			gui.draw(null);
+		}
+//		}else if(commandText.equals("save")) {
+//			save();
+//			gui.changeFocus();
+//		}else if(commandText.equals("load")) {
+//			load();
+//			gui.changeFocus();
+//			gui.draw(null);;
+//		}
+		else if(commandText.equals("layout")) {
+			pause();
+			gui.modifyLayout();
+			gui.changeFocus();
+			gui.draw(null);
+			unPause();
+		}
+	}
+	
+	private void undoAction() {
+
+		int count = 0;
+		while(count != Constants.TIMER_COUNT) {
+			Command val=commandQueue.pollLast();
+			if(val == null)
+				break;
+			if(val instanceof TimerCommand)
+			{
+				count++;
+			}
+//			if(val instanceof BrickEnactCommand)
+//			{
+//				noOfBricks++;
+//			}
+			val.undo();
+		}
 		
+	}
+	
+	public void pause() {
+		if(isGamePaused)
+			unPause();
+		else{
+			isGamePaused = true;
+
+			if(!timer.isObserverListEmpty()) {
+				timer.removeObserver(this);
+			}
+		}
+	}
+	
+	public void unPause() {
+		isGamePaused = false;
+		timer.registerObserver(this);
 	}
 
 }
