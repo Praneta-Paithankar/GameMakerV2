@@ -30,6 +30,7 @@ public class GameMakerController implements  ActionListener {
 	private Clock clock;
 	
 	public GameMakerController(GUI gui, Clock clock) {
+		log.info("Initializing game-maker-controller");
 		this.gui = gui;
 		this.gameObject = new GameObject();
 		this.timer = new BreakoutTimer();
@@ -65,8 +66,7 @@ public class GameMakerController implements  ActionListener {
 			this.gui.draw(null);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			 log.error(e.getMessage());
 		}
 	}
 	
@@ -88,7 +88,6 @@ public class GameMakerController implements  ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		String commandText= e.getActionCommand();
 		if(commandText.equals("play")) {
 			play();

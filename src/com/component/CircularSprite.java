@@ -16,9 +16,7 @@ public class CircularSprite extends SpriteElement implements Serializable {
 	int firstInstanceOfY;
 	int firstInstanceOfRadius;
 	
-	
 	public CircularSprite(String image, int elementX, int elementY, int radius) throws IOException {
-		// TODO Auto-generated constructor stub
 		super(image,elementX,elementY,radius);
 		this.firstInstanceOfImage = this.image = image;
 		this.firstInstanceOfX = this.elementX = elementX;
@@ -28,10 +26,6 @@ public class CircularSprite extends SpriteElement implements Serializable {
 	
 	public void reset() {
 		super.reset();
-//		this.setElementX(firstInstanceOfX);
-//		this.setElementY(firstInstanceOfY);
-//		this.setRadius(radius);
-//		this.setImage(firstInstanceOfImage);
 	}
 
 }

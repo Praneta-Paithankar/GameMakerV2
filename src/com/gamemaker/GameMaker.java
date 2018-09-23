@@ -28,7 +28,8 @@ public class GameMaker {
 	public static void start(boolean isRestart){
 		
 		PropertyConfigurator.configure("log4j.properties");
-		
+		 log.info("Initializing game-maker");
+
 		BreakoutTimer observable  = new BreakoutTimer();
 		GamePanel boardPanel =new GamePanel();
 

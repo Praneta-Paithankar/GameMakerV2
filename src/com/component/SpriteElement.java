@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 
 import com.controller.GameDriver;
 import com.infrastruture.Constants;
-import com.infrastruture.Element;
 
 public abstract class SpriteElement implements Serializable{
 	protected static Logger log = Logger.getLogger(GameDriver.class);

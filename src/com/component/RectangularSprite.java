@@ -19,7 +19,6 @@ public class RectangularSprite extends SpriteElement implements Serializable{
 	int firstInstanceOfHeight;
 
 	public RectangularSprite(String image, int elementX, int elementY, int width, int height) throws IOException {
-		// TODO Auto-generated constructor stub
 		super(image,elementX,elementY,width,height);
 		this.firstInstanceOfImage = this.image = image;
 		this.firstInstanceOfX = this.elementX = elementX;
@@ -31,11 +30,6 @@ public class RectangularSprite extends SpriteElement implements Serializable{
 	
 	public void reset() {
 		super.reset();
-//		this.setElementX(firstInstanceOfX);
-//		this.setElementY(firstInstanceOfY);
-//		this.setWidth(firstInstanceOfWidth);
-//		this.setHeight(firstInstanceOfHeight);
-//		this.setImage(firstInstanceOfImage);
 	}
 	
 }

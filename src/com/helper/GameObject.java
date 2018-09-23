@@ -19,13 +19,6 @@ public class GameObject {
 	String element;  // String denoting SpriteType
 	int elementX; // String denoting X coordinate of Sprite obtained from MakerEngine
 	int elementY; // String denoting Y coordinate of Sprite obtained from MakerEngine
-
-	
-//	GameObject(String element, int elementX, int elementY){
-//		this.element = element;
-//		this.elementX = elementX;
-//		this.elementY = elementY;
-//	}
 	
 	public SpriteElement spriteDecoder(String element, int elementX, int elementY) throws IOException {
 		this.elementX = elementX;

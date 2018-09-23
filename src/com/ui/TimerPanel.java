@@ -20,6 +20,7 @@ public class TimerPanel extends AbstractPanel implements Element {
 	private ArrayList<Element> components;
 
 	public TimerPanel() {
+		 log.info("Initializing TimerPanel");
 		setLayoutBehavior(new FlowLayoutBehavior());
 		performUpdateLayout(this, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_WIDTH);
 
