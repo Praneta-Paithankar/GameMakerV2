@@ -27,10 +27,11 @@ public class CircularSprite extends SpriteElement implements Serializable {
 	}
 	
 	public void reset() {
-		this.setElementX(firstInstanceOfX);
-		this.setElementY(firstInstanceOfY);
-		this.setRadius(radius);
-		this.setImage(image);
+		super.reset();
+//		this.setElementX(firstInstanceOfX);
+//		this.setElementY(firstInstanceOfY);
+//		this.setRadius(radius);
+//		this.setImage(firstInstanceOfImage);
 	}
 
 }

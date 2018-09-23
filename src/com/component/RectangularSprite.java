@@ -30,11 +30,12 @@ public class RectangularSprite extends SpriteElement implements Serializable{
 
 	
 	public void reset() {
-		this.setElementX(firstInstanceOfX);
-		this.setElementY(firstInstanceOfY);
-		this.setWidth(firstInstanceOfWidth);
-		this.setHeight(firstInstanceOfHeight);
-		this.setImage(firstInstanceOfImage);
+		super.reset();
+//		this.setElementX(firstInstanceOfX);
+//		this.setElementY(firstInstanceOfY);
+//		this.setWidth(firstInstanceOfWidth);
+//		this.setHeight(firstInstanceOfHeight);
+//		this.setImage(firstInstanceOfImage);
 	}
 	
 }

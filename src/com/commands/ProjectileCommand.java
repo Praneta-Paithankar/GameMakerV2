@@ -41,22 +41,6 @@ public class ProjectileCommand implements Command{
 	@Override
 	public void undo() {
 		// TODO Auto-generated method stub
-//		if(sprite.getElementY() <= heightY) {
-//			flag = true;
-//		}
-//		calculateProjectile(heightX, heightY);
-//		
-//		sprite.setElementX((int)(sprite.getElementX() - deltaX));
-//		
-//		if(flag == false) {sprite.setElementX((int) (sprite.getElementX() - deltaY)); System.out.println("down");}
-//		else {sprite.setElementX((int) (sprite.getElementX() + deltaY));  System.out.println("Up");}
-		
-//		if(flag == true) {sprite.setElementY(sprite.getElementY()+sprite.getYVel());}
-//		else {sprite.setElementY(sprite.getElementY()-sprite.getYVel());}
-//		
-//		sprite.setElementX(sprite.getElementX()+ sprite.getXVel());
-	
-		
 	}
 
 }

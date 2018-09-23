@@ -24,7 +24,6 @@ import com.behavior.BoxLayoutXAxisBehavior;
 import com.behavior.BoxLayoutYAxisBehavior;
 import com.behavior.GridBagLayoutBehavior;
 import com.component.Clock;
-import com.controller.GameController;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -34,7 +33,6 @@ import com.infrastruture.Element;
 public class StaticPanel extends AbstractPanel implements Element{
 	protected static Logger log = Logger.getLogger(StaticPanel.class);
 	private JLabel score;
-	private GameController driver;
 	private ArrayList<Element> elements;
 	
 	public StaticPanel() {

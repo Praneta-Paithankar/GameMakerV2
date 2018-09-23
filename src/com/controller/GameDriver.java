@@ -6,21 +6,31 @@ import java.awt.event.KeyListener;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import java.lang.reflect.InvocationTargetException;
+
 import java.util.ArrayDeque;
 
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
 import org.apache.log4j.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 
 import com.commands.BounceCommand;
 import com.commands.MacroCommand;
@@ -31,6 +41,7 @@ import com.commands.TimerCommand;
 import com.component.Clock;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
+import com.helper.GameObject;
 import com.helper.SpriteCollision;
 import com.infrastruture.Command;
 import com.infrastruture.Constants;
@@ -48,10 +59,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	private GUI gui;
 	private BreakoutTimer timer;
 	private SpriteCollision collision;
-
+	private HashSet<SpriteElement> gameEndSet;
 	private MouseEvent e;
 	Boolean Projectileflag ;
-
     private boolean isGamePaused ;
     private Deque<Command> commandQueue;
     private TimerCommand timerCommand;
@@ -66,6 +76,17 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		isGamePaused = false;
 		timerCommand = new TimerCommand(clock);	
 		commandQueue = new ArrayDeque<Command>();
+		this.gameEndSet = new HashSet<>();	
+	}
+	
+	public void addGameEndSprite(SpriteElement element) {
+		gameEndSet.add(element);
+	}
+	
+	public void removeGameEndSprite(SpriteElement element) {
+		if (gameEndSet.contains(element)) {
+			gameEndSet.remove(element);
+		}
 	}
 
 	public void addSpriteElements(SpriteElement sprite) {
@@ -100,6 +121,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			ObjectOutputStream op = new ObjectOutputStream(fileOut);
 			
 			op.writeObject(eventMap);
+			op.writeObject(gameEndSet);
 			op.writeObject(sprites);
 
 			//gui.getBoardPanel().setElements(sprites);
@@ -123,8 +145,10 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			
 			sprites.clear();
 			eventMap.clear();
+			gameEndSet.clear();
 			
 			eventMap.putAll((Map<String, List<ActionLink>>) in.readObject());
+			gameEndSet.addAll((HashSet<SpriteElement>)in.readObject());
 			setSprites((ArrayList<SpriteElement>)in.readObject());
 			gui.getBoardPanel().setElements(sprites);
 			gui.getBoardPanel().revalidate();
@@ -142,21 +166,33 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	}
 
 	public void InitPlay() {
-
 		gui.paintView();
-//		gui.draw(null);
 		timerCommand.execute();
 		timer.registerObserver(this);
+		commandQueue.addLast(timerCommand);
 	}
 
 	@Override
 	public void update() {
 		timerCommand.execute();
-
+		commandQueue.addLast(timerCommand);
 		checkCollision();
 		eventHandler("OnTick");
 		eventHandler("OnClick");
+		checkIfGameEnd();
 		gui.paintView();
+	}
+
+	private void checkIfGameEnd() {
+		if (gameEndSet.isEmpty()) {
+			timer.removeObserver(this);
+			int option = JOptionPane.showConfirmDialog(null, 
+	                "Game Over!!", "Game Status", JOptionPane.DEFAULT_OPTION);
+			if (option==JOptionPane.OK_OPTION) {
+				System.exit(0);
+			}
+		}
+		
 	}
 
 	public void checkCollision() {
@@ -177,6 +213,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 				}
 			}
 			macroCommand.execute();
+			commandQueue.addLast(macroCommand);
 		}
 	}
 	
@@ -185,12 +222,10 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			switch(action.getAction()) {
 			case "blow": 
 				macroCommand.addCommand(new SpriteBlowCommand(action.getSprite()));
+				removeGameEndSprite(action.getSprite());
 				break;
 			case "bounce":
 				macroCommand.addCommand(new BounceCommand(action.getSprite(), d));
-				break;
-			case "shoot": 
-				//macroCommand.addCommand(shoot);
 				break;
 			case "move": 
 				macroCommand.addCommand(new MoveCommand(action.getSprite()));
@@ -210,6 +245,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 				switch(actionObserver.getAction()) {
 				case "blow": 
 					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
+					removeGameEndSprite(actionObserver.getSprite());
 					break;
 				case "shoot":
 					if(e != null) {
@@ -227,6 +263,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			}
 
 			macroCommand.execute();
+			commandQueue.addLast(macroCommand);
 		}
 	}
 
@@ -247,6 +284,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 				switch(actionObserver.getAction()) {
 				case "blow": 
 					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
+					removeGameEndSprite(actionObserver.getSprite());
 					break;
 				case "shoot": 
 					//macroCommand.addCommand(shoot);
@@ -260,6 +298,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			}
 
 			macroCommand.execute();
+			commandQueue.addLast(macroCommand);
 		}
 	}
 	
@@ -303,28 +342,26 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 				undoAction();
 			}
 			gui.changeFocus();
-			gui.draw(null);
+			gui.paintView();
 
-		}/*else if(commandText.equals("replay")) {
-			replay();
-		}else*/ if(commandText.equals("start")) {
+		} else if(commandText.equals("start")) {
 			if(isGamePaused) {
 				unPause();
 				gui.changeFocus();
 				gui.paintView();
-//				gui.draw(null);
+
 			}else {
-//				gui.dispose();
 				InitPlay();
-//				gui.revalidate();
-//				gui.paintView();
-//				GameMaker.start(true);
 			}
 		}else if(commandText.equals("pause")) {
 			pause();
 			gui.changeFocus();
-			gui.draw(null);
+			gui.paintView();
+		}else if(commandText.equals("replay")) {
+			replay();
+			gui.changeFocus();
 		}
+		
 //		}else if(commandText.equals("save")) {
 //			save();
 //			gui.changeFocus();
@@ -342,6 +379,56 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		}
 	}
 	
+	public void replay() {
+		pause();
+		gameReset();
+		replayAction();
+		gui.changeFocus();
+	}
+	
+	public void gameReset() {
+		for(SpriteElement element: sprites) {
+			element.reset();
+		}
+	}
+	
+	private void replayAction() {
+		Iterator<Command> itr = commandQueue.iterator();
+		new Thread(){
+			public void run(){
+				while(itr.hasNext()){
+					try {
+						SwingUtilities.invokeAndWait(new Runnable(){
+							Command val = (Command) itr.next();
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								val.execute();
+								gui.paintView();
+								try {
+									currentThread();
+									Thread.sleep(5);
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									// log.error(e.getMessage());
+								}
+							}
+						});
+					} catch (InvocationTargetException | InterruptedException e) {
+						// TODO Auto-generated catch block
+						// log.error(e.getMessage());
+					} 
+				}
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+
 	private void undoAction() {
 
 		int count = 0;
@@ -353,25 +440,21 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			{
 				count++;
 			}
-//			if(val instanceof BrickEnactCommand)
-//			{
-//				noOfBricks++;
-//			}
 			val.undo();
 		}
 		
 	}
 	
 	public void pause() {
-		if(isGamePaused)
-			unPause();
-		else{
-			isGamePaused = true;
+//		if(isGamePaused)
+//			unPause();
+//		else{
+		isGamePaused = true;
 
-			if(!timer.isObserverListEmpty()) {
-				timer.removeObserver(this);
-			}
+		if(!timer.isObserverListEmpty()) {
+			timer.removeObserver(this);
 		}
+//		}
 	}
 	
 	public void unPause() {
@@ -396,11 +479,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		sprite.setYVel((int) deltaY);
 		
 	}
-	
-//	public void ProjectileVelocitySetter(SpriteElement sprite, int heightX, int heightY) {
-//		
-//	}
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		

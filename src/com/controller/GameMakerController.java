@@ -24,8 +24,6 @@ public class GameMakerController implements  ActionListener {
 	private CreateSpriteRequest sprite;
 	private GameObject gameObject;
 	private SpriteElement newSprite;
-	//private ActionLink actionLink;
-	//private List<SpriteElement> spriteList  ;
 	private Map<String, List<ActionLink>> eventMap;
 	private GameDriver gameDriver;
 	private BreakoutTimer timer;
@@ -33,13 +31,11 @@ public class GameMakerController implements  ActionListener {
 	
 	public GameMakerController(GUI gui, Clock clock) {
 		this.gui = gui;
-		//this.spriteList = new ArrayList<>();
 		this.gameObject = new GameObject();
 		this.timer = new BreakoutTimer();
 		this.clock = clock; 
 		this.gameDriver = new GameDriver(this.gui, timer, clock);
 		gui.addDriver(gameDriver);
-		//this.actionLink = new ActionLink();
 	}
 	
 	public void addElementToGame(ArrayList<Element> elementList) {
@@ -53,10 +49,12 @@ public class GameMakerController implements  ActionListener {
 			this.newSprite = gameObject.spriteDecoder(sprite.getElementName(), sprite.getXlocation(), sprite.getYlocation());
 			this.gameDriver.addSpriteElements(newSprite);
 			this.gui.addSpriteToPanel(newSprite);
-			
 			eventMap = gameDriver.getEventMap();
 			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {
-				if (eventMap.containsKey(entry.getKey())) {
+				if (entry.getKey().equals("GameEnd")) {
+					gameDriver.addGameEndSprite(newSprite);
+				}
+				else if (eventMap.containsKey(entry.getKey())) {
 					eventMap.get(entry.getKey()).add(new ActionLink(newSprite, entry.getValue()));
 				} else {
 					List<ActionLink> listAction = new ArrayList<>();
@@ -77,8 +75,6 @@ public class GameMakerController implements  ActionListener {
 	}
 	
 	public void make() {
-		//this.gameDriver = new GameDriver(this.gui, timer, clock);
-		//gui.addDriver(gameDriver);
 
 	}
 	

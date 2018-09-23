@@ -33,12 +33,15 @@ public abstract class SpriteElement implements Serializable{
 	private int elementX;
 	private int elementY;
 	private boolean visible;
+	
+	private int firstInstanceOfX;
+	private int firstInstanceOfY;
+	private int firstInstanceOfRadius;
+	private int firstInstanceOfWidth;
+	private int firstInstanceOfHeight;
 
 	public SpriteElement(String image, int elementX, int elementY, int radius) throws IOException {
 		this.image = image;
-		this.elementX = elementX;
-		this.elementY = elementY;
-		this.radius = radius;
 		this.width = radius *2;
 		this.height = radius *2;
 		this.XVel = Constants.X_Velocity;
@@ -46,6 +49,9 @@ public abstract class SpriteElement implements Serializable{
 		this.imageIcon = ImageIO.read(new File(image));
 		this.imageIcon = resize(imageIcon, width, height);
 		this.visible = true;
+		this.firstInstanceOfX = this.elementX = elementX;
+		this.firstInstanceOfY = this.elementY = elementY;
+		this.firstInstanceOfRadius = this.radius = radius;
 	}
 
 	public SpriteElement(String image, int elementX, int elementY, int width, int height) throws IOException  {
@@ -59,6 +65,10 @@ public abstract class SpriteElement implements Serializable{
 		this.imageIcon = ImageIO.read(new File(image));
 		this.imageIcon = resize(imageIcon, width, height);
 		this.visible = true;
+		this.firstInstanceOfX = this.elementX = elementX;
+		this.firstInstanceOfY = this.elementY = elementY;
+		this.firstInstanceOfWidth = this.width = width;
+		this.firstInstanceOfHeight = this.height = height;
 	}
 
 	public int getXVel() {
@@ -161,7 +171,7 @@ public abstract class SpriteElement implements Serializable{
 			}
 			this.imageIcon = resize(imageIcon, width, height);
 		}
-		
+
 		if(this.visible) {
 			g.drawImage(this.imageIcon, elementX, elementY, null);
 		}
@@ -169,6 +179,14 @@ public abstract class SpriteElement implements Serializable{
 
 	public void reset() {
 		// TODO Auto-generated method stub
+		this.setElementX(firstInstanceOfX);
+		this.setElementY(firstInstanceOfY);
+		this.setRadius(radius);
+		this.setWidth(firstInstanceOfWidth);
+		this.setHeight(firstInstanceOfHeight);
+		this.XVel = Constants.X_Velocity;
+		this.YVel = Constants.Y_Velocity;
+		this.visible = true;
 
 	}
 
@@ -185,7 +203,4 @@ public abstract class SpriteElement implements Serializable{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
 }

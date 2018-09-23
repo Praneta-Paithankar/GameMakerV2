@@ -1,6 +1,7 @@
 package com.commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import com.infrastruture.*;
 
@@ -26,6 +27,7 @@ public class MacroCommand implements Command{
 	@Override
 	public void undo() {
 		// TODO Auto-generated method stub
+		Collections.reverse(commands);
 		for (Command c :commands) {
 			c.undo();
 		}

@@ -1,4 +1,4 @@
-package com.ui;
+package com.behavior;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
