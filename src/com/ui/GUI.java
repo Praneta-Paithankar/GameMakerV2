@@ -77,6 +77,7 @@ public class GUI extends JFrame implements Element{
 		mainPanel.addKeyListener(driver);
 	    controlPanel.createButtons(driver);
 		mainPanel.setFocusable(true);
+		boardPanel.addMouseEvent(driver);
  
         //makePanel.createButtons();
 	}

@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import com.behavior.FlowLayoutBehavior;
 import com.component.SpriteElement;
+import com.controller.GameDriver;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -29,6 +30,7 @@ public class GamePanel extends AbstractPanel implements Element {
 	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private BufferedImage image;
 	private ArrayList<SpriteElement> elements;
+	private GameDriver driver;
 	
 	public GamePanel()
 	{
@@ -123,6 +125,10 @@ public class GamePanel extends AbstractPanel implements Element {
 		return null;
 	}
 
+	public void addMouseEvent(GameDriver driver) {
+		this.driver = driver;
+		this.addMouseListener(driver);
+	}
 
 
 	@Override

@@ -63,6 +63,8 @@ public class Constants {
 	
 	public final static int X_Velocity = 5;
 	public final static int Y_Velocity = 5;
+	
+	public final static int PROJECTILE_GRAVITY = 2;
 	//public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed"};
 	//public final static String[] AVAILABLE_ACTIONS = {"moveHorizontal", "moveVertical", "shoot"};
 	

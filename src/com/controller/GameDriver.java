@@ -3,6 +3,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +23,7 @@ import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
-public class GameDriver implements Observer, KeyListener, ActionListener{
+public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener{
 	private List<SpriteElement> sprites  ;
 	private Map<String, List<ActionLink>> eventMap;
 	private GUI gui;
@@ -209,6 +211,40 @@ public class GameDriver implements Observer, KeyListener, ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		System.out.println("x::" + e.getX());
+		System.out.println("y :: " + e.getY());
+		/************************change this******************************
+		ProjectileCommand command = new ProjectileCommand(null, noOfBricks);
+		/************************change this******************************/
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
