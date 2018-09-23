@@ -18,6 +18,8 @@ import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 
 import com.behavior.FlowLayoutBehavior;
+import com.component.SpriteElement;
+import com.controller.GameDriver;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -27,12 +29,13 @@ import com.infrastruture.Element;
 public class GamePanel extends AbstractPanel implements Element {
 	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private BufferedImage image;
-	private ArrayList<Element> elements;
+	private ArrayList<SpriteElement> elements;
+	private GameDriver driver;
 	
 	public GamePanel()
 	{
 
-	    elements = new ArrayList<Element>();
+	    elements = new ArrayList<>();
         try {
             image = ImageIO.read(new File("./src/com/image/nature.jpg"));
             image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
@@ -59,7 +62,7 @@ public class GamePanel extends AbstractPanel implements Element {
         return resized;
     }
 	
-	public ArrayList<Element> getElements(){
+	public ArrayList<SpriteElement> getElements(){
 		return elements;
 	}
 
@@ -71,13 +74,11 @@ public class GamePanel extends AbstractPanel implements Element {
 		if (image != null) {
 	        g.drawImage(image, 0, 0, this);
 	    }
-		for(Element element : elements)
+		for(SpriteElement element:elements)
 		{
 			element.draw(g);
 		}
 	}
-
-	
 
 	@Override
 	public void draw(Graphics g) {
@@ -86,12 +87,12 @@ public class GamePanel extends AbstractPanel implements Element {
 
 	@Override
 	public void reset() {
-		for(Element element : elements) {
+		for(SpriteElement element:elements) {
 			element.reset();
 		}
 	}
 
-	public void addComponent(Element e) {
+	public void addComponent(SpriteElement e) {
 		//this.add((Component)e);
 		elements.add(e);
 	}
@@ -107,7 +108,7 @@ public class GamePanel extends AbstractPanel implements Element {
 	@Override
 	public void save(ObjectOutputStream op) {
 		// TODO Auto-generated method stub
-		for (Element element : elements) {
+		for(SpriteElement element:elements) {
 			element.save(op);
 		}
 	}
@@ -115,12 +116,24 @@ public class GamePanel extends AbstractPanel implements Element {
 	@Override
 	public Element load(ObjectInputStream ip) {
 		// TODO Auto-generated method stub
-		ArrayList<Element> loadComponents = new ArrayList<>();
-		for (Element element : elements) {
+		ArrayList<SpriteElement> loadComponents = new ArrayList<>();
+		for(SpriteElement element:elements) {
 			loadComponents.add(element.load(ip));
 		}
 		elements.clear();
 		elements.addAll(loadComponents);
 		return null;
+	}
+
+	public void addMouseEvent(GameDriver driver) {
+		this.driver = driver;
+		this.addMouseListener(driver);
+	}
+
+
+	@Override
+	public void addComponent(Element e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -51,7 +51,7 @@ public class Brick  implements Element,Serializable{
 		this.rectangle = rectangle;
 	}
 
-	@Override
+
 	public void draw(Graphics g){
 		if(visible) {
 		g.setColor(color);

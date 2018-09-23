@@ -4,7 +4,6 @@ package com.ui;
 
 import java.awt.Graphics;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -20,7 +19,9 @@ import com.behavior.BoxLayoutXAxisBehavior;
 import com.behavior.BoxLayoutYAxisBehavior;
 import com.behavior.FlowLayoutBehavior;
 import com.behavior.GridBagLayoutBehavior;
-import com.controller.GameController;
+import com.component.SpriteElement;
+import com.controller.GameMakerController;
+import com.controller.GameDriver;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
@@ -31,25 +32,26 @@ public class GUI extends JFrame implements Element{
 	private GamePanel boardPanel;
 	private ArrayList<Element> elementList;
 
-	private GameController driver;
+	private GameDriver driver;
 	private MainPanel mainPanel;
 	private JFileChooser c;
-	private FileWriter fileWriter;
 	private String filePath;
 	private FileReader fileReader;
 
 	private StaticPanel staticPanel;
 	private TimerPanel timerPanel;
 	private ControlPanel controlPanel;
+	private MakePanel makePanel;
 	private boolean toggleLayout;
 	
-	public GUI(MainPanel mainPanel, GamePanel boardPanel, StaticPanel staticPanel, TimerPanel timerPanel, ControlPanel controlPanel) {
+	public GUI(MainPanel mainPanel, GamePanel boardPanel, StaticPanel staticPanel, TimerPanel timerPanel, ControlPanel controlPanel,MakePanel makePanel) {
 		super("Breakout Game");
 		this.mainPanel = mainPanel;
 		this.boardPanel = boardPanel;
 		this.staticPanel = staticPanel;
 		this.timerPanel = timerPanel;
 		this.controlPanel = controlPanel;
+		this.makePanel = makePanel;
 		toggleLayout = false;
 		initializeUI();
 		elementList = new ArrayList<>();
@@ -65,10 +67,19 @@ public class GUI extends JFrame implements Element{
 	public void removeKeyListner() {
 		mainPanel.removeKeyListener(driver);
 	}
-	public void addDriver(GameController driver){
+	
+	public void addDriver(GameDriver driver){
 		this.driver = driver;
 		mainPanel.addKeyListener(driver);
-        controlPanel.createButtons(driver);
+	    controlPanel.createButtons(driver);
+		mainPanel.setFocusable(true);
+		boardPanel.addMouseEvent(driver);
+ 
+        //makePanel.createButtons();
+	}
+	
+	public void addGameMakerDriver(GameMakerController controller) {
+		makePanel.createButtons(controller);
 	}
 
 	public void changeFocus()
@@ -217,5 +228,17 @@ public class GUI extends JFrame implements Element{
 		return timerPanel;
 	}
 
+	public MakePanel getMakePanel() {
+		return makePanel;
+	}
+	
+	public void addSpriteToPanel(SpriteElement e) {
+		System.out.println("adding to panel");
+		this.boardPanel.addComponent(e);
+	}
+	
+	public void paintView() {
+		this.repaint();
+	}
 		
 }
