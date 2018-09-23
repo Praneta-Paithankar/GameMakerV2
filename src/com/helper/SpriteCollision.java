@@ -7,7 +7,7 @@ import com.infrastruture.Constants;
 import com.infrastruture.Direction;
 
 public class SpriteCollision {
-protected static Logger log = Logger.getLogger(CollisionChecker.class);
+protected static Logger log = Logger.getLogger(SpriteCollision.class);
 	
 	public Direction checkCollisionOfSprites(SpriteElement sourceSprite) {
 		if(sourceSprite.getClass().toString().contains("CircularSprite")) {
