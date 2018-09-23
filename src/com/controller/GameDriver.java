@@ -48,8 +48,6 @@ import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
-import jdk.incubator.http.internal.common.Log;
-
 public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener{
 	protected static Logger log = Logger.getLogger(GameDriver.class);
 	private ArrayList<SpriteElement> sprites  ;

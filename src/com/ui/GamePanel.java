@@ -94,7 +94,6 @@ public class GamePanel extends AbstractPanel implements Element {
 	}
 
 	public void addComponent(SpriteElement e) {
-		System.out.println("in game panel adding sprites");
 		elements.add(e);
 	}
 	
