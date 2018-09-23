@@ -11,16 +11,11 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.Logger;import com.behavior.FlowLayoutBehavior;
-import com.component.Ball;
-import com.component.Brick;
 import com.component.Clock;
-import com.component.Paddle;
-import com.controller.GameController;
 import com.controller.GameMakerController;
 import com.dimension.Circle;
 import com.dimension.Coordinate;
 import com.dimension.Rectangle;
-import com.helper.CollisionChecker;
 import com.infrastruture.*;
 import com.timer.BreakoutTimer;
 import com.ui.ControlPanel;
