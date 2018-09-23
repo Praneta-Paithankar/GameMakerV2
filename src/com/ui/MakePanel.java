@@ -228,7 +228,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
         			
         			if(option != JOptionPane.CANCEL_OPTION) {
         	        	controller.done();
-        	        	System.out.println("Done");
         			}
         		}
         	}
@@ -253,8 +252,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	public void setSpriteRequestMap(HashMap<String, CreateSpriteRequest> spriteRequestMap) {
 		this.spriteRequestMap = spriteRequestMap;
 	}
-	
-	
 
 }
 

@@ -25,10 +25,11 @@ public class CircularSprite extends SpriteElement {
 	}
 	
 	public void reset() {
-		this.setElementX(firstInstanceOfX);
-		this.setElementY(firstInstanceOfY);
-		this.setRadius(radius);
-		this.setImage(firstInstanceOfImage);
+		super.reset();
+//		this.setElementX(firstInstanceOfX);
+//		this.setElementY(firstInstanceOfY);
+//		this.setRadius(radius);
+//		this.setImage(firstInstanceOfImage);
 	}
 
 }

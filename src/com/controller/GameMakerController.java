@@ -43,7 +43,6 @@ public class GameMakerController implements  ActionListener {
 	/*This method is called from action performed method .. when user clicks Save on make panel.*/
 	public void done() {
 		try {
-			System.out.println("in done");
 			this.sprite = gui.getMakePanel().getNewSprite();
 			this.newSprite = gameObject.spriteDecoder(sprite.getElementName(), sprite.getXlocation(), sprite.getYlocation());
 			this.gameDriver.addSpriteElements(newSprite);
@@ -70,21 +69,18 @@ public class GameMakerController implements  ActionListener {
 	}
 	
 	public void play() {
-		System.out.println("In Play =========");
 		this.gameDriver.InitPlay();
 	}
 	
 	public void make() {
 		this.gameDriver = new GameDriver(this.gui, timer, clock);
 		gui.addDriver(gameDriver);
-
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		String commandText= e.getActionCommand();
-		System.out.println("GMController - action -- "+commandText);
 		if(commandText.equals("play")) {
 			play();
 		}else if(commandText.equals("make")) {

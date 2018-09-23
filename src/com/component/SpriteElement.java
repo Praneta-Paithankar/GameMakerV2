@@ -24,18 +24,24 @@ public abstract class SpriteElement{
 	private int elementX;
 	private int elementY;
 	private boolean visible;
+	
+	private int firstInstanceOfX;
+	private int firstInstanceOfY;
+	private int firstInstanceOfRadius;
+	private int firstInstanceOfWidth;
+	private int firstInstanceOfHeight;
 
 	public SpriteElement(BufferedImage image, int elementX, int elementY, int radius) {
 		this.image = image;
-		this.elementX = elementX;
-		this.elementY = elementY;
-		this.radius = radius;
 		this.width = radius *2;
 		this.height = radius *2;
 		this.XVel = Constants.X_Velocity;
 		this.YVel = Constants.Y_Velocity;
 		this.image = resize(image, width, height);
 		this.visible = true;
+		this.firstInstanceOfX = this.elementX = elementX;
+		this.firstInstanceOfY = this.elementY = elementY;
+		this.firstInstanceOfRadius = this.radius = radius;
 	}
 
 	public SpriteElement(BufferedImage image, int elementX, int elementY, int width, int height) {
@@ -48,6 +54,10 @@ public abstract class SpriteElement{
 		this.YVel = Constants.Y_Velocity;
 		this.image = resize(image, width, height);
 		this.visible = true;
+		this.firstInstanceOfX = this.elementX = elementX;
+		this.firstInstanceOfY = this.elementY = elementY;
+		this.firstInstanceOfWidth = this.width = width;
+		this.firstInstanceOfHeight = this.height = height;
 	}
 
 	public int getXVel() {
@@ -133,17 +143,21 @@ public abstract class SpriteElement{
 	}
 
 	public void draw(Graphics g) {
-		//		 //Image tmp = image.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		//	     BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		//	        	g = resized.createGraphics();
 		if(this.visible) {
 			g.drawImage(this.image, elementX, elementY, null);
 		}
-		//g.dispose();
 	}
 
 	public void reset() {
 		// TODO Auto-generated method stub
+		this.setElementX(firstInstanceOfX);
+		this.setElementY(firstInstanceOfY);
+		this.setRadius(radius);
+		this.setWidth(firstInstanceOfWidth);
+		this.setHeight(firstInstanceOfHeight);
+		this.XVel = Constants.X_Velocity;
+		this.YVel = Constants.Y_Velocity;
+		this.visible = true;
 
 	}
 
@@ -156,7 +170,4 @@ public abstract class SpriteElement{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
 }

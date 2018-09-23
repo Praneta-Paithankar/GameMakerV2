@@ -28,11 +28,12 @@ public class RectangularSprite extends SpriteElement{
 
 	
 	public void reset() {
-		this.setElementX(firstInstanceOfX);
-		this.setElementY(firstInstanceOfY);
-		this.setWidth(firstInstanceOfWidth);
-		this.setHeight(firstInstanceOfHeight);
-		this.setImage(firstInstanceOfImage);
+		super.reset();
+//		this.setElementX(firstInstanceOfX);
+//		this.setElementY(firstInstanceOfY);
+//		this.setWidth(firstInstanceOfWidth);
+//		this.setHeight(firstInstanceOfHeight);
+//		this.setImage(firstInstanceOfImage);
 	}
 	
 }
