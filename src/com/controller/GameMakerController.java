@@ -36,7 +36,9 @@ public class GameMakerController implements  ActionListener {
 		//this.spriteList = new ArrayList<>();
 		this.gameObject = new GameObject();
 		this.timer = new BreakoutTimer();
-		this.clock = clock;
+		this.clock = clock; 
+		this.gameDriver = new GameDriver(this.gui, timer, clock);
+		gui.addDriver(gameDriver);
 		//this.actionLink = new ActionLink();
 	}
 	
@@ -47,17 +49,11 @@ public class GameMakerController implements  ActionListener {
 	/*This method is called from action performed method .. when user clicks Save on make panel.*/
 	public void done() {
 		try {
-			System.out.println("in done");
 			this.sprite = gui.getMakePanel().getNewSprite();
 			this.newSprite = gameObject.spriteDecoder(sprite.getElementName(), sprite.getXlocation(), sprite.getYlocation());
 			this.gameDriver.addSpriteElements(newSprite);
 			this.gui.addSpriteToPanel(newSprite);
-			//this.spriteList.add(newSprite);
-			//this.actionLink = new ActionLink(newSprite,sprite.getEventAction().values().toString().replace("[", "").replace("]", ""));
-			//this.eventMap.put(sprite.getEventAction().keySet().toString().replace("[", "").replace("]", ""), this.actionLink);
-			//this.gameDriver.setEventMap(eventMap);
-			//this.gameDriver.setSprites(spriteList);
-			//this.gameDriver.setEventMap(eventMap);
+			
 			eventMap = gameDriver.getEventMap();
 			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {
 				if (eventMap.containsKey(entry.getKey())) {
@@ -77,25 +73,35 @@ public class GameMakerController implements  ActionListener {
 	}
 	
 	public void play() {
-		System.out.println("In Play =========");
 		this.gameDriver.InitPlay();
 	}
 	
 	public void make() {
-		this.gameDriver = new GameDriver(this.gui, timer, clock);
-		gui.addDriver(gameDriver);
+		//this.gameDriver = new GameDriver(this.gui, timer, clock);
+		//gui.addDriver(gameDriver);
 
+	}
+	
+	public void save() {
+		gameDriver.save();
+	}
+	
+	public void load() {
+		gameDriver.load();
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		String commandText= e.getActionCommand();
-		System.out.println("GMController - action -- "+commandText);
 		if(commandText.equals("play")) {
 			play();
 		}else if(commandText.equals("make")) {
 			make();
+		}else if(commandText.equals("save")) {
+			save();
+		}else if(commandText.equals("load")) {
+			load();
 		}
 	}
 

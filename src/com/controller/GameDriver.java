@@ -6,7 +6,12 @@ import java.awt.event.KeyListener;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayDeque;
 
 import java.util.ArrayList;
@@ -14,6 +19,8 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.log4j.Logger;
 
 import com.commands.BounceCommand;
 import com.commands.MacroCommand;
@@ -32,8 +39,11 @@ import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
+import jdk.incubator.http.internal.common.Log;
+
 public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener{
-	private List<SpriteElement> sprites  ;
+	protected static Logger log = Logger.getLogger(GameDriver.class);
+	private ArrayList<SpriteElement> sprites  ;
 	private Map<String, List<ActionLink>> eventMap;
 	private GUI gui;
 	private BreakoutTimer timer;
@@ -59,7 +69,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	}
 
 	public void addSpriteElements(SpriteElement sprite) {
-		System.out.println("in sprite add " + sprite.toString());
 		sprites.add(sprite);
 	}
 
@@ -71,7 +80,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		return sprites;
 	}
 
-	public void setSprites(List<SpriteElement> sprites) {
+	public void setSprites(ArrayList<SpriteElement> sprites) {
 		this.sprites = sprites;
 	}
 
@@ -82,13 +91,60 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	public void setEventMap(Map<String, List<ActionLink>> eventMap) {
 		this.eventMap = eventMap;
 	}
+	
+	public void save() {
+		FileOutputStream fileOut;
+		try {
+			String fileName = gui.showSaveDialog();
+			fileOut = new FileOutputStream(fileName);
+			ObjectOutputStream op = new ObjectOutputStream(fileOut);
+			
+			op.writeObject(eventMap);
+			op.writeObject(sprites);
+
+			//gui.getBoardPanel().setElements(sprites);
+			op.close();
+			fileOut.close();
+		} catch (FileNotFoundException e) {
+			log.error(e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+		
+	}
+	
+	public void load() {
+		
+		FileInputStream fileIn;
+		try {
+			String fileName = gui.showOpenDialog();
+			fileIn = new FileInputStream(fileName);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			
+			sprites.clear();
+			eventMap.clear();
+			
+			eventMap.putAll((Map<String, List<ActionLink>>) in.readObject());
+			setSprites((ArrayList<SpriteElement>)in.readObject());
+			gui.getBoardPanel().setElements(sprites);
+			gui.getBoardPanel().revalidate();
+			this.gui.paintView();
+			
+			in.close();
+			fileIn.close();
+		} catch (FileNotFoundException e) {
+			log.error(e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			log.error(e.getMessage());
+		}
+	}
 
 	public void InitPlay() {
 
-		System.out.println("InitPlay ::: "+sprites.toString());
 		gui.paintView();
 //		gui.draw(null);
-//		System.out.println(eventMap.get("OnCollision").size());
 		timerCommand.execute();
 		timer.registerObserver(this);
 	}
@@ -117,7 +173,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					if (element!=actionObserver.getSprite()) {
 						d = collision.checkCollisionOfSprites(actionObserver.getSprite(),element);
 						actionForCollision(actionObserver, d, macroCommand);
-						System.out.println(d);
 					}
 				}
 			}
@@ -129,11 +184,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		if(d != Direction.NONE) {
 			switch(action.getAction()) {
 			case "blow": 
-				System.out.println("blow");
 				macroCommand.addCommand(new SpriteBlowCommand(action.getSprite()));
 				break;
 			case "bounce":
-				System.out.println("in bounce");
 				macroCommand.addCommand(new BounceCommand(action.getSprite(), d));
 				break;
 			case "shoot": 
@@ -256,13 +309,11 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			replay();
 		}else*/ if(commandText.equals("start")) {
 			if(isGamePaused) {
-				System.out.println("in start if");
 				unPause();
 				gui.changeFocus();
 				gui.paintView();
 //				gui.draw(null);
 			}else {
-				System.out.println("in start if");
 //				gui.dispose();
 				InitPlay();
 //				gui.revalidate();
@@ -337,11 +388,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		double tan = (startY- heightY)/(startX-heightX);
 		double Height = startY-heightY;
 		double Range = heightX - startX;
-		System.out.println("Height is "+ Height);
 		double gravity = Constants.PROJECTILE_GRAVITY;
 		double deltaY = Math.sqrt((Height) * 2* gravity);
 		double deltaX = deltaY/tan;
-		System.out.println(Range);
 
 		sprite.setXVel((int) (-1* deltaX)); 
 		sprite.setYVel((int) deltaY);
@@ -372,8 +421,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		
 		
 //		ProjectileCommmand projectileCommand = 
-		System.out.println("x::" + e.getX());
-		System.out.println("y :: " + e.getY());
 		/************************change this******************************
 		ProjectileCommand command = new ProjectileCommand(null, noOfBricks);
 		/************************change this******************************/

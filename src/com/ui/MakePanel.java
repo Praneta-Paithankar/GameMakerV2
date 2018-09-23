@@ -47,7 +47,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		//createButtons();
 		sprites = new ArrayList<>(Constants.spriteTypes);
 		spriteRequestMap = new HashMap<>();
-		//createSpriteSelectionList();
 		createImage();
 		createCheckbox();
 		//createBallActions();
@@ -59,6 +58,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		this.add(createMakeButton());
 		this.add(createPlayButton());
 		createDoneButton();
+		createSaveButton();
+		createLoadButton();
 	}
 	
 	public void createCheckbox() {
@@ -114,6 +115,26 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		doneButton.setVisible(true);
 		doneButton.setFocusable(false);
 		this.add(doneButton);
+	}
+	
+	public void createSaveButton() {
+		JButton saveButton = new JButton("Save");
+		saveButton.setBounds(50, 650, 100, 50);
+		saveButton.setActionCommand("save");
+		saveButton.addActionListener(controller);
+		saveButton.setVisible(true);
+		saveButton.setFocusable(false);
+		this.add(saveButton);
+	}
+	
+	public void createLoadButton() {
+		JButton loadButton = new JButton("Load");
+		loadButton.setBounds(200, 650, 100, 50);
+		loadButton.setActionCommand("load");
+		loadButton.addActionListener(controller);
+		loadButton.setVisible(true);
+		loadButton.setFocusable(false);
+		this.add(loadButton);
 	}
 	
 	@Override

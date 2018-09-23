@@ -67,9 +67,6 @@ public class GameController implements Observer, KeyListener,ActionListener{
     private PaddleRightMoveCommand paddleRightMoveCommand;
     private FileWriter file;
     
-
-  
-    
 	public GameController(Ball ball, Paddle paddle, ArrayList<Brick> bricks, GUI gui,BreakoutTimer observable, Clock clock,CollisionChecker collisionChecker) {
 		
 		this.ball = ball;

@@ -66,7 +66,10 @@ public class GamePanel extends AbstractPanel implements Element {
 		return elements;
 	}
 
-	
+	public void setElements(ArrayList<SpriteElement> elements) {
+		this.elements = elements;
+	}
+
 	@Override
 	public void paintComponent(Graphics g){
 
@@ -93,7 +96,7 @@ public class GamePanel extends AbstractPanel implements Element {
 	}
 
 	public void addComponent(SpriteElement e) {
-		//this.add((Component)e);
+		System.out.println("in game panel adding sprites");
 		elements.add(e);
 	}
 	
