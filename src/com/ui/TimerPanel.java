@@ -20,8 +20,6 @@ public class TimerPanel extends AbstractPanel implements Element {
 	private ArrayList<Element> components;
 
 	public TimerPanel() {
-		System.out.println("TimerPanel constructor");
-
 		setLayoutBehavior(new FlowLayoutBehavior());
 		performUpdateLayout(this, Constants.TIMER_PANEL_WIDTH,Constants.TIMER_PANEL_WIDTH);
 
@@ -32,7 +30,6 @@ public class TimerPanel extends AbstractPanel implements Element {
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		System.out.println("painting timer panel");
 		for(Element component : components)
 		{
 			component.draw(g);
