@@ -34,7 +34,9 @@ public class GameMakerController implements  ActionListener {
 		this.gui = gui;
 		this.gameObject = new GameObject();
 		this.timer = new BreakoutTimer();
-		this.clock = clock;
+		this.clock = clock; 
+		this.gameDriver = new GameDriver(this.gui, timer, clock);
+		gui.addDriver(gameDriver);
 	}
 	
 	public void addElementToGame(ArrayList<Element> elementList) {
@@ -73,8 +75,15 @@ public class GameMakerController implements  ActionListener {
 	}
 	
 	public void make() {
-		this.gameDriver = new GameDriver(this.gui, timer, clock);
-		gui.addDriver(gameDriver);
+
+	}
+	
+	public void save() {
+		gameDriver.save();
+	}
+	
+	public void load() {
+		gameDriver.load();
 	}
 	
 	@Override
@@ -84,6 +93,10 @@ public class GameMakerController implements  ActionListener {
 			play();
 		}else if(commandText.equals("make")) {
 			make();
+		}else if(commandText.equals("save")) {
+			save();
+		}else if(commandText.equals("load")) {
+			load();
 		}
 	}
 

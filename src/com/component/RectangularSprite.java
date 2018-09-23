@@ -1,22 +1,24 @@
 package com.component;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.Serializable;
 
-public class RectangularSprite extends SpriteElement{
+public class RectangularSprite extends SpriteElement implements Serializable{
 	
-	BufferedImage image;
+	String image;
 	int elementX; 
 	int elementY;
 	int width;
 	int height;
 	
-	BufferedImage firstInstanceOfImage;
+	String firstInstanceOfImage;
 	int firstInstanceOfX;
 	int firstInstanceOfY;
 	int firstInstanceOfWidth;
 	int firstInstanceOfHeight;
 
-	public RectangularSprite(BufferedImage image, int elementX, int elementY, int width, int height) {
+	public RectangularSprite(String image, int elementX, int elementY, int width, int height) throws IOException {
 		super(image,elementX,elementY,width,height);
 		this.firstInstanceOfImage = this.image = image;
 		this.firstInstanceOfX = this.elementX = elementX;

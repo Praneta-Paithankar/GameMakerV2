@@ -5,7 +5,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import java.lang.reflect.InvocationTargetException;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -15,6 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+
+import org.apache.log4j.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -37,9 +48,11 @@ import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
+import jdk.incubator.http.internal.common.Log;
+
 public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener{
-	protected static Logger log = Logger.getLogger(GameDriver.class);	
-	private List<SpriteElement> sprites  ;
+	protected static Logger log = Logger.getLogger(GameDriver.class);
+	private ArrayList<SpriteElement> sprites  ;
 	private Map<String, List<ActionLink>> eventMap;
 	private GUI gui;
 	private BreakoutTimer timer;
@@ -87,7 +100,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		return sprites;
 	}
 
-	public void setSprites(List<SpriteElement> sprites) {
+	public void setSprites(ArrayList<SpriteElement> sprites) {
 		this.sprites = sprites;
 	}
 
@@ -97,6 +110,58 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 
 	public void setEventMap(Map<String, List<ActionLink>> eventMap) {
 		this.eventMap = eventMap;
+	}
+	
+	public void save() {
+		FileOutputStream fileOut;
+		try {
+			String fileName = gui.showSaveDialog();
+			fileOut = new FileOutputStream(fileName);
+			ObjectOutputStream op = new ObjectOutputStream(fileOut);
+			
+			op.writeObject(eventMap);
+			op.writeObject(gameEndSet);
+			op.writeObject(sprites);
+
+			//gui.getBoardPanel().setElements(sprites);
+			op.close();
+			fileOut.close();
+		} catch (FileNotFoundException e) {
+			log.error(e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+		
+	}
+	
+	public void load() {
+		
+		FileInputStream fileIn;
+		try {
+			String fileName = gui.showOpenDialog();
+			fileIn = new FileInputStream(fileName);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			
+			sprites.clear();
+			eventMap.clear();
+			gameEndSet.clear();
+			
+			eventMap.putAll((Map<String, List<ActionLink>>) in.readObject());
+			gameEndSet.addAll((HashSet<SpriteElement>)in.readObject());
+			setSprites((ArrayList<SpriteElement>)in.readObject());
+			gui.getBoardPanel().setElements(sprites);
+			gui.getBoardPanel().revalidate();
+			this.gui.paintView();
+			
+			in.close();
+			fileIn.close();
+		} catch (FileNotFoundException e) {
+			log.error(e.getMessage());
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		} catch (ClassNotFoundException e) {
+			log.error(e.getMessage());
+		}
 	}
 
 	public void InitPlay() {
@@ -408,11 +473,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		double tan = (startY- heightY)/(startX-heightX);
 		double Height = startY-heightY;
 		double Range = heightX - startX;
-		System.out.println("Height is "+ Height);
 		double gravity = Constants.PROJECTILE_GRAVITY;
 		double deltaY = Math.sqrt((Height) * 2* gravity);
 		double deltaX = deltaY/tan;
-		System.out.println(Range);
 
 		sprite.setXVel((int) (-1* deltaX)); 
 		sprite.setYVel((int) deltaY);
@@ -436,6 +499,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		}
 		this.Projectileflag = true;
 		this.e = e;
+
 	}
 
 	@Override

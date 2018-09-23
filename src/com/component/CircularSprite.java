@@ -1,21 +1,22 @@
 package com.component;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.Serializable;
 
-public class CircularSprite extends SpriteElement {
+public class CircularSprite extends SpriteElement implements Serializable {
 
-	BufferedImage image;
+	String image;
 	int elementX; 
 	int elementY;
 	int radius;
 	
-	BufferedImage firstInstanceOfImage;
+	String firstInstanceOfImage;
 	int firstInstanceOfX;
 	int firstInstanceOfY;
 	int firstInstanceOfRadius;
 	
-	
-	public CircularSprite(BufferedImage image, int elementX, int elementY, int radius) {
+	public CircularSprite(String image, int elementX, int elementY, int radius) throws IOException {
 		super(image,elementX,elementY,radius);
 		this.firstInstanceOfImage = this.image = image;
 		this.firstInstanceOfX = this.elementX = elementX;

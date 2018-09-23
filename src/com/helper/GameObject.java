@@ -40,16 +40,14 @@ public class GameObject {
 	
 	
 	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne) throws IOException {
-		BufferedImage image = ImageIO.read(new File(imagePath));
 		int centerX = elementX+dimensionOne;
 		int centerY = elementY+dimensionOne;
-		CircularSprite sprite = new CircularSprite(image, centerX, centerY, dimensionOne);
+		CircularSprite sprite = new CircularSprite(imagePath, centerX, centerY, dimensionOne);
 		return sprite;
 	}
 	
 	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne, int dimensionTwo) throws IOException {
-		BufferedImage image = ImageIO.read(new File(imagePath));
-		RectangularSprite sprite = new RectangularSprite(image,elementX, elementY,dimensionOne, dimensionTwo);
+		RectangularSprite sprite = new RectangularSprite(imagePath,elementX, elementY,dimensionOne, dimensionTwo);
 		return sprite;
 	}
 		
