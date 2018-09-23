@@ -237,10 +237,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		double gravity = Constants.PROJECTILE_GRAVITY;
 		double deltaY = Math.sqrt((Height) * 2* gravity);
 		double deltaX = deltaY/tan;
-		
-		if(Range >=0) {sprite.setXVel((int) -deltaX);}
-		else {sprite.setXVel((int) deltaX);}
-		
+		System.out.println(Range);
+
+		sprite.setXVel((int) (-1* deltaX)); 
 		sprite.setYVel((int) deltaY);
 		
 	}
