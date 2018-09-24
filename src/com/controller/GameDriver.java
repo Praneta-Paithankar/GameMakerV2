@@ -181,7 +181,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		gui.paintView();
 	}
 
-	private void checkIfGameEnd() {
+	public void checkIfGameEnd() {
 		if (gameEndSet.isEmpty()) {
 			timer.removeObserver(this);
 			gui.paintView();
@@ -354,15 +354,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			replay();
 			gui.changeFocus();
 		}
-		
-//		}else if(commandText.equals("save")) {
-//			save();
-//			gui.changeFocus();
-//		}else if(commandText.equals("load")) {
-//			load();
-//			gui.changeFocus();
-//			gui.draw(null);;
-//		}
 		else if(commandText.equals("layout")) {
 			pause();
 			gui.modifyLayout();
@@ -372,6 +363,14 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		}
 	}
 	
+	public boolean isGamePaused() {
+		return isGamePaused;
+	}
+
+	public Deque<Command> getCommandQueue() {
+		return commandQueue;
+	}
+
 	public void replay() {
 		pause();
 		gameReset();
@@ -425,7 +424,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		}.start();
 	}
 
-	private void undoAction() {
+	public void undoAction() {
 
 		int count = 0;
 		while(count != Constants.TIMER_COUNT) {
