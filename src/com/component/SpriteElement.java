@@ -11,7 +11,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.infrastruture.Constants;
-import com.infrastruture.Element;
 
 public abstract class SpriteElement{
 

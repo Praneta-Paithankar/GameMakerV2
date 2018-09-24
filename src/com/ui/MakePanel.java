@@ -86,7 +86,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
             paddleImage = ImageIO.read(new File(Constants.PADDLE_IMAGE));
             paddleImage = resize(paddleImage, 80, 50);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
         	log.error(e.getMessage());
         }
 	}

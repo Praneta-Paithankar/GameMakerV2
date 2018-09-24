@@ -17,7 +17,6 @@ public class RectangularSprite extends SpriteElement{
 	int firstInstanceOfHeight;
 
 	public RectangularSprite(BufferedImage image, int elementX, int elementY, int width, int height) {
-		// TODO Auto-generated constructor stub
 		super(image,elementX,elementY,width,height);
 		this.firstInstanceOfImage = this.image = image;
 		this.firstInstanceOfX = this.elementX = elementX;
@@ -29,11 +28,6 @@ public class RectangularSprite extends SpriteElement{
 	
 	public void reset() {
 		super.reset();
-//		this.setElementX(firstInstanceOfX);
-//		this.setElementY(firstInstanceOfY);
-//		this.setWidth(firstInstanceOfWidth);
-//		this.setHeight(firstInstanceOfHeight);
-//		this.setImage(firstInstanceOfImage);
 	}
 	
 }

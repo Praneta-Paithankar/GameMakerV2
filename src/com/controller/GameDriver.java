@@ -3,12 +3,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayDeque;
-
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
@@ -20,6 +18,8 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
+
 import com.commands.BounceCommand;
 import com.commands.MacroCommand;
 import com.commands.MoveCommand;
@@ -29,7 +29,6 @@ import com.commands.TimerCommand;
 import com.component.Clock;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
-import com.helper.GameObject;
 import com.helper.SpriteCollision;
 import com.infrastruture.Command;
 import com.infrastruture.Constants;
@@ -39,6 +38,7 @@ import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
 public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener{
+	protected static Logger log = Logger.getLogger(GameDriver.class);	
 	private List<SpriteElement> sprites  ;
 	private Map<String, List<ActionLink>> eventMap;
 	private GUI gui;
@@ -53,6 +53,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 
 
 	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock){
+		 log.info("Initializing GameDriver");
 		this.sprites = new ArrayList<SpriteElement>();
 		this.eventMap = new HashMap<>();
 		this.gui = gui;
@@ -342,21 +343,24 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 									currentThread();
 									Thread.sleep(5);
 								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									// log.error(e.getMessage());
+									 log.error(e.getMessage());
+									 Thread.currentThread().interrupt();
+									  throw new RuntimeException(e);
 								}
 							}
 						});
 					} catch (InvocationTargetException | InterruptedException e) {
-						// TODO Auto-generated catch block
-						// log.error(e.getMessage());
+						 log.error(e.getMessage());
+						 Thread.currentThread().interrupt();
+						  throw new RuntimeException(e);
 					} 
 				}
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					 log.error(e.getMessage());
+					 Thread.currentThread().interrupt();
+					  throw new RuntimeException(e);
 				}
 			}
 		}.start();
@@ -432,14 +436,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		}
 		this.Projectileflag = true;
 		this.e = e;
-		
-		
-//		ProjectileCommmand projectileCommand = 
-		System.out.println("x::" + e.getX());
-		System.out.println("y :: " + e.getY());
-		/************************change this******************************
-		ProjectileCommand command = new ProjectileCommand(null, noOfBricks);
-		/************************change this******************************/
 	}
 
 	@Override

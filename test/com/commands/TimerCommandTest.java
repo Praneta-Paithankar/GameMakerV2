@@ -1,6 +1,5 @@
 package com.commands;
 
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;

@@ -16,7 +16,6 @@ public class CircularSprite extends SpriteElement {
 	
 	
 	public CircularSprite(BufferedImage image, int elementX, int elementY, int radius) {
-		// TODO Auto-generated constructor stub
 		super(image,elementX,elementY,radius);
 		this.firstInstanceOfImage = this.image = image;
 		this.firstInstanceOfX = this.elementX = elementX;
@@ -26,10 +25,6 @@ public class CircularSprite extends SpriteElement {
 	
 	public void reset() {
 		super.reset();
-//		this.setElementX(firstInstanceOfX);
-//		this.setElementY(firstInstanceOfY);
-//		this.setRadius(radius);
-//		this.setImage(firstInstanceOfImage);
 	}
 
 }
