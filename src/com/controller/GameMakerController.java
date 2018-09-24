@@ -79,8 +79,8 @@ public class GameMakerController implements  ActionListener {
 			gui.getMakePanel().getCheckBox().get(i).setVisible(true);
 		}
 		gui.getMakePanel().createImage();
-		gui.getMakePanel().createSaveButton();
-		gui.getMakePanel().createLoadButton();
+		//gui.getMakePanel().createSaveButton();
+		//gui.getMakePanel().createLoadButton();
 	}
 	
 	public void save() {

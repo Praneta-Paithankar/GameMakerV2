@@ -58,8 +58,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		this.controller = controller;
 		this.add(createMakeButton());
 		this.add(createPlayButton());
-		//createSaveButton();
-		//createLoadButton();
+		createSaveButton();
+		createLoadButton();
 	}
 	
 	public void createCheckbox() {
