@@ -48,7 +48,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		//createButtons();
 		sprites = new ArrayList<>(Constants.spriteTypes);
 		spriteRequestMap = new HashMap<>();
-		createImage();
+		//createImage();
 		createCheckbox();
 		//createBallActions();
 		//createBallEvents();
@@ -58,9 +58,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		this.controller = controller;
 		this.add(createMakeButton());
 		this.add(createPlayButton());
-		createDoneButton();
-		createSaveButton();
-		createLoadButton();
+		//createSaveButton();
+		//createLoadButton();
 	}
 	
 	public void createCheckbox() {
@@ -72,6 +71,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 			c.setFont(f);
 			c.addItemListener(this);
 			c.setFocusable(false);
+			c.setVisible(false);
 			checkBox.add(c);
 			this.add(c);
 			y += 150;
@@ -105,16 +105,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		play.addActionListener(controller);
 		play.setFocusable(false);
 		return play;
-	}
-	
-	public void createDoneButton() {
-		JButton doneButton = new JButton("Done");
-		doneButton.setBounds(350, 10, 100, 50);
-		doneButton.setActionCommand("done");
-		doneButton.addActionListener(controller);
-		doneButton.setVisible(true);
-		doneButton.setFocusable(false);
-		this.add(doneButton);
 	}
 	
 	public void createSaveButton() {
@@ -272,6 +262,17 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	public void setSpriteRequestMap(HashMap<String, CreateSpriteRequest> spriteRequestMap) {
 		this.spriteRequestMap = spriteRequestMap;
 	}
+
+	public List<JCheckBox> getCheckBox() {
+		return checkBox;
+	}
+
+	public void setCheckBox(List<JCheckBox> checkBox) {
+		this.checkBox = checkBox;
+	}
+	
+	
+	
 
 }
 
