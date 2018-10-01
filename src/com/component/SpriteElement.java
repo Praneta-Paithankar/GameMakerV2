@@ -43,6 +43,8 @@ public abstract class SpriteElement implements Serializable{
 		this.image = image;
 		this.width = radius *2;
 		this.height = radius *2;
+//		this.XVel = 0;
+//		this.YVel = 5;
 		this.XVel = Constants.X_Velocity;
 		this.YVel = Constants.Y_Velocity;
 		this.imageIcon = ImageIO.read(new File(image));

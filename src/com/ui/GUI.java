@@ -56,6 +56,7 @@ public class GUI extends JFrame implements Element{
 		toggleLayout = false;
 		initializeUI();
 		elementList = new ArrayList<>();
+//		addComponent(mainPanel);
 	}
 
 	private void initializeUI() {

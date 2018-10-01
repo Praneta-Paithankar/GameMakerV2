@@ -20,7 +20,8 @@ public class GameObject {
 	int elementX; // String denoting X coordinate of Sprite obtained from MakerEngine
 	int elementY; // String denoting Y coordinate of Sprite obtained from MakerEngine
 	
-	public SpriteElement spriteDecoder(String element, int elementX, int elementY) throws IOException {
+//	TODO: Add image path as parameter to constructor
+	public SpriteElement spriteDecoder(String element, int elementX, int elementY) throws IOException { 
 		this.elementX = elementX;
 		this.elementY = elementY;
 		switch(element) {

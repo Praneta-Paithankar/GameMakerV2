@@ -55,11 +55,15 @@ public class GameMakerController implements  ActionListener {
 				if (entry.getKey().equals("GameEnd")) {
 					gameDriver.addGameEndSprite(newSprite);
 				}
-				else if (eventMap.containsKey(entry.getKey())) {
+				else if (eventMap.containsKey(entry.getKey())) {					
 					eventMap.get(entry.getKey()).add(new ActionLink(newSprite, entry.getValue()));
-				} else {
+				}
+				else {
 					List<ActionLink> listAction = new ArrayList<>();
 					listAction.add(new ActionLink(newSprite, entry.getValue()));
+					
+//					eventMap.getOrDefault(entry.getKey(), new ArrayList<>()).add(new ActionLink(newSprite, entry.getValue()));
+
 					eventMap.put(entry.getKey(), listAction);
 				}
 			}
