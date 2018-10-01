@@ -6,14 +6,14 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+//import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import com.component.SpriteElement;
 import com.infrastruture.Constants;
 import com.infrastruture.Direction;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class SpriteCollisionTest {
 	
 	private SpriteCollision spriteCollision;
