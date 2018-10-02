@@ -6,14 +6,16 @@ import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+//import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import com.component.CircularSprite;
+import com.component.RectangularSprite;
 import com.component.SpriteElement;
 import com.infrastruture.Constants;
 import com.infrastruture.Direction;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class SpriteCollisionTest {
 	
 	private SpriteCollision spriteCollision;
@@ -23,8 +25,8 @@ public class SpriteCollisionTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		spriteCollision= new SpriteCollision();
-		sprite = mock(SpriteElement.class);
-		destinationSprite = mock(SpriteElement.class);
+		sprite = mock(CircularSprite.class);
+		destinationSprite = mock(CircularSprite.class);
 	}
 	
 	@Test
@@ -32,7 +34,7 @@ public class SpriteCollisionTest {
 		
 		when(sprite.getElementX()).thenReturn(0);
 		when(sprite.getElementY()).thenReturn(20);
-		
+//		when(sprite.get)
 		Direction result = spriteCollision.checkCollisionOfSprites(sprite);
 		assertEquals(Direction.X, result);
 	}
@@ -70,15 +72,15 @@ public class SpriteCollisionTest {
 	@Test 
 	void checkCollisionWithRectangularElementShouldReturnXIfCollisionOccursWithRectangularElement() {
 		when(sprite.getElementX()).thenReturn(50);
-		when(sprite.getWidth()).thenReturn(5);
+		when(sprite.getImageWidth()).thenReturn(5);
 		when(sprite.getElementY()).thenReturn(20);
-		when(sprite.getHeight()).thenReturn(5);
+		when(sprite.getImageHeight()).thenReturn(5);
 		when(destinationSprite.getElementX()).thenReturn(50);
-		when(destinationSprite.getWidth()).thenReturn(10);
+		when(destinationSprite.getImageWidth()).thenReturn(10);
 		when(destinationSprite.getElementY()).thenReturn(25);
-		when(destinationSprite.getHeight()).thenReturn(10);
+		when(destinationSprite.getImageHeight()).thenReturn(10);
 		
-		Direction result = spriteCollision.checkCollisionBetweenTwoRectangles(sprite, destinationSprite);
+		Direction result = spriteCollision.checkCollisionBetweenTwoRectangles((RectangularSprite)sprite, (RectangularSprite)destinationSprite);
 		assertEquals(Direction.X, result);
 		
 	
