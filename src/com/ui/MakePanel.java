@@ -78,17 +78,23 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		}
 	}
 	
-	public void createImage() {
-		try {
-            ballImage = ImageIO.read(new File(Constants.BALL_IMAGE));
-            ballImage = resize(ballImage, 80, 70);
-            brickImage = ImageIO.read(new File(Constants.BRICK_IMAGE));
-            brickImage = resize(brickImage, 70, 70);
-            paddleImage = ImageIO.read(new File(Constants.PADDLE_IMAGE));
-            paddleImage = resize(paddleImage, 80, 50);
-        } catch (IOException e) {
-        	log.error(e.getMessage());
-        }
+//	public void createImage() {
+//		try {
+//            ballImage = ImageIO.read(new File(Constants.BALL_IMAGE));
+//            ballImage = resize(ballImage, 80, 70);
+//            brickImage = ImageIO.read(new File(Constants.BRICK_IMAGE));
+//            brickImage = resize(brickImage, 70, 70);
+//            paddleImage = ImageIO.read(new File(Constants.PADDLE_IMAGE));
+//            paddleImage = resize(paddleImage, 80, 50);
+//        } catch (IOException e) {
+//        	log.error(e.getMessage());
+//        }
+//	}
+//	
+	public void createSpriteButtons()
+	{
+		createCircleButton();
+		createRectangleButton();
 	}
 	
 	public PanelButton createMakeButton() {
@@ -125,6 +131,28 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		loadButton.setVisible(true);
 		loadButton.setFocusable(false);
 		this.add(loadButton);
+	}
+	
+	public void createCircleButton()
+	{
+		JButton circleButton = new JButton("Circle");
+		circleButton.setBounds(200, 650, 100, 50);
+		circleButton.setActionCommand("Circle");
+		circleButton.addActionListener(controller);
+		circleButton.setVisible(true);
+		circleButton.setFocusable(false);
+		this.add(circleButton);
+	}
+	
+	public void createRectangleButton()
+	{
+		JButton createRectangle = new JButton("Rectangle");
+		createRectangle.setBounds(400, 650, 100, 50);
+		createRectangle.setActionCommand("Rectangle");
+		createRectangle.addActionListener(controller);
+		createRectangle.setVisible(true);
+		createRectangle.setFocusable(false);
+		this.add(createRectangle);
 	}
 	
 	@Override
