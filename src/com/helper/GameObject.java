@@ -40,15 +40,15 @@ public class GameObject {
 	}
 	
 	
-	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne) throws IOException {
-		int centerX = elementX+dimensionOne;
-		int centerY = elementY+dimensionOne;
-		CircularSprite sprite = new CircularSprite(imagePath, centerX, centerY, dimensionOne);
+	public SpriteElement spriteCreator(String type, String imagePath, int radius) throws IOException {
+		int centerX = elementX+radius;
+		int centerY = elementY+radius;
+		CircularSprite sprite = new CircularSprite(imagePath, centerX, centerY,radius*2,radius*2 ,Constants.X_Velocity,Constants.Y_Velocity,radius);
 		return sprite;
 	}
 	
 	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne, int dimensionTwo) throws IOException {
-		RectangularSprite sprite = new RectangularSprite(imagePath,elementX, elementY,dimensionOne, dimensionTwo);
+		RectangularSprite sprite = new RectangularSprite(imagePath,elementX, elementY,dimensionOne, dimensionTwo,0,0);
 		return sprite;
 	}
 		

@@ -2,6 +2,8 @@ package com.helper;
 
 import org.apache.log4j.Logger;
 
+import com.component.CircularSprite;
+import com.component.RectangularSprite;
 import com.component.SpriteElement;
 import com.infrastruture.Constants;
 import com.infrastruture.Direction;
@@ -11,9 +13,9 @@ protected static Logger log = Logger.getLogger(SpriteCollision.class);
 	
 	public Direction checkCollisionOfSprites(SpriteElement sourceSprite) {
 		if(sourceSprite.getClass().toString().contains("CircularSprite")) {
-			return checkCollisionBetweenBallAndWall(sourceSprite);
+			return checkCollisionBetweenBallAndWall((CircularSprite) sourceSprite);
 		}else {
-			return checkCollisionBetweenRectangleAndWall(sourceSprite);
+			return checkCollisionBetweenRectangleAndWall((RectangularSprite) sourceSprite);
 		}
 	}
 	
@@ -21,22 +23,22 @@ protected static Logger log = Logger.getLogger(SpriteCollision.class);
 		if (sourceSprite.isVisible() && destinationSprite.isVisible()) {
 		//System.out.println(sourceSprite.getClass().toString());
 			if(sourceSprite.getClass().toString().contains("CircularSprite") && destinationSprite.getClass().toString().contains("CircularSprite")) {
-				return checkCollisionBetweenTwoCircles(sourceSprite, destinationSprite);
+				return checkCollisionBetweenTwoCircles((CircularSprite)sourceSprite, (CircularSprite)destinationSprite);
 			}
 			else if(sourceSprite.getClass().toString().contains("RectangularSprite") && destinationSprite.getClass().toString().contains("RectangularSprite")) {
-				return checkCollisionBetweenTwoRectangles(sourceSprite, destinationSprite);
+				return checkCollisionBetweenTwoRectangles((RectangularSprite) sourceSprite, (RectangularSprite) destinationSprite);
 			}
 			else if(sourceSprite.getClass().toString().contains("CircularSprite") && destinationSprite.getClass().toString().contains("RectangularSprite")) {
-				return checkCollisionBetweenCircleAndRectangle(sourceSprite, destinationSprite);
+				return checkCollisionBetweenCircleAndRectangle((CircularSprite) sourceSprite, (RectangularSprite) destinationSprite);
 			}
 			else if(sourceSprite.getClass().toString().contains("RectangularSprite") && destinationSprite.getClass().toString().contains("CircularSprite")) {
-				return checkCollisionBetweenCircleAndRectangle(sourceSprite, destinationSprite);
+				return checkCollisionBetweenCircleAndRectangle((RectangularSprite)sourceSprite, (CircularSprite) destinationSprite);
 			}
 		}
 		return Direction.NONE;
 	}
 	
-	public  Direction checkCollisionBetweenBallAndWall(SpriteElement sprite) {
+	public  Direction checkCollisionBetweenBallAndWall(CircularSprite sprite) {
 		//Collision between ball and wall
 		int spriteX = sprite.getElementX();
 		int spriteY = sprite.getElementY();
@@ -70,7 +72,7 @@ protected static Logger log = Logger.getLogger(SpriteCollision.class);
 		return Direction.NONE;
 	}
 	
-	public Direction checkCollisionBetweenRectangleAndWall(SpriteElement sprite) {
+	public Direction checkCollisionBetweenRectangleAndWall(RectangularSprite sprite) {
 		int topLeftX = sprite.getElementX();
 		int topLeftY = sprite.getElementY();
 		
@@ -94,7 +96,7 @@ protected static Logger log = Logger.getLogger(SpriteCollision.class);
 		return Direction.NONE;
 	}
 	
-	public Direction checkCollisionBetweenTwoRectangles(SpriteElement sourceSprite, SpriteElement destinationSprite){
+	public Direction checkCollisionBetweenTwoRectangles(RectangularSprite sourceSprite, RectangularSprite destinationSprite){
 		
 		// If one rectangle is on left side of other 
 		if (sourceSprite.getElementX() > (destinationSprite.getElementX()+destinationSprite.getWidth()) || 
@@ -110,7 +112,7 @@ protected static Logger log = Logger.getLogger(SpriteCollision.class);
 		
 	}
 	
-	public Direction checkCollisionBetweenTwoCircles(SpriteElement sourceSprite,SpriteElement destinationSprite) {
+	public Direction checkCollisionBetweenTwoCircles(CircularSprite sourceSprite,CircularSprite destinationSprite) {
 		
 		int sourceCircleX = sourceSprite.getElementX();
 		int sourceCircleY = sourceSprite.getElementY();
@@ -131,16 +133,16 @@ protected static Logger log = Logger.getLogger(SpriteCollision.class);
 
 	public Direction checkCollisionBetweenCircleAndRectangle(SpriteElement sourceSprite,SpriteElement destinationSprite)
 	{
-		SpriteElement circleSprite;
-		SpriteElement rectangleSprite;
+		CircularSprite circleSprite;
+		RectangularSprite rectangleSprite;
 		
 		if(sourceSprite.getClass().toString().contains("Circular")) {
 			
-			circleSprite = sourceSprite;
-			rectangleSprite = destinationSprite;
+			circleSprite = (CircularSprite) sourceSprite;
+			rectangleSprite = (RectangularSprite) destinationSprite;
 		}else {
-			circleSprite = destinationSprite;
-			rectangleSprite = sourceSprite;
+			circleSprite = (CircularSprite) destinationSprite;
+			rectangleSprite = (RectangularSprite) sourceSprite;
 		}
 		
 		int circleX = circleSprite.getElementX();
