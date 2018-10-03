@@ -421,6 +421,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			//newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
 			x.getText();
 			y.getText();
+			
+			
 			xVel.getText();
 			yVel.getText();
 			getEventActionMap();// to get event and action mapping
