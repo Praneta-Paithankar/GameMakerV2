@@ -14,13 +14,13 @@ public class RectangularSprite extends SpriteElement implements Serializable{
 	private int firstInstanceOfWidth;
 	private int firstInstanceOfHeight;
 
-	public RectangularSprite(String image, int elementX, int elementY, int width, int height,int velX, int velY) throws IOException {
-		super(image,elementX,elementY,width,height,velX,velY);
+	public RectangularSprite(String image, int elementX, int elementY, int width, int height,int velX, int velY, String spriteId, String category,Color color) throws IOException {
+		super(image,elementX,elementY,width,height,velX,velY, spriteId, category,color);
 		this.firstInstanceOfWidth = this.width = width;
 		this.firstInstanceOfHeight = this.height = height;
 	}
 	public RectangularSprite(RectangularSprite rectangularSprite) throws IOException {
-		this(rectangularSprite.getImagePath(),rectangularSprite.getElementX(),rectangularSprite.getElementY(),rectangularSprite.getWidth(),rectangularSprite.getHeight(),rectangularSprite.getXVel(),rectangularSprite.getYVel());
+		this(rectangularSprite.getImagePath(),rectangularSprite.getElementX(),rectangularSprite.getElementY(),rectangularSprite.getWidth(),rectangularSprite.getHeight(),rectangularSprite.getXVel(),rectangularSprite.getYVel(),rectangularSprite.getSpriteId(),rectangularSprite.getCategory(),rectangularSprite.getColor());
 	}
 	
 	public void reset() {

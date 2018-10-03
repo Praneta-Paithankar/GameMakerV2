@@ -3,10 +3,12 @@
  */
 package com.component;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +31,10 @@ public abstract class SpriteElement implements Serializable{
 	private int elementY;
 	private boolean visible;
 	
+	private String spriteId;
+	private String category;
+	private Color color;
+	
 	private int firstInstanceOfX;
 	private int firstInstanceOfY;
 	private int firstInstanceOfVelX;
@@ -40,7 +46,7 @@ public abstract class SpriteElement implements Serializable{
 	private int imageType;
 	private boolean isShooter;
 	
-	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY) throws IOException {
+	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color) throws IOException {
 		this.imagePath = image;
 		this.imageIcon = ImageIO.read(new File(image));
 		this.imageWidth = width;
@@ -51,11 +57,13 @@ public abstract class SpriteElement implements Serializable{
 		this.visible = true;
 		this.firstInstanceOfX = this.elementX = elementX;
 		this.firstInstanceOfY = this.elementY = elementY;
+		this.spriteId = spriteId;
+		this.category = category;
+		this.color = color;
 
 	}
-
 	public SpriteElement(SpriteElement element) throws IOException {
-		this(element.imagePath,element.elementX,element.elementY,element.imageWidth,element.imageHeight, element.XVel, element.YVel);
+		this(element.imagePath,element.elementX,element.elementY,element.imageWidth,element.imageHeight, element.XVel, element.YVel, element.spriteId,element.category,element.color);
 	}
 	public BufferedImage resize(BufferedImage img, int width, int height) {
 		Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
@@ -234,6 +242,24 @@ public abstract class SpriteElement implements Serializable{
 
 	public void setImageHeight(int imageHeight) {
 		this.imageHeight = imageHeight;
+	}
+	public String getSpriteId() {
+		return spriteId;
+	}
+	public void setSpriteId(String spriteId) {
+		this.spriteId = spriteId;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 }
