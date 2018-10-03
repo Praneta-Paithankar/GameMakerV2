@@ -1,5 +1,6 @@
 package com.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -53,6 +54,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private List<JCheckBox> checkBox = new ArrayList<>();
 	private CreateSpriteRequest newSprite;
 	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
+	private HashMap<String,String> eventActionMap;
 	
 	private JPanel subOptionPanel1;
 	private GridLayout gbLayout;
@@ -85,7 +87,49 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private JLabel notApplicablelabel;
 	private JPanel mainOptionPanel;
 	private JPanel subOptionPanel2;
+	private JLabel actionlabel;
+	private JButton actionsButton;
+	private JLabel collisionslabel;
+	private JButton collisionsButton;
+	private JLabel actionDropDownlabel;
+	private JLabel eventDropDownlabel;
+	private String imagePath;
+	private Color spriteColor;
+	private HashMap<String,String> collidables;
+	
+	public String getImagePath() {
+		return imagePath;
+	}
 
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	public Color getSpriteColor() {
+		return spriteColor;
+	}
+
+	public void setSpriteColor(Color spriteColor) {
+		this.spriteColor = spriteColor;
+	}
+
+	public HashMap<String, String> getCollidables() {
+		return collidables;
+	}
+
+	public void setCollidables(HashMap<String, String> collidables) {
+		this.collidables = collidables;
+	}
+
+	public HashMap<String, String> getEventActionMap() {
+		return eventActionMap;
+	}
+
+	public void setEventActionMap(HashMap<String, String> eventActionMap) {
+		this.eventActionMap = eventActionMap;
+	}
+
+	
 	public MakePanel() {
 		setLayoutBehavior(new NullLayoutBehavior());
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
@@ -303,6 +347,21 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	shooterButton = new JButton("Select Shooter");
     	subOptionPanel1.add(shooterButton);
     	
+    	actionlabel = new JLabel("Actions :");
+    	subOptionPanel1.add(actionlabel);
+    	
+    	actionsButton = new JButton("Actions");
+    	subOptionPanel1.add(actionsButton);
+    	actionsButton.addActionListener(this);
+    	
+    	collisionslabel = new JLabel("Collisions :");
+    	subOptionPanel1.add(collisionslabel);
+    	
+    	
+    	collisionsButton = new JButton("Collisions");
+    	subOptionPanel1.add(collisionsButton);
+    	collisionsButton.addActionListener(this);
+    	
     	gameWinRadioButton = new JRadioButton("Game Win");
     	gameLooseRadioButton=new JRadioButton("Game Loose");
     	notApplicableRadioButton=new JRadioButton("Not Applicable");
@@ -312,29 +371,36 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	group.add(gameLooseRadioButton);
     	group.add(notApplicableRadioButton);
     	
-//    	gameWinlabel = new JLabel("GameWin :");
-//    	subOptionPanel1.add(gameWinlabel);
-    	
     	subOptionPanel2.add(gameWinRadioButton);
-    	
-//    	gameLooselabel = new JLabel("GameLoose :");
-//    	subOptionPanel1.add(gameLooselabel);
-    	
     	subOptionPanel2.add(gameLooseRadioButton);
-    	
-//    	notApplicablelabel = new JLabel("notApplicable :");
-//    	subOptionPanel1.add(notApplicablelabel);
-    	
     	subOptionPanel2.add(notApplicableRadioButton);
-    	
-    	//subOptionPanel1.add(subOptionPanel2);
-    	
+    
     	mainOptionPanel.add(subOptionPanel1);
     	mainOptionPanel.add(subOptionPanel2);
+    	
+    	
     	JOptionPane pane = new JOptionPane();
-
     	int option = pane.showConfirmDialog(null, mainOptionPanel, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
+    	
+    	getFormData(option);
 	}
+	private void getFormData(int option) {
+		// TODO Auto-generated method stub
+		if(option == JOptionPane.YES_OPTION) {
+			//newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
+			x.getText();
+			y.getText();
+			xVel.getText();
+			yVel.getText();
+			getEventActionMap();// to get event and action mapping
+			
+			
+			
+		}
+		
+	}
+
+
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
@@ -371,10 +437,49 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		this.checkBox = checkBox;
 	}
 
+	
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		createOptionPopUp();
+		switch(e.getActionCommand()) {
+		case "Actions" :eventActionMap=new HashMap<>(); 
+						createActionPopUp();
+						break;
+		default : log.error("switch hitting the default case of makepanel actionlistner");
+						break;
+		}
+		System.out.println(e.getActionCommand());
+		//createOptionPopUp();
+		
+	}
+
+
+	private void createActionPopUp() {
+		// TODO Auto-generated method stub
+		
+		JOptionPane subActionpane = new JOptionPane();
+		subActionpane.setLayout(new BoxLayout(mainOptionPanel,BoxLayout.PAGE_AXIS));
+		
+		actionDropDownlabel = new JLabel("Actions :");
+    	
+		JComboBox<String> actionDropDownList = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
+		
+		eventDropDownlabel = new JLabel("Actions :");
+    	
+		JComboBox<String> eventDropDownList = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
+		
+		actionDropDownList.setVisible(true);
+		Object[] message = {  
+				eventDropDownlabel, eventDropDownList,
+			    actionDropDownlabel, actionDropDownList
+			};
+    	
+		int option = subActionpane.showConfirmDialog(null, message, "Event Action Mapping", subActionpane.OK_CANCEL_OPTION);
+		
+		if(option== JOptionPane.OK_OPTION) {
+			eventActionMap.put(actionDropDownList.getSelectedItem().toString(), eventDropDownList.getSelectedItem().toString());
+		}	
 		
 	}
 	
