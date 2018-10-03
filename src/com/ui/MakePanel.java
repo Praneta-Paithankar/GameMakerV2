@@ -39,6 +39,7 @@ import javax.swing.UIManager;
 import org.apache.log4j.Logger;
 
 import com.behavior.NullLayoutBehavior;
+import com.component.SpriteElement;
 import com.controller.GameMakerController;
 import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
@@ -96,6 +97,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private String imagePath;
 	private Color spriteColor;
 	private HashMap<String,String> collidables;
+	
+	private SpriteElement spriteElement;
 	
 	public String getImagePath() {
 		return imagePath;
@@ -422,7 +425,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			yVel.getText();
 			getEventActionMap();// to get event and action mapping
 			
-			
+//			spriteElement = new SpriteElement("", x, y,  )
 			
 		}
 		
@@ -509,6 +512,14 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			eventActionMap.put(actionDropDownList.getSelectedItem().toString(), eventDropDownList.getSelectedItem().toString());
 		}	
 		
+	}
+
+	public SpriteElement getSpriteElement() {
+		return spriteElement;
+	}
+
+	public void setSpriteElement(SpriteElement spriteElement) {
+		this.spriteElement = spriteElement;
 	}
 	
 	

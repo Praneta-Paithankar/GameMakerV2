@@ -116,6 +116,7 @@ public class GameMakerController implements  ActionListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+
 		// TODO Auto-generated method stub
 		SpriteElement spriteElement = null;
 		SpriteElement gamePanelSelected = gui.getBoardPanel().getSpriteElement();
@@ -142,6 +143,7 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			
 			spriteElement.setElementX(e.getX());
 			spriteElement.setElementY(e.getY());
+			System.out.println("Mouse clicked on = " + spriteElement.getElementX() + " " + spriteElement.getElementY());
 			
 			gui.getBoardPanel().addComponent(spriteElement);
 			
