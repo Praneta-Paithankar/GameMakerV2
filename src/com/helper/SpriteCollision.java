@@ -11,17 +11,71 @@ import com.infrastruture.Direction;
 public class SpriteCollision {
 protected static Logger log = Logger.getLogger(SpriteCollision.class);
 	
-	public Direction checkCollisionOfSprites(SpriteElement sourceSprite) {
-		if(sourceSprite.getClass().toString().contains("CircularSprite")) {
-			return checkCollisionBetweenBallAndWall((CircularSprite) sourceSprite);
-		}else {
-			return checkCollisionBetweenRectangleAndWall((RectangularSprite) sourceSprite);
+	public Direction checkCollisionOfSprites(SpriteElement c) {
+		if (c.getElementX() <= 0 || c.getElementX() + c.getImageWidth() >=  Constants.BOARD_PANEL_WIDTH) {
+			return Direction.X;
 		}
+		if (c.getElementY() <= 0 || c.getElementY() + c.getImageHeight() >= Constants.BOARD_PANEL_HEIGHT) {
+			return Direction.Y;
+		}
+		return Direction.NONE;
 	}
-	
-	public Direction checkCollisionOfSprites(SpriteElement sourceSprite,SpriteElement destinationSprite) {
+	public Direction checkCollisionOfSprites(SpriteElement c1,SpriteElement c2) {
+		Direction currentDirection = Direction.NONE;
+//		if (c1.intersects(c2) && (topCollision(c1, c2) || botCollision(c1, c2))) { // c1: top/bot c2: bot/top
+//			currentDirection = Direction.Y;
+//		} 
+//		if (c1.intersects(c2) && (rightCollision(c1, c2) ||  leftCollision(c1, c2))) { // c1: right/left c2: left/right
+//			currentDirection = currentDirection==Direction.NONE? Direction.X:Direction.X;
+//		}
+		if (c1.intersects(c2) && topCollision(c1, c2)) { // c1: top c2: bot
+			currentDirection =  Direction.Y;
+		} else if (c1.intersects(c2) && botCollision(c1, c2)) { // c1: bot c2: top
+			currentDirection = Direction.Y;
+		} else if (c1.intersects(c2) && rightCollision(c1, c2)) { // c1: right c2: left
+			currentDirection = Direction.X;
+		} else if (c1.intersects(c2) && leftCollision(c1, c2)) { // c1: left c2: right
+			currentDirection = Direction.X;
+		}
+		return currentDirection;
+	}
+
+	private boolean topCollision(SpriteElement c1, SpriteElement c2) {
+		int oneTop = c1.getElementY();
+		
+		int oneBot = c1.getElementY() + c1.getImageHeight();
+		int twoTop = c2.getElementY();
+		int twoBot = c2.getElementY() + c2.getImageHeight();
+
+		return (oneTop >= twoTop && oneTop <= twoBot);
+	}
+
+	private boolean rightCollision(SpriteElement c1, SpriteElement c2) {
+		int oneRight = c1.getElementX() + c1.getImageWidth();
+		int twoLeft = c2.getElementX();
+		int twoRight = c2.getElementX() + c2.getImageWidth();
+		return oneRight >= twoLeft && oneRight <= twoRight;
+	}
+
+	private boolean botCollision(SpriteElement c1, SpriteElement c2) {
+		int oneTop = c1.getElementY();
+		int oneBot = c1.getElementY() + c1.getImageHeight();
+		int twoTop = c2.getElementY();
+		int twoBot = c2.getElementY() + c2.getImageHeight();
+
+		return oneBot >= twoTop && oneBot <= twoBot;
+	}
+
+	private boolean leftCollision(SpriteElement c1, SpriteElement c2) {
+		int oneLeft = c1.getElementX();
+		int c2Left = c2.getElementX();
+		int c2Right = c2.getElementX() + c2.getImageWidth();
+
+		return oneLeft >= c2Left && oneLeft <= c2Right;
+	}
+
+	public Direction checkCollisionOfSprites2(SpriteElement sourceSprite,SpriteElement destinationSprite) {
 		if (sourceSprite.isVisible() && destinationSprite.isVisible()) {
-		//System.out.println(sourceSprite.getClass().toString());
 			if(sourceSprite.getClass().toString().contains("CircularSprite") && destinationSprite.getClass().toString().contains("CircularSprite")) {
 				return checkCollisionBetweenTwoCircles((CircularSprite)sourceSprite, (CircularSprite)destinationSprite);
 			}
@@ -128,7 +182,6 @@ protected static Logger log = Logger.getLogger(SpriteCollision.class);
 				return Direction.Y;
 		}
 		return Direction.NONE;
-		
 	}
 
 	public Direction checkCollisionBetweenCircleAndRectangle(SpriteElement sourceSprite,SpriteElement destinationSprite)
