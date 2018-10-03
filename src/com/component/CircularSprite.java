@@ -19,12 +19,12 @@ public class CircularSprite extends SpriteElement implements Serializable {
 	private int firstInstanceOfRadius;
 	
 	public CircularSprite(String image, int elementX, int elementY, int width, int height, int velX, int velY,
-			int radius) throws IOException {
-		super(image, elementX, elementY, radius*2, radius*2, velX, velY);
+			int radius, String spriteId, String category,Color color) throws IOException {
+		super(image, elementX, elementY, radius*2, radius*2, velX, velY, spriteId, category,color);
 		this.firstInstanceOfRadius = this.radius = radius;
 	}
 	public CircularSprite(CircularSprite circularSprite) throws IOException {
-		this(circularSprite.getImagePath(), circularSprite.getElementX(), circularSprite.getElementY(), circularSprite.getRadius()*2, circularSprite.getRadius()*2, circularSprite.getXVel(), circularSprite.getYVel(),circularSprite.getRadius());	
+		this(circularSprite.getImagePath(), circularSprite.getElementX(), circularSprite.getElementY(), circularSprite.getRadius()*2, circularSprite.getRadius()*2, circularSprite.getXVel(), circularSprite.getYVel(),circularSprite.getRadius(),circularSprite.getSpriteId(),circularSprite.getCategory(),circularSprite.getColor());	
 	}
 	public void draw(Graphics g) {
 		//logger.trace("Drawing a circle");

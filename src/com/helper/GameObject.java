@@ -1,5 +1,6 @@
 package com.helper;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -43,12 +44,12 @@ public class GameObject {
 	public SpriteElement spriteCreator(String type, String imagePath, int radius) throws IOException {
 		int centerX = elementX+radius;
 		int centerY = elementY+radius;
-		CircularSprite sprite = new CircularSprite(imagePath, centerX, centerY,radius*2,radius*2 ,Constants.X_Velocity,Constants.Y_Velocity,radius);
+		CircularSprite sprite = new CircularSprite(imagePath, centerX, centerY,radius*2,radius*2 ,Constants.X_Velocity,Constants.Y_Velocity,radius, "", "",Color.BLACK);
 		return sprite;
 	}
 	
 	public SpriteElement spriteCreator(String type, String imagePath, int dimensionOne, int dimensionTwo) throws IOException {
-		RectangularSprite sprite = new RectangularSprite(imagePath,elementX, elementY,dimensionOne, dimensionTwo,0,0);
+		RectangularSprite sprite = new RectangularSprite(imagePath,elementX, elementY,dimensionOne, dimensionTwo,0,0,"", "",Color.BLACK);
 		return sprite;
 	}
 		
