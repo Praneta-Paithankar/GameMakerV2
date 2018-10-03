@@ -1,9 +1,17 @@
 package com.ui;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
@@ -16,10 +24,15 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
@@ -31,7 +44,7 @@ import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
-public class MakePanel extends AbstractPanel implements Element, ItemListener{
+public class MakePanel extends AbstractPanel implements Element, ItemListener, ActionListener{
 	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private List<String> sprites;
 	private GameMakerController controller;
@@ -41,7 +54,82 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 	private List<JCheckBox> checkBox = new ArrayList<>();
 	private CreateSpriteRequest newSprite;
 	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
+	private HashMap<String,String> eventActionMap;
+	
+	private JPanel subOptionPanel1;
+	private GridLayout gbLayout;
+	private GridBagConstraints gbConstraints;
+	
+	private JTextField x;
+	private JLabel xlabel;
+	private JLabel ylabel;
+	private JTextField y;
+	private JLabel xVellabel;
+	private JTextField xVel;
+	private JLabel yVellabel;
+	private JTextField yVel;
+	private JLabel spriteId;
+	private JTextField spriteTextField;
+	private JLabel categoryId;
+	private JTextField categoryTextField;
+	private JLabel colorlabel;
+	private JButton colorButton;
+	private JButton imageButton;
+	private JLabel imagelabel;
+	private JLabel shooterlabel;
+	private JCheckBox shooterCheckbox;
+	private JButton shooterButton;
+	private JRadioButton gameWinRadioButton;
+	private JRadioButton gameLooseRadioButton;
+	private JRadioButton notApplicableRadioButton;
+	private JLabel gameWinlabel;
+	private JLabel gameLooselabel;
+	private JLabel notApplicablelabel;
+	private JPanel mainOptionPanel;
+	private JPanel subOptionPanel2;
+	private JLabel actionlabel;
+	private JButton actionsButton;
+	private JLabel collisionslabel;
+	private JButton collisionsButton;
+	private JLabel actionDropDownlabel;
+	private JLabel eventDropDownlabel;
+	private String imagePath;
+	private Color spriteColor;
+	private HashMap<String,String> collidables;
+	
+	public String getImagePath() {
+		return imagePath;
+	}
 
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	public Color getSpriteColor() {
+		return spriteColor;
+	}
+
+	public void setSpriteColor(Color spriteColor) {
+		this.spriteColor = spriteColor;
+	}
+
+	public HashMap<String, String> getCollidables() {
+		return collidables;
+	}
+
+	public void setCollidables(HashMap<String, String> collidables) {
+		this.collidables = collidables;
+	}
+
+	public HashMap<String, String> getEventActionMap() {
+		return eventActionMap;
+	}
+
+	public void setEventActionMap(HashMap<String, String> eventActionMap) {
+		this.eventActionMap = eventActionMap;
+	}
+
+	
 	public MakePanel() {
 		setLayoutBehavior(new NullLayoutBehavior());
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
@@ -214,62 +302,140 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 		
 	}
 
+	public GridBagConstraints setGridBagConstraints(int fill, int gridx, int gridy) {
+		gbConstraints= new GridBagConstraints();
+		gbConstraints.fill = fill;
+    	gbConstraints.gridx = gridx;
+    	gbConstraints.gridy = gridy;
+    	gbConstraints.insets= new Insets(5, 10 , 10, 10);
+		return gbConstraints;
+	}
+	
+	public void createOptionPopUp() {
+		mainOptionPanel= new JPanel();
+    	mainOptionPanel.setLayout(new BoxLayout(mainOptionPanel,BoxLayout.PAGE_AXIS));
+    	subOptionPanel1=new JPanel();
+    	subOptionPanel2=new JPanel();
+    	gbLayout=new GridLayout(0,2,10,10);
+    	subOptionPanel1.setLayout(gbLayout);
+    	
+    	spriteId = new JLabel("Sprite ID :");
+    	subOptionPanel1.add(spriteId);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 0));
+    	
+    	spriteTextField = new JTextField(10);
+    	subOptionPanel1.add(spriteTextField);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 0));
+    	
+    	categoryId = new JLabel("category :");
+    	subOptionPanel1.add(categoryId);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 0));
+    	
+    	categoryTextField = new JTextField(10);
+    	subOptionPanel1.add(categoryTextField);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 0));
+    	
+    	
+    	xlabel = new JLabel("X :");
+    	subOptionPanel1.add(xlabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 1));
+    	
+    	x = new JTextField(10);
+    	subOptionPanel1.add(x);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 1));
+    	
+    	ylabel = new JLabel("Y :");
+    	subOptionPanel1.add(ylabel);//,setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 2));
+    	
+    	y = new JTextField(10);
+    	subOptionPanel1.add(y);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 2));
+    	
+    	xVellabel = new JLabel("XVelocity :");
+    	subOptionPanel1.add(xVellabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 3));
+    	
+    	xVel = new JTextField(10);
+    	subOptionPanel1.add(xVel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 3));
+    	
+    	yVellabel = new JLabel("YVelocity :");
+    	subOptionPanel1.add(yVellabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 4));
+    	
+    	yVel = new JTextField(10);
+    	subOptionPanel1.add(yVel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 4));
+    	
+    	colorlabel = new JLabel("Color :");
+    	subOptionPanel1.add(colorlabel);
+    	
+    	colorButton = new JButton("Select Color");
+    	subOptionPanel1.add(colorButton);
+    	
+    	imagelabel = new JLabel("Image :");
+    	subOptionPanel1.add(imagelabel);
+    	
+    	imageButton = new JButton("Select Image");
+    	subOptionPanel1.add(imageButton);
+    	imageButton.addActionListener(this);
+    	
+    	shooterlabel = new JLabel("Shooter :");
+    	subOptionPanel1.add(shooterlabel);
+    	
+    	shooterButton = new JButton("Select Shooter");
+    	subOptionPanel1.add(shooterButton);
+    	
+    	actionlabel = new JLabel("Actions :");
+    	subOptionPanel1.add(actionlabel);
+    	
+    	actionsButton = new JButton("Actions");
+    	subOptionPanel1.add(actionsButton);
+    	actionsButton.addActionListener(this);
+    	
+    	collisionslabel = new JLabel("Collisions :");
+    	subOptionPanel1.add(collisionslabel);
+    	
+    	
+    	collisionsButton = new JButton("Collisions");
+    	subOptionPanel1.add(collisionsButton);
+    	collisionsButton.addActionListener(this);
+    	
+    	gameWinRadioButton = new JRadioButton("Game Win");
+    	gameLooseRadioButton=new JRadioButton("Game Loose");
+    	notApplicableRadioButton=new JRadioButton("Not Applicable");
+    	
+    	ButtonGroup group = new ButtonGroup();
+    	group.add(gameWinRadioButton);
+    	group.add(gameLooseRadioButton);
+    	group.add(notApplicableRadioButton);
+    	
+    	subOptionPanel2.add(gameWinRadioButton);
+    	subOptionPanel2.add(gameLooseRadioButton);
+    	subOptionPanel2.add(notApplicableRadioButton);
+    
+    	mainOptionPanel.add(subOptionPanel1);
+    	mainOptionPanel.add(subOptionPanel2);
+    	
+    	
+    	JOptionPane pane = new JOptionPane();
+    	int option = pane.showConfirmDialog(null, mainOptionPanel, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
+    	
+    	getFormData(option);
+	}
+	private void getFormData(int option) {
+		// TODO Auto-generated method stub
+		if(option == JOptionPane.YES_OPTION) {
+			//newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
+			x.getText();
+			y.getText();
+			xVel.getText();
+			yVel.getText();
+			getEventActionMap();// to get event and action mapping
+			
+			
+			
+		}
+		
+	}
+
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
 		int sel = e.getStateChange();
         if (sel == ItemEvent.SELECTED) {
-        	for (JCheckBox c: checkBox) {
-        		if (c==e.getSource()) {
-        			JTextField x = new JTextField();
-        			JTextField y = new JTextField();
-        			JComboBox<String> eventBox = new JComboBox<>(Constants.AVAILABLE_EVENTS);
-        			JComboBox<String> actionBox = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
-        			actionBox.setVisible(true);
-        			JOptionPane pane = new JOptionPane();
-        			Object[] message = {
-        			    "X Coordinate:", x,
-        			    "Y Coordinate:", y,
-        			    "Events:", eventBox,
-        			    "Actions:", actionBox
-        			};
-        			
-        			Object[] options = {"More Action", "Ok", "Exit"}; 
-        			UIManager.put("OptionPane.yesButtonText", "Save");
-        			UIManager.put("OptionPane.noButtonText", "More Event-Action");
-        			UIManager.put("OptionPane.cancelButtonText", "Cancel");
-        			int option = pane.showConfirmDialog(null, message, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
-        			if (option == JOptionPane.YES_OPTION || option == JOptionPane.NO_OPTION) {
-        				/*if(spriteRequestMap.containsKey(c.getText())) {
-        					newSprite = spriteRequestMap.get(c.getText());
-        				}
-        				else {*/
-        					newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
-        				//}
-        					newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
-        					//spriteRequestMap.put(c.getText(), newSprite);
-        			} 
-        			if (option == JOptionPane.NO_OPTION) {
-        				Object[] eventMessage = {
-                			    "Events:", eventBox,
-                			    "Actions:", actionBox
-                		};
-        				while (option == JOptionPane.NO_OPTION) {
-        					option = pane.showConfirmDialog(null, eventMessage, "Add event-action Details", pane.YES_NO_CANCEL_OPTION);
-        					if (option == JOptionPane.CANCEL_OPTION) {
-        						break;
-        					}
-        					newSprite.addEventAction(eventBox.getSelectedItem().toString(), actionBox.getSelectedItem().toString());
-        				}
-        			}
-        			
-        			if(option != JOptionPane.CANCEL_OPTION) {
-        	        	controller.done();
-        			}
-        		}
-        	}
-        	
+        	createOptionPopUp();
+        	//createOptionPopUp();
         } else {
         	
         }
@@ -297,6 +463,52 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener{
 
 	public void setCheckBox(List<JCheckBox> checkBox) {
 		this.checkBox = checkBox;
+	}
+
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		switch(e.getActionCommand()) {
+		case "Actions" :eventActionMap=new HashMap<>(); 
+						createActionPopUp();
+						break;
+		default : log.error("switch hitting the default case of makepanel actionlistner");
+						break;
+		}
+		System.out.println(e.getActionCommand());
+		//createOptionPopUp();
+		
+	}
+
+
+	private void createActionPopUp() {
+		// TODO Auto-generated method stub
+		
+		JOptionPane subActionpane = new JOptionPane();
+		subActionpane.setLayout(new BoxLayout(mainOptionPanel,BoxLayout.PAGE_AXIS));
+		
+		actionDropDownlabel = new JLabel("Actions :");
+    	
+		JComboBox<String> actionDropDownList = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
+		
+		eventDropDownlabel = new JLabel("Actions :");
+    	
+		JComboBox<String> eventDropDownList = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
+		
+		actionDropDownList.setVisible(true);
+		Object[] message = {  
+				eventDropDownlabel, eventDropDownList,
+			    actionDropDownlabel, actionDropDownList
+			};
+    	
+		int option = subActionpane.showConfirmDialog(null, message, "Event Action Mapping", subActionpane.OK_CANCEL_OPTION);
+		
+		if(option== JOptionPane.OK_OPTION) {
+			eventActionMap.put(actionDropDownList.getSelectedItem().toString(), eventDropDownList.getSelectedItem().toString());
+		}	
+		
 	}
 	
 	
