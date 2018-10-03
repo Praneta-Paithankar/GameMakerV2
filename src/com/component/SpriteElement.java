@@ -6,6 +6,7 @@ package com.component;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -99,6 +100,15 @@ public abstract class SpriteElement implements Serializable{
 		} else {
 			return new RectangularSprite((RectangularSprite)shootingObject);
 		}
+	}
+		
+	public boolean intersects(SpriteElement c) {
+
+		java.awt.Rectangle one = new java.awt.Rectangle(elementX ,elementY, imageWidth, imageHeight);
+		java.awt.Rectangle two = new java.awt.Rectangle(c.getElementX(), c.getElementY(), c.getImageWidth(), c.getImageHeight());
+
+		return one.intersects(two);
+
 	}
 	public int getImageType() {
 		return imageType;
