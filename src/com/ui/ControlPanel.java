@@ -38,7 +38,6 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	public void createReplay() {
 		PanelButton replayButton = new PanelButton("Replay", "replay", driver);
 		this.add(replayButton);
-
 	}
 	
 	public void createUndo() {
