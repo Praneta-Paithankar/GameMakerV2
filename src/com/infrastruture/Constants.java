@@ -67,4 +67,8 @@ public class Constants {
 	
 	public final static int PROJECTILE_GRAVITY = 1;
 	
+	public final static int GAME_WIN_COMPONENT=0;
+	public final static int GAME_LOSE_COMPONENT=1;
+	public final static int GAME_NOT_APPLICABLE_COMPONENT=2;
+	
 }

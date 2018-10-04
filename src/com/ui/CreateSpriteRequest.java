@@ -16,11 +16,11 @@ public class CreateSpriteRequest {
 	private String imagePath;
 	private int width;
 	private int height;
-	
+	private int gameEndDependency;
 	private Map<String, String> eventAction;
 	
 	public CreateSpriteRequest(String name, int x, int y, int velX, int velY, int width, int height, Color color, 
-								String imageFilePath, String spriteId, String category, Map<String, String> eventAction) {
+								String imageFilePath, String spriteId, String category, Map<String, String> eventAction, int gameEndDependency) {
 		this.elementName = name;
 		this.xlocation = x;
 		this.ylocation = y;
@@ -33,10 +33,18 @@ public class CreateSpriteRequest {
 		this.spriteId = spriteId;
 		this.category = category;
 		this.eventAction = eventAction;
-		
+		this.gameEndDependency=gameEndDependency;
 //		eventAction = new HashMap<>(); 
 	}
 	
+	public int getGameEndDependency() {
+		return gameEndDependency;
+	}
+
+	public void setGameEndDependency(int gameEndDependency) {
+		this.gameEndDependency = gameEndDependency;
+	}
+
 	public void addEventAction(String event, String action) {
 		eventAction.put(event, action);
 	}

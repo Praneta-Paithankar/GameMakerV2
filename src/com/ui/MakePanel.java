@@ -112,14 +112,16 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private JLabel heightLabel;
 	private JTextField height;
 	
-	protected String getSelectedRadioButton() {
+	protected int getSelectedRadioButton() {
+		int counter=0;
 		for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
 	        AbstractButton button = buttons.nextElement();
-	        if (button.isSelected()) {
-	                return button.getText();
+	        if (button.isSelected()) {	
+	                return counter;
 	        }
+	        counter++;
 	    }
-		return null;
+		return 2;
 	}
 	public HashMap getCollisionMap() {
 		return collisionMap;
@@ -213,8 +215,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 //	
 	public void createSpriteButtons()
 	{
-		createCircleButton();
-		createRectangleButton();
+//		createCircleButton();
+//		createRectangleButton();
 	}
 	
 	public PanelButton createMakeButton() {
@@ -437,6 +439,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	gameLooseRadioButton=new JRadioButton("Game Loose");
     	notApplicableRadioButton=new JRadioButton("Not Applicable");
     	
+    	notApplicableRadioButton.setSelected(true);
     	group = new ButtonGroup();
     	group.add(gameWinRadioButton);
     	group.add(gameLooseRadioButton);
@@ -472,8 +475,10 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			String category = categoryTextField.getText();
 			HashMap<String, String> eventAction = getEventActionMap();
 			
+			
+			
 			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
-												Color.BLACK, "", spriteID, category, eventAction);
+												Color.BLACK, "", spriteID, category, eventAction,getSelectedRadioButton());
 			
 			
 			
@@ -486,7 +491,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			
 //			getEventActionMap();// to get event and action mapping
 			getCollisionMap();	// to get mapping of event and collision
-			log.error(getSelectedRadioButton());
+//			log.error(getSelectedRadioButton());
 		}
 		else {
 			

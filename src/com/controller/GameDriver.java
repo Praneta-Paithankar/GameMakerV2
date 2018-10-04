@@ -57,7 +57,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	private GUI gui;
 	private BreakoutTimer timer;
 	private SpriteCollision collision;
-	private HashSet<SpriteElement> gameEndSet;
+	private HashSet<SpriteElement> gameWinSet;
+	private HashSet<SpriteElement> gameLoseSet;
 	private MouseEvent e;
 	Boolean Projectileflag ;
     private boolean isGamePaused ;
@@ -75,16 +76,32 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		isGamePaused = false;
 		timerCommand = new TimerCommand(clock);	
 		commandQueue = new ArrayDeque<Command>();
-		this.gameEndSet = new HashSet<>();	
+		this.gameWinSet = new HashSet<>();	
+		this.gameLoseSet = new HashSet<>();	
 	}
 	
 	public void addGameEndSprite(SpriteElement element) {
-		gameEndSet.add(element);
+		System.out.println("addGameEndSprite called");
+//		gameEndSet.add(element);
+//		addGameWinSprite(element);
+//		addGameLoseSprite(element);
+	}
+	public void addGameWinSprite(SpriteElement element) {
+		
+		gameWinSet.add(element);
+	}
+	public void addGameLoseSprite(SpriteElement element) {
+		
+		gameLoseSet.add(element);
 	}
 	
+	
 	public void removeGameEndSprite(SpriteElement element) {
-		if (gameEndSet.contains(element)) {
-			gameEndSet.remove(element);
+		if (gameWinSet.contains(element)) {
+			gameWinSet.remove(element);
+		}
+		if (gameLoseSet.contains(element)) {
+			gameLoseSet.remove(element);
 		}
 	}
 
@@ -120,7 +137,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			ObjectOutputStream op = new ObjectOutputStream(fileOut);
 			
 			op.writeObject(eventMap);
-			op.writeObject(gameEndSet);
+			op.writeObject(gameWinSet);
+			op.writeObject(gameLoseSet);
 			op.writeObject(sprites);
 
 			//gui.getBoardPanel().setElements(sprites);
@@ -144,10 +162,12 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			
 			sprites.clear();
 			eventMap.clear();
-			gameEndSet.clear();
+			gameWinSet.clear();
+			gameLoseSet.clear();
 			
 			eventMap.putAll((Map<String, List<ActionLink>>) in.readObject());
-			gameEndSet.addAll((HashSet<SpriteElement>)in.readObject());
+			gameWinSet.addAll((HashSet<SpriteElement>)in.readObject());
+			gameLoseSet.addAll((HashSet<SpriteElement>)in.readObject());
 			setSprites((ArrayList<SpriteElement>)in.readObject());
 			gui.getBoardPanel().setElements(sprites);
 			gui.getBoardPanel().revalidate();
@@ -183,7 +203,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	}
 
 	public void checkIfGameEnd() {
-		if (gameEndSet.isEmpty()) {
+		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
 			timer.removeObserver(this);
 			gui.paintView();
 			int option = JOptionPane.showConfirmDialog(null, 
@@ -320,7 +340,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			element.setYVel(Constants.Y_Velocity);
 			break;
 		case KeyEvent.VK_SPACE:
-			element.shoot(new CircularSprite("", element.getElementX() + element.getWidth()/2, element.getElementY()-10, 10, 10, 0, -1, "bullet1", "bullet", Color.black));
+			element.shoot(new CircularSprite("", element.getElementX() + element.getWidth()/2, element.getElementY()-10, 10, 10, 0, -1, "bullet1", "bullet", Color.black,Constants.GAME_NOT_APPLICABLE_COMPONENT));
 			break;
 		default:
 			break;
