@@ -75,6 +75,7 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			
 		} catch (IOException e) {
 			 log.error(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	

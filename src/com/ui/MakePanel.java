@@ -449,6 +449,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	mainOptionPanel.add(subOptionPanel1);
     	mainOptionPanel.add(subOptionPanel2);
     	
+    	eventActionMap=new HashMap();
+    	collisionMap=new HashMap();
     	
     	JOptionPane pane = new JOptionPane();
     	int option = pane.showConfirmDialog(null, mainOptionPanel, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
@@ -474,6 +476,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 												Color.BLACK, "", spriteID, category, eventAction);
 			
 			
+			
 //			yVel.getText();
 //			width.getText();
 //			height.getText();
@@ -481,7 +484,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 //			categoryTextField.getText();
 //			
 			
-			getEventActionMap();// to get event and action mapping
+//			getEventActionMap();// to get event and action mapping
 			getCollisionMap();	// to get mapping of event and collision
 			log.error(getSelectedRadioButton());
 		}
@@ -489,6 +492,10 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			
 //			spriteElement = new SpriteElement("", x, y,  )
 			
+		}
+		
+		if(option != JOptionPane.CANCEL_OPTION) {
+        	controller.done();
 		}
 		
 	}
@@ -560,8 +567,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		actionDropDownlabel = new JLabel("Actions :");
 		JComboBox<String> actionDropDownList = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
 		
-		eventDropDownlabel = new JLabel("E :");
-		JComboBox<String> eventDropDownList = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
+		eventDropDownlabel = new JLabel("Events :");
+		JComboBox<String> eventDropDownList = new JComboBox<>(Constants.AVAILABLE_EVENTS);
 		
 		Object[] message = {  
 				eventDropDownlabel, eventDropDownList,
@@ -574,7 +581,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			eventActionMap.put(actionDropDownList.getSelectedItem().toString(), eventDropDownList.getSelectedItem().toString());
 		}	
 		else {
-			;
+			
 		}
 		
 	}

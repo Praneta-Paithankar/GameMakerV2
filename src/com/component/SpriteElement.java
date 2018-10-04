@@ -48,10 +48,11 @@ public abstract class SpriteElement implements Serializable{
 	
 	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color) throws IOException {
 		this.imagePath = image;
-		this.imageIcon = ImageIO.read(new File(image));
+//		this.imageIcon = ImageIO.read(new File(image));
+		this.imageIcon = null;
 		this.width = width;
 		this.height = height;
-		this.imageIcon = resize(imageIcon, width, height);
+//		this.imageIcon  = resize(imageIcon, width, height);
 		this.firstInstanceOfVelX =this.XVel =velX;
 		this.firstInstanceOfVelY = this.YVel = velY;
 		this.visible = true;
