@@ -103,6 +103,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private JLabel spriteIDDropDownlabel;
 	
 	private SpriteElement spriteElement;
+
 	private JLabel spriteCategoryDropDownlabel;
 	private HashMap collisionMap;
 	private ButtonGroup group;
@@ -127,7 +128,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	public void setCollisionMap(HashMap collisionMap) {
 		this.collisionMap = collisionMap;
 	}
-
+	
 	public String getImagePath() {
 		return imagePath;
 	}
@@ -461,6 +462,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			//newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
 			x.getText();
 			y.getText();
+			
+			
 			xVel.getText();
 			yVel.getText();
 			getEventActionMap();// to get event and action mapping

@@ -1,4 +1,5 @@
 package com.controller;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -37,6 +38,7 @@ import com.commands.MoveCommand;
 import com.commands.ProjectileCommand;
 import com.commands.SpriteBlowCommand;
 import com.commands.TimerCommand;
+import com.component.CircularSprite;
 import com.component.Clock;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
@@ -282,7 +284,12 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					//macroCommand.addCommand(shoot);
 					break;
 				case "move": 
-					setSpriteDirection(e, actionObserver.getSprite());
+					try {
+						setSpriteDirection(e, actionObserver.getSprite());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
 					break;
 				default: break;
@@ -294,7 +301,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		}
 	}
 	
-	public void setSpriteDirection(KeyEvent e, SpriteElement element) {
+	public void setSpriteDirection(KeyEvent e, SpriteElement element) throws IOException {
 		switch(e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
 			element.setYVel(0);
@@ -311,6 +318,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		case KeyEvent.VK_DOWN:
 			element.setXVel(0);
 			element.setYVel(Constants.Y_Velocity);
+			break;
+		case KeyEvent.VK_SPACE:
+			element.shoot(new CircularSprite("", element.getElementX() + element.getWidth()/2, element.getElementY()-10, 10, 10, 0, -1, "bullet1", "bullet", Color.black));
 			break;
 		default:
 			break;
