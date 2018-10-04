@@ -97,6 +97,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private String imagePath;
 	private Color spriteColor;
 	private HashMap<String,String> collidables;
+	private JLabel collisionIDDropDownlabel;
+	private JLabel spriteIDDropDownlabel;
 	
 	private SpriteElement spriteElement;
 	
@@ -290,7 +292,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	@Override
 	public void save(ObjectOutputStream op) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -426,8 +427,11 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			xVel.getText();
 			yVel.getText();
 			getEventActionMap();// to get event and action mapping
+
 			
 //			spriteElement = new SpriteElement("", x, y,  )
+		}
+		else {
 			
 		}
 		
@@ -495,14 +499,11 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		subActionpane.setLayout(new BoxLayout(mainOptionPanel,BoxLayout.PAGE_AXIS));
 		
 		actionDropDownlabel = new JLabel("Actions :");
-    	
 		JComboBox<String> actionDropDownList = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
 		
-		eventDropDownlabel = new JLabel("Actions :");
-    	
+		eventDropDownlabel = new JLabel("E :");
 		JComboBox<String> eventDropDownList = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
 		
-		actionDropDownList.setVisible(true);
 		Object[] message = {  
 				eventDropDownlabel, eventDropDownList,
 			    actionDropDownlabel, actionDropDownList
@@ -513,6 +514,42 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		if(option== JOptionPane.OK_OPTION) {
 			eventActionMap.put(actionDropDownList.getSelectedItem().toString(), eventDropDownList.getSelectedItem().toString());
 		}	
+		else {
+			;
+		}
+		
+	}
+	
+	private void createCollisionPopUp() {
+		// TODO Auto-generated method stub
+		
+		JOptionPane subCollisionpane = new JOptionPane();
+		subCollisionpane.setLayout(new BoxLayout(mainOptionPanel,BoxLayout.PAGE_AXIS));
+		
+		String [] spriteIds= {"b1","b2", "b3"};
+		String[] categoryIds= {"category1"};
+	//	String[] categoryandsprite= spriteIds+categoryIds;
+		
+		spriteIDDropDownlabel = new JLabel("Sprite Id :");
+		
+		JComboBox<String> actionDropDownList = new JComboBox<>(spriteIds);
+		
+		eventDropDownlabel = new JLabel("Sprite Id/Category Id :");
+		JComboBox<String> eventDropDownList = new JComboBox<>();
+		
+		Object[] message = {  
+				eventDropDownlabel, eventDropDownList,
+			    actionDropDownlabel, actionDropDownList
+			};
+    	
+		int option = subCollisionpane.showConfirmDialog(null, message, "Collison between Ids", subCollisionpane.OK_CANCEL_OPTION);
+		
+		if(option== JOptionPane.OK_OPTION) {
+			eventActionMap.put(actionDropDownList.getSelectedItem().toString(), eventDropDownList.getSelectedItem().toString());
+		}	
+		else {
+			;
+		}
 		
 	}
 
