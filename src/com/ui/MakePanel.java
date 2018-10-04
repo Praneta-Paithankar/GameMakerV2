@@ -459,13 +459,28 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private void getFormData(int option) {
 		// TODO Auto-generated method stub
 		if(option == JOptionPane.YES_OPTION) {
-			//newSprite = new CreateSpriteRequest(c.getText(), Integer.parseInt(x.getText()), Integer.parseInt(y.getText()));
-			x.getText();
-			y.getText();
+			
+			int tempX = Integer.parseInt(x.getText());
+			int tempY = Integer.parseInt(y.getText());
+			int tempXVel = Integer.parseInt(xVel.getText());
+			int tempYVel = Integer.parseInt(yVel.getText());
+			int tempWidth = Integer.parseInt(width.getText());
+			int tempHeight = Integer.parseInt(height.getText());
+			String spriteID = spriteTextField.getText();
+			String category = categoryTextField.getText();
+			HashMap<String, String> eventAction = getEventActionMap();
+			
+			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
+												Color.BLACK, "", spriteID, category, eventAction);
 			
 			
-			xVel.getText();
-			yVel.getText();
+//			yVel.getText();
+//			width.getText();
+//			height.getText();
+//			spriteTextField.getText();
+//			categoryTextField.getText();
+//			
+			
 			getEventActionMap();// to get event and action mapping
 			getCollisionMap();	// to get mapping of event and collision
 			log.error(getSelectedRadioButton());

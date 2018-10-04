@@ -19,7 +19,8 @@ public class CreateSpriteRequest {
 	
 	private Map<String, String> eventAction;
 	
-	public CreateSpriteRequest(String name, int x, int y, int velX, int velY, int width, int height, Color color, String imageFilePath, String SpriteID) {
+	public CreateSpriteRequest(String name, int x, int y, int velX, int velY, int width, int height, Color color, 
+								String imageFilePath, String spriteId, String category, Map<String, String> eventAction) {
 		this.elementName = name;
 		this.xlocation = x;
 		this.ylocation = y;
@@ -31,8 +32,9 @@ public class CreateSpriteRequest {
 		this.imagePath = imageFilePath;
 		this.spriteId = spriteId;
 		this.category = category;
+		this.eventAction = eventAction;
 		
-		eventAction = new HashMap<>(); 
+//		eventAction = new HashMap<>(); 
 	}
 	
 	public void addEventAction(String event, String action) {

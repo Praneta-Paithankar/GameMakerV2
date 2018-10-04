@@ -25,6 +25,7 @@ public class CircularSprite extends SpriteElement implements Serializable {
 	}
 	public void draw(Graphics g) {
 		//logger.trace("Drawing a circle");
+		System.out.println("Drawing circle");
 		if (isVisible()) {
 			if(getImagePath().length()>0) {
 				super.draw(g);
