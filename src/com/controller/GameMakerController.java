@@ -51,7 +51,7 @@ public class GameMakerController implements  ActionListener, MouseListener {
 	public void done() {
 		try {
 			this.sprite = gui.getMakePanel().getNewSprite();
-			this.newSprite = gameObject.spriteDecoder(sprite.getElementName(), sprite.getXlocation(), sprite.getYlocation());
+			this.newSprite = gameObject.spriteDecoder(sprite);
 			this.gameDriver.addSpriteElements(newSprite);
 			this.gui.addSpriteToPanel(newSprite);
 			eventMap = gameDriver.getEventMap();

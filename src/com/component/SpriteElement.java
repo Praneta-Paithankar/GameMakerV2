@@ -41,17 +41,17 @@ public abstract class SpriteElement implements Serializable{
 	private int firstInstanceOfVelY;
 	private transient BufferedImage imageIcon;
 	private String imagePath;
-	private int imageWidth;
-	private int imageHeight;
+	private int width;
+	private int height;
 	private int imageType;
 	private boolean isShooter;
 	
 	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color) throws IOException {
 		this.imagePath = image;
 		this.imageIcon = ImageIO.read(new File(image));
-		this.imageWidth = width;
-		this.imageHeight = height;
-		this.imageIcon = resize(imageIcon, imageWidth, imageHeight);
+		this.width = width;
+		this.height = height;
+		this.imageIcon = resize(imageIcon, width, height);
 		this.firstInstanceOfVelX =this.XVel =velX;
 		this.firstInstanceOfVelY = this.YVel = velY;
 		this.visible = true;
@@ -63,7 +63,7 @@ public abstract class SpriteElement implements Serializable{
 
 	}
 	public SpriteElement(SpriteElement element) throws IOException {
-		this(element.imagePath,element.elementX,element.elementY,element.imageWidth,element.imageHeight, element.XVel, element.YVel, element.spriteId,element.category,element.color);
+		this(element.imagePath,element.elementX,element.elementY,element.width,element.height, element.XVel, element.YVel, element.spriteId,element.category,element.color);
 	}
 	public BufferedImage resize(BufferedImage img, int width, int height) {
 		Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
@@ -92,7 +92,7 @@ public abstract class SpriteElement implements Serializable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			this.imageIcon = resize(imageIcon, imageWidth, imageHeight);
+			this.imageIcon = resize(imageIcon, width, height);
 		}
 
 		if(isVisible()) {
@@ -112,8 +112,8 @@ public abstract class SpriteElement implements Serializable{
 		
 	public boolean intersects(SpriteElement c) {
 
-		java.awt.Rectangle one = new java.awt.Rectangle(elementX ,elementY, imageWidth, imageHeight);
-		java.awt.Rectangle two = new java.awt.Rectangle(c.getElementX(), c.getElementY(), c.getImageWidth(), c.getImageHeight());
+		java.awt.Rectangle one = new java.awt.Rectangle(elementX ,elementY, width, height);
+		java.awt.Rectangle two = new java.awt.Rectangle(c.getElementX(), c.getElementY(), c.getWidth(), c.getHeight());
 
 		return one.intersects(two);
 
@@ -228,20 +228,20 @@ public abstract class SpriteElement implements Serializable{
 		this.visible = visible;
 	}
 
-	public int getImageWidth() {
-		return imageWidth;
+	public int getWidth() {
+		return width;
 	}
 
-	public void setImageWidth(int imageWidth) {
-		this.imageWidth = imageWidth;
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
-	public int getImageHeight() {
-		return imageHeight;
+	public int getHeight() {
+		return height;
 	}
 
-	public void setImageHeight(int imageHeight) {
-		this.imageHeight = imageHeight;
+	public void setHeight(int height) {
+		this.height = height;
 	}
 	public String getSpriteId() {
 		return spriteId;
