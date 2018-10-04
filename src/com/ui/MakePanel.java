@@ -20,10 +20,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -101,6 +103,31 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private JLabel spriteIDDropDownlabel;
 	
 	private SpriteElement spriteElement;
+
+	private JLabel spriteCategoryDropDownlabel;
+	private HashMap collisionMap;
+	private ButtonGroup group;
+	private JLabel widthLabel;
+	private JTextField width;
+	private JLabel heightLabel;
+	private JTextField height;
+	
+	protected String getSelectedRadioButton() {
+		for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
+	        AbstractButton button = buttons.nextElement();
+	        if (button.isSelected()) {
+	                return button.getText();
+	        }
+	    }
+		return null;
+	}
+	public HashMap getCollisionMap() {
+		return collisionMap;
+	}
+
+	public void setCollisionMap(HashMap collisionMap) {
+		this.collisionMap = collisionMap;
+	}
 	
 	public String getImagePath() {
 		return imagePath;
@@ -329,7 +356,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	spriteTextField = new JTextField(10);
     	subOptionPanel1.add(spriteTextField);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 0));
     	
-    	categoryId = new JLabel("category :");
+    	categoryId = new JLabel("Category :");
     	subOptionPanel1.add(categoryId);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 0));
     	
     	categoryTextField = new JTextField(10);
@@ -347,6 +374,18 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	
     	y = new JTextField(10);
     	subOptionPanel1.add(y);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 2));
+    	
+    	widthLabel = new JLabel("Width :");
+    	subOptionPanel1.add(widthLabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 1));
+    	
+    	width = new JTextField(10);
+    	subOptionPanel1.add(width);
+    	
+    	heightLabel = new JLabel("Height :");
+    	subOptionPanel1.add(heightLabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 1));
+    	
+    	height = new JTextField(10);
+    	subOptionPanel1.add(height);
     	
     	xVellabel = new JLabel("XVelocity :");
     	subOptionPanel1.add(xVellabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 3));
@@ -398,7 +437,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	gameLooseRadioButton=new JRadioButton("Game Loose");
     	notApplicableRadioButton=new JRadioButton("Not Applicable");
     	
-    	ButtonGroup group = new ButtonGroup();
+    	group = new ButtonGroup();
     	group.add(gameWinRadioButton);
     	group.add(gameLooseRadioButton);
     	group.add(notApplicableRadioButton);
@@ -414,7 +453,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	JOptionPane pane = new JOptionPane();
     	int option = pane.showConfirmDialog(null, mainOptionPanel, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
     	
-    	getFormData(option);
+    	if(option == JOptionPane.YES_OPTION)
+    		getFormData(option);
 	}
 	private void getFormData(int option) {
 		// TODO Auto-generated method stub
@@ -427,11 +467,12 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			xVel.getText();
 			yVel.getText();
 			getEventActionMap();// to get event and action mapping
-
-			
-//			spriteElement = new SpriteElement("", x, y,  )
+			getCollisionMap();	// to get mapping of event and collision
+			log.error(getSelectedRadioButton());
 		}
 		else {
+			
+//			spriteElement = new SpriteElement("", x, y,  )
 			
 		}
 		
@@ -483,6 +524,9 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		case "Actions" :eventActionMap=new HashMap<>(); 
 						createActionPopUp();
 						break;
+		case "Collisions": collisionMap=new HashMap<>();
+						   createCollisionPopUp();
+						   break;
 		default : log.error("switch hitting the default case of makepanel actionlistner");
 						break;
 		}
@@ -528,24 +572,25 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		
 		String [] spriteIds= {"b1","b2", "b3"};
 		String[] categoryIds= {"category1"};
-	//	String[] categoryandsprite= spriteIds+categoryIds;
+//		String[] categoryandsprite.add
 		
 		spriteIDDropDownlabel = new JLabel("Sprite Id :");
 		
-		JComboBox<String> actionDropDownList = new JComboBox<>(spriteIds);
+		JComboBox<String> spriteDropDownList = new JComboBox<>(spriteIds);
 		
-		eventDropDownlabel = new JLabel("Sprite Id/Category Id :");
-		JComboBox<String> eventDropDownList = new JComboBox<>();
+		spriteCategoryDropDownlabel = new JLabel("Sprite Id/Category Id :");
+		JComboBox<String> categoryDropDownList = new JComboBox<>(categoryIds);
 		
 		Object[] message = {  
-				eventDropDownlabel, eventDropDownList,
-			    actionDropDownlabel, actionDropDownList
+				spriteIDDropDownlabel, spriteDropDownList,
+				spriteCategoryDropDownlabel, categoryDropDownList
 			};
     	
 		int option = subCollisionpane.showConfirmDialog(null, message, "Collison between Ids", subCollisionpane.OK_CANCEL_OPTION);
 		
 		if(option== JOptionPane.OK_OPTION) {
-			eventActionMap.put(actionDropDownList.getSelectedItem().toString(), eventDropDownList.getSelectedItem().toString());
+			collisionMap.put(spriteDropDownList.getSelectedItem().toString(), categoryDropDownList.getSelectedItem().toString());
+			log.error(collisionMap.values().toString());
 		}	
 		else {
 			;
