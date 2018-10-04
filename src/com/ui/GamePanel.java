@@ -30,6 +30,7 @@ public class GamePanel extends AbstractPanel implements Element {
 	private BufferedImage image;
 	private ArrayList<SpriteElement> elements;
 	private GameDriver driver;
+	private SpriteElement spriteElement;
 	
 	public GamePanel()
 	{
@@ -135,5 +136,17 @@ public class GamePanel extends AbstractPanel implements Element {
 	public void addComponent(Element e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+
+
+	public SpriteElement getSpriteElement() {
+		return spriteElement;
+	}
+
+
+
+	public void setSpriteElement(SpriteElement spriteElement) {
+		this.spriteElement = spriteElement;
 	}
 }

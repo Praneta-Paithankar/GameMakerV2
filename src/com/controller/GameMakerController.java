@@ -2,6 +2,8 @@ package com.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,9 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
+import com.component.CircularSprite;
 import com.component.Clock;
+import com.component.RectangularSprite;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
 import com.helper.GameObject;
@@ -18,7 +22,7 @@ import com.timer.BreakoutTimer;
 import com.ui.CreateSpriteRequest;
 import com.ui.GUI;
 
-public class GameMakerController implements  ActionListener {
+public class GameMakerController implements  ActionListener, MouseListener {
 	protected static Logger log = Logger.getLogger(GameMakerController.class);
     private GUI gui;
 	private CreateSpriteRequest sprite;
@@ -47,7 +51,7 @@ public class GameMakerController implements  ActionListener {
 	public void done() {
 		try {
 			this.sprite = gui.getMakePanel().getNewSprite();
-			this.newSprite = gameObject.spriteDecoder(sprite.getElementName(), sprite.getXlocation(), sprite.getYlocation());
+			this.newSprite = gameObject.spriteDecoder(sprite);
 			this.gameDriver.addSpriteElements(newSprite);
 			this.gui.addSpriteToPanel(newSprite);
 			eventMap = gameDriver.getEventMap();
@@ -82,7 +86,8 @@ public class GameMakerController implements  ActionListener {
 		for(int i=0;i<gui.getMakePanel().getCheckBox().size();i++) {
 			gui.getMakePanel().getCheckBox().get(i).setVisible(true);
 		}
-		gui.getMakePanel().createImage();
+//		gui.getMakePanel().createImage();
+		gui.getMakePanel().createSpriteButtons();
 		//gui.getMakePanel().createSaveButton();
 		//gui.getMakePanel().createLoadButton();
 	}
@@ -107,6 +112,69 @@ public class GameMakerController implements  ActionListener {
 		}else if(commandText.equals("load")) {
 			load();
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+
+		// TODO Auto-generated method stub
+		SpriteElement spriteElement = null;
+		SpriteElement gamePanelSelected = gui.getBoardPanel().getSpriteElement();
+		
+		if(gamePanelSelected != null)
+		{
+			if(gamePanelSelected instanceof CircularSprite) {
+				try {
+					spriteElement = new  CircularSprite((CircularSprite)gamePanelSelected);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+//				return new CircularSprite(shootingObject.imagePath,shootingObject.elementX,shootingObject.elementY,shootingObject.imageWidth, shootingObject.imageHeight,shootingObject.XVel, shootingObject.YVel,((CircularSprite) shootingObject).getRadius());
+
+			} else {
+				try {
+					spriteElement = new  RectangularSprite((RectangularSprite)gamePanelSelected);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+			
+			spriteElement.setElementX(e.getX());
+			spriteElement.setElementY(e.getY());
+			System.out.println("Mouse clicked on = " + spriteElement.getElementX() + " " + spriteElement.getElementY());
+			
+			gui.getBoardPanel().addComponent(spriteElement);
+			
+			
+		}
+		
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

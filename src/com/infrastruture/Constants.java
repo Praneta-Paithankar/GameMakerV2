@@ -48,7 +48,8 @@ public class Constants {
 	public final static int PADDLE_DELTA_X = 20;
 	public final static Color PADDLE_COLOR = new Color(91,33,91);
 	
-	public final static List<String> spriteTypes = Arrays.asList("Ball", "Brick", "Paddle");
+//	public final static List<String> spriteTypes = Arrays.asList("Ball", "Brick", "Paddle");
+	public final static List<String> spriteTypes = Arrays.asList("Rectangle", "Circle");
 	public final static String[] AVAILABLE_EVENTS = {"OnTick", "OnCollision", "keyPressed", "OnClick", "GameEnd"};
 	public final static String[] AVAILABLE_ACTIONS = {"move", "bounce", "shoot", "blow"};
 	

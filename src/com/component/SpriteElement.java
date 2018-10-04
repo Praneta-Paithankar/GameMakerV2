@@ -3,9 +3,12 @@
  */
 package com.component;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -22,54 +25,167 @@ import com.infrastruture.Constants;
 
 public abstract class SpriteElement implements Serializable{
 	protected static Logger log = Logger.getLogger(GameDriver.class);
-	private transient BufferedImage imageIcon;
-	private String image;
-	private int radius;
-	private int width;
-	private int height;
 	private int XVel;
 	private int YVel;
 	private int elementX;
 	private int elementY;
 	private boolean visible;
 	
+	private String spriteId;
+	private String category;
+	private Color color;
+	
 	private int firstInstanceOfX;
 	private int firstInstanceOfY;
-	private int firstInstanceOfRadius;
-	private int firstInstanceOfWidth;
-	private int firstInstanceOfHeight;
-
-	public SpriteElement(String image, int elementX, int elementY, int radius) throws IOException {
-		this.image = image;
-		this.width = radius *2;
-		this.height = radius *2;
-//		this.XVel = 0;
-//		this.YVel = 5;
-		this.XVel = Constants.X_Velocity;
-		this.YVel = Constants.Y_Velocity;
+	private int firstInstanceOfVelX;
+	private int firstInstanceOfVelY;
+	private transient BufferedImage imageIcon;
+	private String imagePath;
+	private int width;
+	private int height;
+	private int imageType;
+	private boolean isShooter;
+	
+	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color) throws IOException {
+		this.imagePath = image;
 		this.imageIcon = ImageIO.read(new File(image));
-		this.imageIcon = resize(imageIcon, width, height);
-		this.visible = true;
-		this.firstInstanceOfX = this.elementX = elementX;
-		this.firstInstanceOfY = this.elementY = elementY;
-		this.firstInstanceOfRadius = this.radius = radius;
-	}
-
-	public SpriteElement(String image, int elementX, int elementY, int width, int height) throws IOException  {
-		this.image = image;
-		this.elementX = elementX;
-		this.elementY = elementY;
 		this.width = width;
 		this.height = height;
-		this.XVel = Constants.X_Velocity;
-		this.YVel = Constants.Y_Velocity;
-		this.imageIcon = ImageIO.read(new File(image));
 		this.imageIcon = resize(imageIcon, width, height);
+		this.firstInstanceOfVelX =this.XVel =velX;
+		this.firstInstanceOfVelY = this.YVel = velY;
 		this.visible = true;
 		this.firstInstanceOfX = this.elementX = elementX;
 		this.firstInstanceOfY = this.elementY = elementY;
-		this.firstInstanceOfWidth = this.width = width;
-		this.firstInstanceOfHeight = this.height = height;
+		this.spriteId = spriteId;
+		this.category = category;
+		this.color = color;
+
+	}
+	public SpriteElement(SpriteElement element) throws IOException {
+		this(element.imagePath,element.elementX,element.elementY,element.width,element.height, element.XVel, element.YVel, element.spriteId,element.category,element.color);
+	}
+	public BufferedImage resize(BufferedImage img, int width, int height) {
+		Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+		BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = resized.createGraphics();
+		g2d.drawImage(tmp, 0, 0, null);
+		g2d.dispose();
+		return resized;
+	}
+	
+	public void reset() {
+		// TODO Auto-generated method stub
+		this.setElementX(firstInstanceOfX);
+		this.setElementY(firstInstanceOfY);
+		this.XVel = firstInstanceOfVelX;
+		this.YVel = firstInstanceOfVelY;
+		this.visible = true;
+
+	}
+	
+	public void draw(Graphics g) {
+		if (imageIcon == null) {
+			try {
+				this.imageIcon = ImageIO.read(new File(imagePath));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			this.imageIcon = resize(imageIcon, width, height);
+		}
+
+		if(isVisible()) {
+			g.drawImage(this.imageIcon, getElementX(), getElementY(), null);
+		}
+	}
+	
+	public SpriteElement shoot(SpriteElement shootingObject) throws IOException {
+		if(shootingObject instanceof CircularSprite) {
+			return new CircularSprite((CircularSprite)shootingObject);
+//			return new CircularSprite(shootingObject.imagePath,shootingObject.elementX,shootingObject.elementY,shootingObject.imageWidth, shootingObject.imageHeight,shootingObject.XVel, shootingObject.YVel,((CircularSprite) shootingObject).getRadius());
+
+		} else {
+			return new RectangularSprite((RectangularSprite)shootingObject);
+		}
+	}
+		
+	public boolean intersects(SpriteElement c) {
+
+		java.awt.Rectangle one = new java.awt.Rectangle(elementX ,elementY, width, height);
+		java.awt.Rectangle two = new java.awt.Rectangle(c.getElementX(), c.getElementY(), c.getWidth(), c.getHeight());
+
+		return one.intersects(two);
+
+	}
+	public int getImageType() {
+		return imageType;
+	}
+
+	public void setImageType(int imageType) {
+		this.imageType = imageType;
+	}
+
+	public boolean isShooter() {
+		return isShooter;
+	}
+
+	public void setShooter(boolean isShooter) {
+		this.isShooter = isShooter;
+	}
+
+	public void save(ObjectOutputStream op) {
+		// TODO Auto-generated method stub
+		try {
+			op.writeObject(this);
+		} catch (IOException e) {
+			log.error(e.getMessage());
+		}
+	}
+
+	public SpriteElement load(ObjectInputStream ip) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public int getFirstInstanceOfX() {
+		return firstInstanceOfX;
+	}
+
+	public void setFirstInstanceOfX(int firstInstanceOfX) {
+		this.firstInstanceOfX = firstInstanceOfX;
+	}
+
+	public int getFirstInstanceOfY() {
+		return firstInstanceOfY;
+	}
+
+	public void setFirstInstanceOfY(int firstInstanceOfY) {
+		this.firstInstanceOfY = firstInstanceOfY;
+	}
+
+	public int getFirstInstanceOfVelX() {
+		return firstInstanceOfVelX;
+	}
+
+	public void setFirstInstanceOfVelX(int firstInstanceOfVelX) {
+		this.firstInstanceOfVelX = firstInstanceOfVelX;
+	}
+
+	public int getFirstInstanceOfVelY() {
+		return firstInstanceOfVelY;
+	}
+
+	public void setFirstInstanceOfVelY(int firstInstanceOfVelY) {
+		this.firstInstanceOfVelY = firstInstanceOfVelY;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String image) {
+		this.imagePath = image;
 	}
 
 	public int getXVel() {
@@ -86,46 +202,6 @@ public abstract class SpriteElement implements Serializable{
 
 	public void setYVel(int yVel) {
 		YVel = yVel;
-	}
-
-	public int getRadius() {
-		return radius;
-	}
-
-	public void setRadius(int radius) {
-		this.radius = radius;
-	}
-
-	/*public BufferedImage getImg() {
-		return imageIcon;
-	}
-
-	public void setImage(BufferedImage imageIcon) {
-		this.imageIcon = imageIcon;
-	}*/
-
-	public int getWidth() {
-		return width;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
 	}
 
 	public int getElementX() {
@@ -152,56 +228,38 @@ public abstract class SpriteElement implements Serializable{
 		this.visible = visible;
 	}
 
-
-	private BufferedImage resize(BufferedImage img, int width, int height) {
-		Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-		BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d = resized.createGraphics();
-		g2d.drawImage(tmp, 0, 0, null);
-		g2d.dispose();
-		return resized;
+	public int getWidth() {
+		return width;
 	}
 
-	public void draw(Graphics g) {
-		if (imageIcon == null) {
-			try {
-				this.imageIcon = ImageIO.read(new File(image));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			this.imageIcon = resize(imageIcon, width, height);
-		}
-
-		if(this.visible) {
-			g.drawImage(this.imageIcon, elementX, elementY, null);
-		}
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
-	public void reset() {
-		// TODO Auto-generated method stub
-		this.setElementX(firstInstanceOfX);
-		this.setElementY(firstInstanceOfY);
-		this.setRadius(radius);
-		this.setWidth(firstInstanceOfWidth);
-		this.setHeight(firstInstanceOfHeight);
-		this.XVel = Constants.X_Velocity;
-		this.YVel = Constants.Y_Velocity;
-		this.visible = true;
-
+	public int getHeight() {
+		return height;
 	}
 
-	public void save(ObjectOutputStream op) {
-		// TODO Auto-generated method stub
-		try {
-			op.writeObject(this);
-		} catch (IOException e) {
-			log.error(e.getMessage());
-		}
+	public void setHeight(int height) {
+		this.height = height;
 	}
-
-	public SpriteElement load(ObjectInputStream ip) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getSpriteId() {
+		return spriteId;
 	}
+	public void setSpriteId(String spriteId) {
+		this.spriteId = spriteId;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
+	}
+	
 }

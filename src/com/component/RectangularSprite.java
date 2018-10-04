@@ -1,35 +1,62 @@
 package com.component;
 
-import java.awt.image.BufferedImage;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.Serializable;
 
 public class RectangularSprite extends SpriteElement implements Serializable{
 	
-	String image;
-	int elementX; 
-	int elementY;
-	int width;
-	int height;
 	
-	String firstInstanceOfImage;
-	int firstInstanceOfX;
-	int firstInstanceOfY;
-	int firstInstanceOfWidth;
-	int firstInstanceOfHeight;
+	private int firstInstanceOfWidth;
+	private int firstInstanceOfHeight;
 
-	public RectangularSprite(String image, int elementX, int elementY, int width, int height) throws IOException {
-		super(image,elementX,elementY,width,height);
-		this.firstInstanceOfImage = this.image = image;
-		this.firstInstanceOfX = this.elementX = elementX;
-		this.firstInstanceOfY = this.elementY = elementY;
-		this.firstInstanceOfWidth = this.width = width;
-		this.firstInstanceOfHeight = this.height = height;
+	public RectangularSprite(String image, int elementX, int elementY, int width, int height,int velX, int velY, String spriteId, String category,Color color) throws IOException {
+		super(image,elementX,elementY,width,height,velX,velY, spriteId, category,color);
+		this.firstInstanceOfWidth = width;
+		this.firstInstanceOfHeight = height;
 	}
-
+	public RectangularSprite(RectangularSprite rectangularSprite) throws IOException {
+		this(rectangularSprite.getImagePath(),rectangularSprite.getElementX(),rectangularSprite.getElementY(),rectangularSprite.getWidth(),rectangularSprite.getHeight(),rectangularSprite.getXVel(),rectangularSprite.getYVel(),rectangularSprite.getSpriteId(),rectangularSprite.getCategory(),rectangularSprite.getColor());
+	}
 	
 	public void reset() {
 		super.reset();
+		this.setWidth(firstInstanceOfWidth);
+		this.setHeight(firstInstanceOfHeight);
+	}
+
+	public void draw(Graphics g) {
+		//logger.debug("rectangle.isVisible() = " + isVisible());
+		if (isVisible()) {
+			if(getImagePath().length()>0) {
+				super.draw(g);
+			}else {
+				Graphics2D g2 = (Graphics2D) g;
+				g2.setPaint(Color.BLACK);
+				g2.fill(new Rectangle2D.Double(getElementX(), getElementY(), getWidth(), getHeight()));
+			}
+		}
+	}
+	
+
+	public int getFirstInstanceOfWidth() {
+		return firstInstanceOfWidth;
+	}
+
+	public void setFirstInstanceOfWidth(int firstInstanceOfWidth) {
+		this.firstInstanceOfWidth = firstInstanceOfWidth;
+	}
+
+	public int getFirstInstanceOfHeight() {
+		return firstInstanceOfHeight;
+	}
+
+
+	public void setFirstInstanceOfHeight(int firstInstanceOfHeight) {
+		this.firstInstanceOfHeight = firstInstanceOfHeight;
 	}
 	
 }
