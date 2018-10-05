@@ -27,6 +27,7 @@ public class ActionLink implements Serializable{
 	public ActionLink(SpriteElement sprite, String action){
 		this.sprite = sprite;
 		this.action = action;
+		this.spriteElement2IdOrCategory = "";
 	}
 
 	public ActionLink(SpriteElement sprite, String spriteElement2IdOrCategory, String action) {
