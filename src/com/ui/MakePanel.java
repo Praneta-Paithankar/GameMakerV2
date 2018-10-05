@@ -596,17 +596,17 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		JComboBox<String> actionDropDownList1 = new JComboBox<>(Constants.AVAILABLE_ACTIONS);
 		
 		spriteCategoryDropDownlabel = new JLabel("Sprite Id/Category Id :");
-		JComboBox<String> categoryDropDownList = new JComboBox<>(categoryIds);
+		JTextField categoryTextField1 = new JTextField();
 		
 		Object[] message = {  
 				actionIDDropDownlabel, actionDropDownList1,
-				spriteCategoryDropDownlabel, categoryDropDownList
+				spriteCategoryDropDownlabel, categoryTextField1
 			};
     	
 		int option = subCollisionpane.showConfirmDialog(null, message, "Collison between Ids", subCollisionpane.OK_CANCEL_OPTION);
 		
 		if(option== JOptionPane.OK_OPTION) {
-			collisionMap.put(actionDropDownList1.getSelectedItem().toString(), categoryDropDownList.getSelectedItem().toString());
+			collisionMap.put(categoryTextField1.getText(),actionDropDownList1.getSelectedItem().toString());
 			log.error(collisionMap.values().toString());
 		}	
 		else {
