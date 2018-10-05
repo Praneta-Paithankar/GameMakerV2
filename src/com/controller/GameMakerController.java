@@ -53,6 +53,7 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			this.sprite = gui.getMakePanel().getNewSprite();
 			this.newSprite = gameObject.spriteDecoder(sprite);
 			this.gameDriver.addSpriteElements(newSprite);
+			gui.getBoardPanel().setSpriteElement(newSprite);
 			this.gui.addSpriteToPanel(newSprite);
 			eventMap = gameDriver.getEventMap();
 			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {
@@ -88,7 +89,7 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			gui.getMakePanel().getCheckBox().get(i).setVisible(true);
 		}
 //		gui.getMakePanel().createImage();
-		gui.getMakePanel().createSpriteButtons();
+//		gui.getMakePanel().createSpriteButtons();
 		//gui.getMakePanel().createSaveButton();
 		//gui.getMakePanel().createLoadButton();
 	}
@@ -121,7 +122,6 @@ public class GameMakerController implements  ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 		SpriteElement spriteElement = null;
 		SpriteElement gamePanelSelected = gui.getBoardPanel().getSpriteElement();
-		
 		if(gamePanelSelected != null)
 		{
 			if(gamePanelSelected instanceof CircularSprite) {
@@ -144,9 +144,9 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			
 			spriteElement.setElementX(e.getX());
 			spriteElement.setElementY(e.getY());
-			System.out.println("Mouse clicked on = " + spriteElement.getElementX() + " " + spriteElement.getElementY());
-			
+//			System.out.println("Mouse clicked on = " + spriteElement.getElementX() + " " + spriteElement.getElementY());
 			gui.getBoardPanel().addComponent(spriteElement);
+			gui.draw(null);
 			
 			
 		}
@@ -176,6 +176,14 @@ public class GameMakerController implements  ActionListener, MouseListener {
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public GUI getGui() {
+		return gui;
+	}
+
+	public void setGui(GUI gui) {
+		this.gui = gui;
 	}
 
 }
