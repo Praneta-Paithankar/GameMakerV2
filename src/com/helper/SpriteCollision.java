@@ -11,7 +11,7 @@ import com.infrastruture.Direction;
 public class SpriteCollision {
 protected static Logger log = Logger.getLogger(SpriteCollision.class);
 	
-	public Direction checkCollisionOfSprites(SpriteElement c) {
+	public Direction checkCollisionOfSpriteWithWall(SpriteElement c) {
 		if (c.getElementX() <= 0 || c.getElementX() + c.getWidth() >=  Constants.BOARD_PANEL_WIDTH) {
 			return Direction.X;
 		}

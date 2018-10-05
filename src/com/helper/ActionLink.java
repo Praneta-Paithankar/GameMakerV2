@@ -9,6 +9,8 @@ public class ActionLink implements Serializable{
 	
 	String action;
 	SpriteElement sprite;
+	String spriteElement2IdOrCategory;
+	
 	
 	public ActionLink() {
 		
@@ -25,5 +27,28 @@ public class ActionLink implements Serializable{
 	public ActionLink(SpriteElement sprite, String action){
 		this.sprite = sprite;
 		this.action = action;
+	}
+
+	public ActionLink(SpriteElement sprite, String spriteElement2IdOrCategory, String action) {
+		super();
+		this.action = action;
+		this.sprite = sprite;
+		this.spriteElement2IdOrCategory = spriteElement2IdOrCategory;
+	}
+
+	public String getSpriteElement2IdOrCategory() {
+		return spriteElement2IdOrCategory;
+	}
+
+	public void setSpriteElement2IdOrCategory(String spriteElement2IdOrCategory) {
+		this.spriteElement2IdOrCategory = spriteElement2IdOrCategory;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	public void setSprite(SpriteElement sprite) {
+		this.sprite = sprite;
 	}
 }
