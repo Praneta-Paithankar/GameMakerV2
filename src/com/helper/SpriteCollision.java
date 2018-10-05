@@ -11,11 +11,11 @@ import com.infrastruture.Direction;
 public class SpriteCollision {
 protected static Logger log = Logger.getLogger(SpriteCollision.class);
 	
-	public Direction checkCollisionOfSpriteWithWall(SpriteElement c) {
-		if (c.getElementX() <= 0 || c.getElementX() + c.getWidth() >=  Constants.BOARD_PANEL_WIDTH) {
+	public Direction checkCollisionOfSpriteWithWall(SpriteElement spriteElement) {
+		if (spriteElement.getElementX() <= 0 || spriteElement.getElementX() + spriteElement.getWidth() >=  Constants.BOARD_PANEL_WIDTH) {
 			return Direction.X;
 		}
-		if (c.getElementY() <= 0 || c.getElementY() + c.getHeight() >= Constants.BOARD_PANEL_HEIGHT) {
+		if (spriteElement.getElementY() <= 0 || spriteElement.getElementY() + spriteElement.getHeight() >= Constants.BOARD_PANEL_HEIGHT) {
 			return Direction.Y;
 		}
 		return Direction.NONE;

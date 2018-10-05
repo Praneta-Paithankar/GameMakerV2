@@ -360,6 +360,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 						element.getWidth()/2, element.getElementY()-10, 10, 10, 0, -1, "bullet1", "bullet",
 						Color.black,Constants.GAME_NOT_APPLICABLE_COMPONENT));
 			addSpriteElements(circularSprite);
+			System.out.println("Event map = " + eventMap );
+			eventMap.get("OnTick").add(new ActionLink(circularSprite, "move"));
 			break;
 		default:
 			break;
