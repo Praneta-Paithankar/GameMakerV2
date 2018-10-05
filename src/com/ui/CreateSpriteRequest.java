@@ -1,5 +1,6 @@
 package com.ui;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,15 +8,43 @@ public class CreateSpriteRequest {
 	private String elementName;
 	private int xlocation;
 	private int ylocation;
+	private int XVel;
+	private int YVel;
+	private String spriteId;
+	private String category;
+	private Color color;
+	private String imagePath;
+	private int width;
+	private int height;
+	private int gameEndDependency;
 	private Map<String, String> eventAction;
 	
-	public CreateSpriteRequest(String name, int x, int y) {
+	public CreateSpriteRequest(String name, int x, int y, int velX, int velY, int width, int height, Color color, 
+								String imageFilePath, String spriteId, String category, Map<String, String> eventAction, int gameEndDependency) {
 		this.elementName = name;
 		this.xlocation = x;
 		this.ylocation = y;
-		eventAction = new HashMap<>(); 
+		this.XVel = velX;
+		this.YVel = velY;
+		this.width = width;
+		this.height = height;
+		this.color = color;
+		this.imagePath = imageFilePath;
+		this.spriteId = spriteId;
+		this.category = category;
+		this.eventAction = eventAction;
+		this.gameEndDependency=gameEndDependency;
+//		eventAction = new HashMap<>(); 
 	}
 	
+	public int getGameEndDependency() {
+		return gameEndDependency;
+	}
+
+	public void setGameEndDependency(int gameEndDependency) {
+		this.gameEndDependency = gameEndDependency;
+	}
+
 	public void addEventAction(String event, String action) {
 		eventAction.put(event, action);
 	}
@@ -50,6 +79,70 @@ public class CreateSpriteRequest {
 
 	public void setYlocation(int ylocation) {
 		this.ylocation = ylocation;
+	}
+
+	public int getXVel() {
+		return XVel;
+	}
+
+	public void setXVel(int xVel) {
+		XVel = xVel;
+	}
+
+	public int getYVel() {
+		return YVel;
+	}
+
+	public void setYVel(int yVel) {
+		YVel = yVel;
+	}
+
+	public String getSpriteId() {
+		return spriteId;
+	}
+
+	public void setSpriteId(String spriteId) {
+		this.spriteId = spriteId;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
+	public String getImagePath() {
+		return imagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 	
 	

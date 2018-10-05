@@ -3,9 +3,12 @@
  */
 package com.component;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,33 +31,49 @@ public abstract class SpriteElement implements Serializable{
 	private int elementY;
 	private boolean visible;
 	
+	private String spriteId;
+	private String category;
+	private Color color;
+	
 	private int firstInstanceOfX;
 	private int firstInstanceOfY;
 	private int firstInstanceOfVelX;
 	private int firstInstanceOfVelY;
 	private transient BufferedImage imageIcon;
 	private String imagePath;
-	private int imageWidth;
-	private int imageHeight;
+	private int width;
+	private int height;
 	private int imageType;
 	private boolean isShooter;
+	private int gameEndDependency;
+
 	
-	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY) throws IOException {
+	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color, int gameEndDependency) throws IOException {
 		this.imagePath = image;
-		this.imageIcon = ImageIO.read(new File(image));
-		this.imageWidth = width;
-		this.imageHeight = height;
-		this.imageIcon = resize(imageIcon, imageWidth, imageHeight);
+//		this.imageIcon = ImageIO.read(new File(image));
+		this.imageIcon = null;
+		this.width = width;
+		this.height = height;
+//		this.imageIcon  = resize(imageIcon, width, height);
 		this.firstInstanceOfVelX =this.XVel =velX;
 		this.firstInstanceOfVelY = this.YVel = velY;
 		this.visible = true;
 		this.firstInstanceOfX = this.elementX = elementX;
 		this.firstInstanceOfY = this.elementY = elementY;
+		this.spriteId = spriteId;
+		this.category = category;
+		this.color = color;
+		this.gameEndDependency=gameEndDependency;
 
 	}
-
 	public SpriteElement(SpriteElement element) throws IOException {
-		this(element.imagePath,element.elementX,element.elementY,element.imageWidth,element.imageHeight, element.XVel, element.YVel);
+		this(element.imagePath,element.elementX,element.elementY,element.width,element.height, element.XVel, element.YVel, element.spriteId,element.category,element.color,element.gameEndDependency);
+	}
+	public int getGameEndDependency() {
+		return gameEndDependency;
+	}
+	public void setGameEndDependency(int gameEndDependency) {
+		this.gameEndDependency = gameEndDependency;
 	}
 	public BufferedImage resize(BufferedImage img, int width, int height) {
 		Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
@@ -83,7 +102,7 @@ public abstract class SpriteElement implements Serializable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			this.imageIcon = resize(imageIcon, imageWidth, imageHeight);
+			this.imageIcon = resize(imageIcon, width, height);
 		}
 
 		if(isVisible()) {
@@ -99,6 +118,15 @@ public abstract class SpriteElement implements Serializable{
 		} else {
 			return new RectangularSprite((RectangularSprite)shootingObject);
 		}
+	}
+		
+	public boolean intersects(SpriteElement c) {
+
+		java.awt.Rectangle one = new java.awt.Rectangle(elementX ,elementY, width, height);
+		java.awt.Rectangle two = new java.awt.Rectangle(c.getElementX(), c.getElementY(), c.getWidth(), c.getHeight());
+
+		return one.intersects(two);
+
 	}
 	public int getImageType() {
 		return imageType;
@@ -210,20 +238,38 @@ public abstract class SpriteElement implements Serializable{
 		this.visible = visible;
 	}
 
-	public int getImageWidth() {
-		return imageWidth;
+	public int getWidth() {
+		return width;
 	}
 
-	public void setImageWidth(int imageWidth) {
-		this.imageWidth = imageWidth;
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
-	public int getImageHeight() {
-		return imageHeight;
+	public int getHeight() {
+		return height;
 	}
 
-	public void setImageHeight(int imageHeight) {
-		this.imageHeight = imageHeight;
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	public String getSpriteId() {
+		return spriteId;
+	}
+	public void setSpriteId(String spriteId) {
+		this.spriteId = spriteId;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public Color getColor() {
+		return color;
+	}
+	public void setColor(Color color) {
+		this.color = color;
 	}
 	
 }

@@ -72,13 +72,13 @@ public class SpriteCollisionTest {
 	@Test 
 	void checkCollisionWithRectangularElementShouldReturnXIfCollisionOccursWithRectangularElement() {
 		when(sprite.getElementX()).thenReturn(50);
-		when(sprite.getImageWidth()).thenReturn(5);
+		when(sprite.getWidth()).thenReturn(5);
 		when(sprite.getElementY()).thenReturn(20);
-		when(sprite.getImageHeight()).thenReturn(5);
+		when(sprite.getHeight()).thenReturn(5);
 		when(destinationSprite.getElementX()).thenReturn(50);
-		when(destinationSprite.getImageWidth()).thenReturn(10);
+		when(destinationSprite.getWidth()).thenReturn(10);
 		when(destinationSprite.getElementY()).thenReturn(25);
-		when(destinationSprite.getImageHeight()).thenReturn(10);
+		when(destinationSprite.getHeight()).thenReturn(10);
 		
 		Direction result = spriteCollision.checkCollisionBetweenTwoRectangles((RectangularSprite)sprite, (RectangularSprite)destinationSprite);
 		assertEquals(Direction.X, result);
