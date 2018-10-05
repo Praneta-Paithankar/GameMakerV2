@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.SpinnerDateModel;
+
 import org.apache.log4j.Logger;
 
 import com.component.CircularSprite;
@@ -17,6 +19,7 @@ import com.component.RectangularSprite;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
 import com.helper.GameObject;
+import com.infrastruture.Constants;
 import com.infrastruture.Element;
 import com.timer.BreakoutTimer;
 import com.ui.CreateSpriteRequest;
@@ -56,11 +59,20 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			gui.getBoardPanel().setSpriteElement(newSprite);
 			this.gui.addSpriteToPanel(newSprite);
 			eventMap = gameDriver.getEventMap();
+			switch (sprite.getGameEndDependency()) {
+			case Constants.GAME_WIN_COMPONENT:
+				gameDriver.addGameWinSprite(newSprite);
+				break;
+			case Constants.GAME_LOSE_COMPONENT:
+				gameDriver.addGameLoseSprite(newSprite);
+				break;
+			default:
+				break;
+			}
+	
 			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {
-				if (entry.getKey().equals("GameEnd")) {
-					gameDriver.addGameEndSprite(newSprite);
-				}
-				else if (eventMap.containsKey(entry.getKey())) {					
+			 if (eventMap.containsKey(entry.getKey())) {	
+				// System.out.println("here");
 					eventMap.get(entry.getKey()).add(new ActionLink(newSprite, entry.getValue()));
 				}
 				else {

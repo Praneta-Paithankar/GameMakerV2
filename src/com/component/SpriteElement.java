@@ -45,8 +45,10 @@ public abstract class SpriteElement implements Serializable{
 	private int height;
 	private int imageType;
 	private boolean isShooter;
+	private int gameEndDependency;
+
 	
-	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color) throws IOException {
+	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color, int gameEndDependency) throws IOException {
 		this.imagePath = image;
 //		this.imageIcon = ImageIO.read(new File(image));
 		this.imageIcon = null;
@@ -61,10 +63,17 @@ public abstract class SpriteElement implements Serializable{
 		this.spriteId = spriteId;
 		this.category = category;
 		this.color = color;
+		this.gameEndDependency=gameEndDependency;
 
 	}
 	public SpriteElement(SpriteElement element) throws IOException {
-		this(element.imagePath,element.elementX,element.elementY,element.width,element.height, element.XVel, element.YVel, element.spriteId,element.category,element.color);
+		this(element.imagePath,element.elementX,element.elementY,element.width,element.height, element.XVel, element.YVel, element.spriteId,element.category,element.color,element.gameEndDependency);
+	}
+	public int getGameEndDependency() {
+		return gameEndDependency;
+	}
+	public void setGameEndDependency(int gameEndDependency) {
+		this.gameEndDependency = gameEndDependency;
 	}
 	public BufferedImage resize(BufferedImage img, int width, int height) {
 		Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
