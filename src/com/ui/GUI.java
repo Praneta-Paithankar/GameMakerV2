@@ -82,6 +82,7 @@ public class GUI extends JFrame implements Element{
 	
 	public void addGameMakerDriver(GameMakerController controller) {
 		makePanel.createButtons(controller);
+		boardPanel.addMouseListener(controller);
 	}
 
 	public void changeFocus()

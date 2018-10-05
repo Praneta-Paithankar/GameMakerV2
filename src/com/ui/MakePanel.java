@@ -83,7 +83,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private JCheckBox shooterCheckbox;
 	private JButton shooterButton;
 	private JRadioButton gameWinRadioButton;
-	private JRadioButton gameLooseRadioButton;
+	private JRadioButton gameLoseRadioButton;
 	private JRadioButton notApplicableRadioButton;
 	private JLabel gameWinlabel;
 	private JLabel gameLooselabel;
@@ -214,12 +214,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 //        }
 //	}
 //	
-	public void createSpriteButtons()
-	{
-//		createCircleButton();
-//		createRectangleButton();
-	}
-	
+
 	public PanelButton createMakeButton() {
 		PanelButton make = new PanelButton("Make", "make");
 		make.setBounds(50, 10, 100, 50);
@@ -437,17 +432,17 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	collisionsButton.addActionListener(this);
     	
     	gameWinRadioButton = new JRadioButton("Game Win");
-    	gameLooseRadioButton=new JRadioButton("Game Loose");
+    	gameLoseRadioButton=new JRadioButton("Game Lose");
     	notApplicableRadioButton=new JRadioButton("Not Applicable");
     	
     	notApplicableRadioButton.setSelected(true);
     	group = new ButtonGroup();
     	group.add(gameWinRadioButton);
-    	group.add(gameLooseRadioButton);
+    	group.add(gameLoseRadioButton);
     	group.add(notApplicableRadioButton);
     	
     	subOptionPanel2.add(gameWinRadioButton);
-    	subOptionPanel2.add(gameLooseRadioButton);
+    	subOptionPanel2.add(gameLoseRadioButton);
     	subOptionPanel2.add(notApplicableRadioButton);
     
     	mainOptionPanel.add(subOptionPanel1);
@@ -481,13 +476,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
 												Color.BLACK, "", spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap());
 			
-			
-			
-//			yVel.getText();
-//			width.getText();
-//			height.getText();
-//			spriteTextField.getText();
-//			categoryTextField.getText();
 //			
 			
 //			getEventActionMap();// to get event and action mapping
@@ -502,6 +490,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		
 		if(option != JOptionPane.CANCEL_OPTION) {
         	controller.done();
+           
 		}
 		
 	}
@@ -621,7 +610,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			log.error(collisionMap.values().toString());
 		}	
 		else {
-			;
+			
 		}
 		
 	}

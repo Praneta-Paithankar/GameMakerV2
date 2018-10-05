@@ -65,5 +65,6 @@ public class GameMaker {
 
 		gui.draw(null);
 		gui.pack();
+		
 	}
 }
