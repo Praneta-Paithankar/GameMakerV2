@@ -57,7 +57,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private List<JCheckBox> checkBox = new ArrayList<>();
 	private CreateSpriteRequest newSprite;
 	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
-	private HashMap<String,String> eventActionMap;
+	private HashMap<String,String> eventActionMap=new HashMap<String, String>();
 	
 	private JPanel subOptionPanel1;
 	private GridLayout gbLayout;
@@ -105,7 +105,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private SpriteElement spriteElement;
 
 	private JLabel spriteCategoryDropDownlabel;
-	private HashMap<String,String> collisionMap;
+	private HashMap<String,String> collisionMap=new HashMap<>();
 	private ButtonGroup group;
 	private JLabel widthLabel;
 	private JTextField width;
@@ -538,12 +538,13 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		switch(e.getActionCommand()) {
-		case "Actions" :eventActionMap=new HashMap<>(); 
+		case "Actions" :
 						createActionPopUp();
 						break;
-		case "Collisions": collisionMap=new HashMap<>();
+		case "Collisions":
 						   createCollisionPopUp();
 						   break;
+		case "shooter" :  createActionPopUp();
 		default : log.error("switch hitting the default case of makepanel actionlistner");
 						break;
 		}
@@ -607,7 +608,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		
 		if(option== JOptionPane.OK_OPTION) {
 			collisionMap.put(categoryTextField1.getText(),actionDropDownList1.getSelectedItem().toString());
-			log.error(collisionMap.values().toString());
+			log.error(collisionMap.entrySet().toString());
 		}	
 		else {
 			

@@ -21,7 +21,8 @@ public class CircularSprite extends SpriteElement implements Serializable {
 		super(image, elementX, elementY, width, height, velX, velY, spriteId, category,color,gameEndDependency);
 	}
 	public CircularSprite(CircularSprite circularSprite) throws IOException {
-		this(circularSprite.getImagePath(), circularSprite.getElementX(), circularSprite.getElementY(), circularSprite.getWidth(), circularSprite.getHeight(), circularSprite.getXVel(), circularSprite.getYVel(),circularSprite.getSpriteId(),circularSprite.getCategory(),circularSprite.getColor(),circularSprite.getGameEndDependency());	
+		this(circularSprite.getImagePath(), circularSprite.getElementX(), circularSprite.getElementY(), circularSprite.getWidth(), circularSprite.getHeight(), circularSprite.getXVel(), circularSprite.getYVel(),circularSprite.getSpriteId(),circularSprite.getCategory(),circularSprite.getColor(),circularSprite.getGameEndDependency());
+		
 	}
 	public void draw(Graphics g) {
 		//logger.trace("Drawing a circle");

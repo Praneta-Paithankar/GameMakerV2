@@ -24,7 +24,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import javax.swing.JOptionPane;
@@ -218,23 +218,27 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	public void checkCollision() {
 		MacroCommand macroCommand = new MacroCommand();
 		Direction d;
+		
+		Set<SpriteElement> visited = new HashSet();
 		if (eventMap.containsKey("OnCollision")) {
 			List<ActionLink> eventObservers = eventMap.get("OnCollision");
 			for(ActionLink actionObserver: eventObservers) {
-				
-				d = collision.checkCollisionOfSpriteWithWall(actionObserver.getSprite());
-				actionForCollision(actionObserver, d, macroCommand);
-				
-				for(SpriteElement element: sprites) {
-					SpriteElement currentSprite=actionObserver.getSprite();
-					if (element!=currentSprite && 
-							(actionObserver.getSpriteElement2IdOrCategory().isEmpty() || 
-							element.getCategory().equals(actionObserver.getSpriteElement2IdOrCategory()) ||
-							element.getSpriteId().equals(actionObserver.getSpriteElement2IdOrCategory()))) {
-						d = collision.checkCollisionOfSprites(currentSprite,element);
-						actionForCollision(actionObserver, d, macroCommand);
-					}
+				if(!visited.contains(actionObserver.getSprite())) {
+					visited.add(actionObserver.getSprite());
+					d = collision.checkCollisionOfSpriteWithWall(actionObserver.getSprite());
+					actionForCollision(actionObserver, d, macroCommand);
 				}
+					for(SpriteElement element: sprites) {
+						SpriteElement currentSprite=actionObserver.getSprite();
+						if (element!=currentSprite && 
+								(actionObserver.getSpriteElement2IdOrCategory().isEmpty() || 
+								element.getCategory().equals(actionObserver.getSpriteElement2IdOrCategory()) ||
+								element.getSpriteId().equals(actionObserver.getSpriteElement2IdOrCategory()))) {
+							d = collision.checkCollisionOfSprites(currentSprite,element);
+							actionForCollision(actionObserver, d, macroCommand);
+						}
+					}					
+				
 			}
 			macroCommand.execute();
 			commandQueue.addLast(macroCommand);
@@ -307,7 +311,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					//macroCommand.addCommand(shoot);
 					break;
 				case "move": 
-					
+					System.out.println("in move");
 					try {
 						setSpriteDirection(e, actionObserver.getSprite());
 					} catch (IOException e1) {
@@ -360,6 +364,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 						element.getWidth()/2, element.getElementY()-10, 10, 10, 0, -1, "bullet1", "bullet",
 						Color.black,Constants.GAME_NOT_APPLICABLE_COMPONENT));
 			addSpriteElements(circularSprite);
+			System.out.println("Event map = " + eventMap );
+			eventMap.get("OnTick").add(new ActionLink(circularSprite, "move"));
 			break;
 		default:
 			break;
