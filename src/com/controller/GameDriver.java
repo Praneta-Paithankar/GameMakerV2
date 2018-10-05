@@ -258,7 +258,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	public void eventHandler(String event) {
 		
 		MacroCommand macroCommand = new MacroCommand();
-
+		System.out.println("");
 		if (eventMap.containsKey(event)) {
 			List<ActionLink> eventObservers = eventMap.get(event);
 			for(ActionLink actionObserver: eventObservers) {

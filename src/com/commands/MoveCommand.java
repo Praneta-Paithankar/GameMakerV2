@@ -22,6 +22,7 @@ public class MoveCommand implements Command{
 		
 		sprite.setElementX(elementX+sprite.getXVel());
 		sprite.setElementY(elementY+sprite.getYVel());
+		System.out.println("X:"+ sprite.getElementX());
 	}
 
 	@Override

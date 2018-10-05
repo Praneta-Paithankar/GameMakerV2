@@ -583,7 +583,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		int option = subActionpane.showConfirmDialog(null, message, "Event Action Mapping", subActionpane.OK_CANCEL_OPTION);
 		
 		if(option== JOptionPane.OK_OPTION) {
-			eventActionMap.put(actionDropDownList.getSelectedItem().toString(), eventDropDownList.getSelectedItem().toString());
+			eventActionMap.put( eventDropDownList.getSelectedItem().toString(),actionDropDownList.getSelectedItem().toString());
 		}	
 		else {
 			

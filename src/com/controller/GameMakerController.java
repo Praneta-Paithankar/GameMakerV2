@@ -70,7 +70,8 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			}
 	
 			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {
-			 if (eventMap.containsKey(entry.getKey())) {					
+			 if (eventMap.containsKey(entry.getKey())) {	
+				// System.out.println("here");
 					eventMap.get(entry.getKey()).add(new ActionLink(newSprite, entry.getValue()));
 				}
 				else {
