@@ -69,9 +69,16 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			default:
 				break;
 			}
-	
-			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {
-			 if (eventMap.containsKey(entry.getKey())) {	
+			
+			for (Map.Entry<String,String> entry:sprite.getCollisionMap().entrySet()) {			 
+				eventMap.putIfAbsent("OnCollision", new ArrayList<>());
+				eventMap.get("OnCollision").add(new ActionLink(newSprite,entry.getKey(),entry.getValue()));
+			}
+			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {			 
+				eventMap.putIfAbsent(entry.getKey(), new ArrayList<>());
+				eventMap.get(entry.getKey()).add(new ActionLink(newSprite, entry.getValue()));
+			}
+				/*if (eventMap.containsKey(entry.getKey())) {	
 				// System.out.println("here");
 					eventMap.get(entry.getKey()).add(new ActionLink(newSprite, entry.getValue()));
 				}
@@ -79,11 +86,11 @@ public class GameMakerController implements  ActionListener, MouseListener {
 					List<ActionLink> listAction = new ArrayList<>();
 					listAction.add(new ActionLink(newSprite, entry.getValue()));
 					
-//					eventMap.getOrDefault(entry.getKey(), new ArrayList<>()).add(new ActionLink(newSprite, entry.getValue()));
+//					
 
 					eventMap.put(entry.getKey(), listAction);
-				}
-			}
+				}*/
+			
 			this.gui.draw(null);
 			
 		} catch (IOException e) {

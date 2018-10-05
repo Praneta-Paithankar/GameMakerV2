@@ -18,9 +18,9 @@ public class CreateSpriteRequest {
 	private int height;
 	private int gameEndDependency;
 	private Map<String, String> eventAction;
-	
+	HashMap<String,String> collisionMap;
 	public CreateSpriteRequest(String name, int x, int y, int velX, int velY, int width, int height, Color color, 
-								String imageFilePath, String spriteId, String category, Map<String, String> eventAction, int gameEndDependency) {
+								String imageFilePath, String spriteId, String category, Map<String, String> eventAction, int gameEndDependency, HashMap<String,String> collisionMap) {
 		this.elementName = name;
 		this.xlocation = x;
 		this.ylocation = y;
@@ -34,9 +34,18 @@ public class CreateSpriteRequest {
 		this.category = category;
 		this.eventAction = eventAction;
 		this.gameEndDependency=gameEndDependency;
+		this.collisionMap=collisionMap;
 //		eventAction = new HashMap<>(); 
 	}
 	
+	public HashMap<String, String> getCollisionMap() {
+		return collisionMap;
+	}
+
+	public void setCollisionMap(HashMap<String, String> collisionMap) {
+		this.collisionMap = collisionMap;
+	}
+
 	public int getGameEndDependency() {
 		return gameEndDependency;
 	}

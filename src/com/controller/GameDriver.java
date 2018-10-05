@@ -222,12 +222,16 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			List<ActionLink> eventObservers = eventMap.get("OnCollision");
 			for(ActionLink actionObserver: eventObservers) {
 				
-				d = collision.checkCollisionOfSprites(actionObserver.getSprite());
+				d = collision.checkCollisionOfSpriteWithWall(actionObserver.getSprite());
 				actionForCollision(actionObserver, d, macroCommand);
 				
 				for(SpriteElement element: sprites) {
-					if (element!=actionObserver.getSprite()) {
-						d = collision.checkCollisionOfSprites(actionObserver.getSprite(),element);
+					SpriteElement currentSprite=actionObserver.getSprite();
+					if (element!=currentSprite && 
+							(actionObserver.getSpriteElement2IdOrCategory().isEmpty() || 
+							element.getCategory().equals(actionObserver.getSpriteElement2IdOrCategory()) ||
+							element.getSpriteId().equals(actionObserver.getSpriteElement2IdOrCategory()))) {
+						d = collision.checkCollisionOfSprites(currentSprite,element);
 						actionForCollision(actionObserver, d, macroCommand);
 					}
 				}
@@ -258,7 +262,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	public void eventHandler(String event) {
 		
 		MacroCommand macroCommand = new MacroCommand();
-		System.out.println("");
 		if (eventMap.containsKey(event)) {
 			List<ActionLink> eventObservers = eventMap.get(event);
 			for(ActionLink actionObserver: eventObservers) {
@@ -304,13 +307,14 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					//macroCommand.addCommand(shoot);
 					break;
 				case "move": 
+					
 					try {
 						setSpriteDirection(e, actionObserver.getSprite());
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
+//					macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
 					break;
 				default: break;
 				}
@@ -321,26 +325,41 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		}
 	}
 	
+	
+	
+
 	public void setSpriteDirection(KeyEvent e, SpriteElement element) throws IOException {
 		switch(e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
-			element.setYVel(0);
-			element.setXVel(-1*Constants.X_Velocity);
+			if (element.getElementX() - element.getXVel() > 0) {
+//				element.setYVel(0);
+				element.setElementX(element.getElementX() - element.getXVel());
+			}
 			break;
 		case KeyEvent.VK_RIGHT:
-			element.setYVel(0);
-			element.setXVel(Constants.X_Velocity);
+			if (element.getElementX() + element.getWidth() + element.getXVel() <  Constants.BOARD_PANEL_WIDTH) {
+//				element.setYVel(0);
+				element.setElementX(element.getElementX() + element.getXVel());
+			}
 			break;
 		case KeyEvent.VK_UP:
-			element.setXVel(0);
-			element.setYVel(-1*Constants.Y_Velocity);
+			if (element.getElementY() - element.getYVel() > 0) {
+//				element.setXVel(0);
+				element.setElementY(element.getElementY() - element.getYVel());
+			}
 			break;
 		case KeyEvent.VK_DOWN:
-			element.setXVel(0);
-			element.setYVel(Constants.Y_Velocity);
+			if (element.getElementY() + element.getHeight() + element.getYVel() <  Constants.BOARD_PANEL_HEIGHT) {
+//				element.setXVel(0);
+				element.setElementY(element.getElementY() + element.getYVel());
+			}
 			break;
 		case KeyEvent.VK_SPACE:
-			element.shoot(new CircularSprite("", element.getElementX() + element.getWidth()/2, element.getElementY()-10, 10, 10, 0, -1, "bullet1", "bullet", Color.black,Constants.GAME_NOT_APPLICABLE_COMPONENT));
+			//System.out.println("Shooting");
+			CircularSprite circularSprite = (CircularSprite) element.shoot(new CircularSprite("", element.getElementX() + 
+						element.getWidth()/2, element.getElementY()-10, 10, 10, 0, -1, "bullet1", "bullet",
+						Color.black,Constants.GAME_NOT_APPLICABLE_COMPONENT));
+			addSpriteElements(circularSprite);
 			break;
 		default:
 			break;
