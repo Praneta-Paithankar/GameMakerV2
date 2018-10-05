@@ -1,12 +1,10 @@
 package com.ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
@@ -16,7 +14,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -24,19 +21,18 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 
@@ -58,6 +54,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private CreateSpriteRequest newSprite;
 	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
 	private HashMap<String,String> eventActionMap=new HashMap<String, String>();
+	private String path;
 	
 	private JPanel subOptionPanel1;
 	private GridLayout gbLayout;
@@ -406,7 +403,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	imagelabel = new JLabel("Image :");
     	subOptionPanel1.add(imagelabel);
     	
-    	imageButton = new JButton("Select Image");
+    	imageButton = new JButton("Image");
     	subOptionPanel1.add(imageButton);
     	imageButton.addActionListener(this);
     	
@@ -474,7 +471,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			
 			
 			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
-												Color.BLACK, "", spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap());
+												Color.BLACK, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap());
 			
 //			
 			
@@ -545,6 +542,13 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 						   createCollisionPopUp();
 						   break;
 		case "shooter" :  createActionPopUp();
+							break;
+							
+		case "Image" : 
+			
+					setPath(fileExplorer());
+						break;
+						
 		default : log.error("switch hitting the default case of makepanel actionlistner");
 						break;
 		}
@@ -553,6 +557,20 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		
 	}
 
+	public String fileExplorer()
+	{
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(new File("."));
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		int returnVal = chooser.showOpenDialog(this);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			File file = chooser.getSelectedFile();
+			String path = file.getAbsolutePath();
+			System.out.println("path = " + path);
+			return path;
+		}
+		return "";
+	}
 
 	private void createActionPopUp() {
 		// TODO Auto-generated method stub
@@ -622,6 +640,12 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 
 	public void setSpriteElement(SpriteElement spriteElement) {
 		this.spriteElement = spriteElement;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
 	}
 	
 	
