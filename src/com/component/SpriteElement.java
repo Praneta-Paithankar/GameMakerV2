@@ -112,6 +112,7 @@ public abstract class SpriteElement implements Serializable{
 	
 	public SpriteElement shoot(SpriteElement shootingObject) throws IOException {
 		if(shootingObject instanceof CircularSprite) {
+			
 			return new CircularSprite((CircularSprite)shootingObject);
 //			return new CircularSprite(shootingObject.imagePath,shootingObject.elementX,shootingObject.elementY,shootingObject.imageWidth, shootingObject.imageHeight,shootingObject.XVel, shootingObject.YVel,((CircularSprite) shootingObject).getRadius());
 
