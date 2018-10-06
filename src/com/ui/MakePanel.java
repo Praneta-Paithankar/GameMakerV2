@@ -1,19 +1,15 @@
 package com.ui;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -21,6 +17,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -111,6 +108,8 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private JRadioButton gameWinRadioButton;
 	private JRadioButton gameLoseRadioButton;
 	private JRadioButton notApplicableRadioButton;
+	private JButton createRectangle;
+	private JButton createCircle;
 	
 	private SpriteElement spriteElement;
 	private Color spriteColor;
@@ -124,6 +123,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private JLabel shooterIntervallabel;
 	private JTextField shooterIntervalTextField;
 	private String shooterInterval;
+	private BufferedImage image;
 	
 	
 	public MakePanel() {
@@ -244,6 +244,8 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		this.controller = controller;
 		this.add(createMakeButton());
 		this.add(createPlayButton());
+		this.add(createSetBackgroundButton());
+	
 		createCircleButton();
 		createRectangleButton();
 		createSaveButton();
@@ -264,6 +266,15 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		play.addActionListener(controller);
 		play.setFocusable(false);
 		return play;
+	}
+	
+	public PanelButton createSetBackgroundButton()
+	{
+		PanelButton setBackground = new PanelButton("Background", "setBackground");
+		setBackground.setBounds(50, 100, 104, 50);
+		setBackground.addActionListener(controller);
+		setBackground.setFocusable(false);
+		return setBackground;
 	}
 	
 	public void createSaveButton() {
@@ -288,22 +299,22 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	
 	public void createCircleButton()
 	{
-		JButton circleButton = new JButton("Circle");
-		circleButton.setBounds(50, 100, 100, 50);
-		circleButton.setActionCommand("Circle");
-		circleButton.addActionListener(controller);
-		circleButton.setVisible(true);
-		circleButton.setFocusable(false);
-		this.add(circleButton);
+		createCircle = new JButton("Circle");
+		createCircle.setBounds(50, 200, 100, 50);
+		createCircle.setActionCommand("Circle");
+		createCircle.addActionListener(controller);
+		createCircle.setVisible(false);
+		createCircle.setFocusable(false);
+		this.add(createCircle);
 	}
 	
 	public void createRectangleButton()
 	{
-		JButton createRectangle = new JButton("Rectangle");
-		createRectangle.setBounds(50, 200, 100, 50);
+		createRectangle = new JButton("Rectangle");
+		createRectangle.setBounds(50, 300, 100, 50);
 		createRectangle.setActionCommand("Rectangle");
 		createRectangle.addActionListener(controller);
-		createRectangle.setVisible(true);
+		createRectangle.setVisible(false);
 		createRectangle.setFocusable(false);
 		this.add(createRectangle);
 	}
@@ -320,6 +331,12 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		if (ballImage != null) {
 			g.drawImage(paddleImage, 100, 400, this);
 		}
+	}
+	
+	public void buttonVisiblity()
+	{
+		createCircle.setVisible(true);
+		createRectangle.setVisible(true);
 	}
 	
 	private BufferedImage resize(BufferedImage img, int width, int height) {
@@ -561,6 +578,13 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		}
 		return "";
 	}
+	
+	public String getBackgroundImagePath()
+	{
+		return fileExplorer();
+//		windowFrame.getGamePanel().setImage(imagePath);
+	}
+	
 	public Color colorChooser() {
 		Color color = JColorChooser.showDialog(this, "Choose color", Color.BLACK);
 		return color;

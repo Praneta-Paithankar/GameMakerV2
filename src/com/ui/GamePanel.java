@@ -36,12 +36,13 @@ public class GamePanel extends AbstractPanel implements Element {
 	{
 		 log.info("Initializing GamePanel");
 	    elements = new ArrayList<>();
-        try {
-            image = ImageIO.read(new File("./src/com/image/nature.jpg"));
-            image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
-        } catch (IOException e) {
-        	log.error(e.getMessage());
-        }
+//        try {
+//            image = ImageIO.read(new File("./src/com/image/nature.jpg"));
+//            image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
+////        	  image = ImageIO.read(new File());
+//        } catch (IOException e) {
+//        	log.error(e.getMessage());
+//        }
         setLayout();
 	}
 
@@ -138,6 +139,17 @@ public class GamePanel extends AbstractPanel implements Element {
 		
 	}
 
+	public void setImage(String path)
+	{
+		try {
+			image = ImageIO.read(new File(path));
+			image = resize(image, Constants.BOARD_PANEL_WIDTH, Constants.BOARD_PANEL_HEIGHT);
+			draw(null);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 
 	public SpriteElement getSpriteElement() {
