@@ -106,13 +106,17 @@ public class GameMakerController implements  ActionListener, MouseListener {
 	}
 	
 	public void make() {
-		for(int i=0;i<gui.getMakePanel().getCheckBox().size();i++) {
-			gui.getMakePanel().getCheckBox().get(i).setVisible(true);
-		}
-//		gui.getMakePanel().createImage();
-//		gui.getMakePanel().createSpriteButtons();
-		//gui.getMakePanel().createSaveButton();
-		//gui.getMakePanel().createLoadButton();
+		
+		gui.getMakePanel().buttonVisiblity();
+		
+	}
+	
+	public void setBackground()
+	{
+		String backgroundImagePath;
+		backgroundImagePath = gui.getMakePanel().getBackgroundImagePath();
+		gui.getBoardPanel().setImage(backgroundImagePath);
+		
 	}
 	
 	public void save() {
@@ -130,6 +134,8 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			play();
 		}else if(commandText.equals("make")) {
 			make();
+		}else if(commandText.equals("setBackground")) {
+			setBackground();
 		}else if(commandText.equals("save")) {
 			save();
 		}else if(commandText.equals("load")) {
