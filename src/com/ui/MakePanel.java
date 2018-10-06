@@ -44,7 +44,7 @@ import com.infrastruture.AbstractPanel;
 import com.infrastruture.Constants;
 import com.infrastruture.Element;
 
-public class MakePanel extends AbstractPanel implements Element, ItemListener, ActionListener{
+public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private List<String> sprites;
 	private GameMakerController controller;
@@ -131,7 +131,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
 		sprites = new ArrayList<>(Constants.spriteTypes);
 		spriteRequestMap = new HashMap<>();
-		createCheckbox();
 		setShooter(false);
 	}
 	
@@ -245,27 +244,11 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		this.controller = controller;
 		this.add(createMakeButton());
 		this.add(createPlayButton());
+		createCircleButton();
+		createRectangleButton();
 		createSaveButton();
 		createLoadButton();
 	}
-	
-	public void createCheckbox() {
-		int y = Constants.CHECKBOX_Y;
-		Font f = new Font("Serif", Font.BOLD, 20);
-		for (String s: sprites) {
-			JCheckBox c = new JCheckBox(s);
-			c.setBounds(Constants.CHECKBOX_X, y, Constants.CHECKBOX_WIDTH, Constants.CHECKBOX_HEIGHT);
-			c.setFont(f);
-			c.addItemListener(this);
-			c.setFocusable(false);
-			c.setVisible(false);
-			checkBox.add(c);
-			this.add(c);
-			y += 150;
-		}
-	}
-	
-
 
 	public PanelButton createMakeButton() {
 		PanelButton make = new PanelButton("Make", "make");
@@ -306,7 +289,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	public void createCircleButton()
 	{
 		JButton circleButton = new JButton("Circle");
-		circleButton.setBounds(200, 650, 100, 50);
+		circleButton.setBounds(50, 100, 100, 50);
 		circleButton.setActionCommand("Circle");
 		circleButton.addActionListener(controller);
 		circleButton.setVisible(true);
@@ -317,7 +300,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	public void createRectangleButton()
 	{
 		JButton createRectangle = new JButton("Rectangle");
-		createRectangle.setBounds(400, 650, 100, 50);
+		createRectangle.setBounds(50, 200, 100, 50);
 		createRectangle.setActionCommand("Rectangle");
 		createRectangle.addActionListener(controller);
 		createRectangle.setVisible(true);
@@ -478,7 +461,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	
     	return option;
 	}
-	private void getFormData(int option,boolean isShooter) {
+	private void getFormData(int option,boolean isShooter, String objectType) {
 		// TODO Auto-generated method stub
 		if(isShooter) {
 			shooterXvel=Integer.parseInt(xVel.getText());
@@ -512,7 +495,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			HashMap<String, String> eventAction = getEventActionMap();
 			
 			
-			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
+			newSprite = new CreateSpriteRequest(objectType, tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
 												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap(),1);
 //			getEventActionMap();// to get event and action mapping
 			getCollisionMap();	// to get mapping of event and collision
@@ -526,25 +509,13 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		}
 		
 	}
-
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		int sel = e.getStateChange();
-        if (sel == ItemEvent.SELECTED) {
-        	int option=createOptionPopUp(isShooter());
-        	if(option == JOptionPane.YES_OPTION)
-        		getFormData(option,isShooter());
-        	//createOptionPopUp();
-        } else {
-        	
-        }
+	
+	public void createSpriteElement(String objectType) {
+		int option=createOptionPopUp(isShooter());
+    	if(option == JOptionPane.YES_OPTION)
+    		getFormData(option,isShooter(),objectType);
 	}
 
-	
-
-	
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -558,11 +529,10 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		case "Shooter" :  	setShooter(true);
 							int option=createOptionPopUp(isShooter());
 							if(option == JOptionPane.YES_OPTION)
-					    		getFormData(option,isShooter());
+					    		getFormData(option,isShooter(),"Circle");
 							else
 								setShooter(false);
-							break;
-							
+							break;			
 		case "Image" : 
 			
 					setPath(fileExplorer());
@@ -573,7 +543,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		default : log.error("switch hitting the default case of makepanel actionlistner");
 						break;
 		}
-		System.out.println(e.getActionCommand());
 		//createOptionPopUp();
 		
 	}

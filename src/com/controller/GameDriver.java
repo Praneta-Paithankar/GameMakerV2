@@ -408,7 +408,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			gui.changeFocus();
 			gui.paintView();
 
-		} else if(commandText.equals("start")) {
+		}else if(commandText.equals("start")) {
 			if(isGamePaused) {
 				unPause();
 				gui.changeFocus();

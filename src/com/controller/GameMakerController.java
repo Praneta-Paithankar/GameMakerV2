@@ -134,6 +134,10 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			save();
 		}else if(commandText.equals("load")) {
 			load();
+		}else if(commandText.equals("Circle")) {
+			gui.getMakePanel().createSpriteElement(commandText);
+		}else if(commandText.equals("Rectangle")) {
+			gui.getMakePanel().createSpriteElement(commandText);
 		}
 	}
 

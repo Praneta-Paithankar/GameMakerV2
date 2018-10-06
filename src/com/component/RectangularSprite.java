@@ -31,7 +31,7 @@ public class RectangularSprite extends SpriteElement implements Serializable{
 	public void draw(Graphics g) {
 		//logger.debug("rectangle.isVisible() = " + isVisible());
 		if (isVisible()) {
-				if(getImagePath().length()>0) {
+			if(getImagePath()!= null && getImagePath().length()!=0) {
 					super.draw(g);
 				}else {
 					Graphics2D g2 = (Graphics2D) g;
