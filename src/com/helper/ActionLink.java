@@ -2,11 +2,16 @@ package com.helper;
 
 import java.io.Serializable;
 
+import com.component.CircularSprite;
 import com.component.SpriteElement;
 
 public class ActionLink implements Serializable{
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7933629464902243547L;
 	String action;
 	SpriteElement sprite;
 	String spriteElement2IdOrCategory;
@@ -51,5 +56,10 @@ public class ActionLink implements Serializable{
 
 	public void setSprite(SpriteElement sprite) {
 		this.sprite = sprite;
+	}
+	public String toString() {
+//		String explanation= (sprite.getSpriteId() instanceof CircularSprite)?"Circle:":"Rectangle";
+		return sprite.getSpriteId()+" " + action;
+		
 	}
 }

@@ -29,12 +29,12 @@ public class GameObject {
 		case "Circle":
 			return new CircularSprite(createSpriteRequest.getImagePath(), createSpriteRequest.getXlocation(), createSpriteRequest.getYlocation(), 
 					createSpriteRequest.getWidth(), createSpriteRequest.getHeight(), createSpriteRequest.getXVel(), 
-					createSpriteRequest.getYVel(), createSpriteRequest.getSpriteId(), createSpriteRequest.getCategory(), createSpriteRequest.getColor(),createSpriteRequest.getGameEndDependency());
+					createSpriteRequest.getYVel(), createSpriteRequest.getSpriteId(), createSpriteRequest.getCategory(), createSpriteRequest.getColor(),createSpriteRequest.getGameEndDependency(),createSpriteRequest.getCounterInterval());
 			
 		case "Rectangle":
 			return new RectangularSprite(createSpriteRequest.getImagePath(), createSpriteRequest.getXlocation(), createSpriteRequest.getYlocation(), 
 					createSpriteRequest.getWidth(), createSpriteRequest.getHeight(), createSpriteRequest.getXVel(), 
-					createSpriteRequest.getYVel(), createSpriteRequest.getSpriteId(), createSpriteRequest.getCategory(), createSpriteRequest.getColor(),createSpriteRequest.getGameEndDependency());
+					createSpriteRequest.getYVel(), createSpriteRequest.getSpriteId(), createSpriteRequest.getCategory(), createSpriteRequest.getColor(),createSpriteRequest.getGameEndDependency(),createSpriteRequest.getCounterInterval());
 				
 		}
 		return null;
