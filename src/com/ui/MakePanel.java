@@ -56,7 +56,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private boolean isShooter;
 	
 	private int shooterXvel;
-	private int shhoterYvel;
+	private int shooterYvel;
 	private int shooterWidth;
 	private int shooterHeight;
 	
@@ -70,7 +70,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private JPanel subOptionPanel2;
 	
 	private GridLayout gbLayout;
-	private GridBagConstraints gbConstraints;
 	
 	private JTextField x;
 	private JTextField y;
@@ -90,15 +89,12 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private JLabel colorlabel;
 	private JLabel imagelabel;
 	private JLabel shooterlabel;
-	private JLabel gameWinlabel;
-	private JLabel gameLooselabel;
-	private JLabel notApplicablelabel;
+
 	private JLabel collisionslabel;
 	private JLabel actionDropDownlabel;
 	private JLabel eventDropDownlabel;
 	private JLabel actionlabel;
-	private JLabel collisionIDDropDownlabel;
-	private JLabel spriteIDDropDownlabel;
+
 	private JLabel spriteCategoryDropDownlabel;
 	private JLabel widthLabel;
 	private JLabel heightLabel;
@@ -110,8 +106,6 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private JButton shooterButton;
 	private JButton actionsButton;
 	private JButton collisionsButton;
-	
-	private JCheckBox shooterCheckbox;
 	
 	private JRadioButton gameWinRadioButton;
 	private JRadioButton gameLoseRadioButton;
@@ -125,6 +119,10 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private HashMap<String,String> shooterEventActionMap=new HashMap<>();
 	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
 	private HashMap<String,String> eventActionMap=new HashMap<String, String>();
+
+	private JLabel shooterIntervallabel;
+	private JTextField shooterIntervalTextField;
+	private String shooterInterval;
 	
 	
 	public MakePanel() {
@@ -429,6 +427,13 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	    	subOptionPanel1.add(shooterButton);
 	    	
     	}
+    	else {
+    		shooterIntervallabel = new JLabel("Time in MilliSeconds :");
+	    	subOptionPanel1.add(shooterIntervallabel);
+	    	
+	    	shooterIntervalTextField = new JTextField(10);
+	    	subOptionPanel1.add(shooterIntervalTextField);
+    	}
     	actionlabel = new JLabel("Actions :");
     	subOptionPanel1.add(actionlabel);
     	
@@ -474,13 +479,20 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		// TODO Auto-generated method stub
 		if(isShooter) {
 			shooterXvel=Integer.parseInt(xVel.getText());
-			shhoterYvel=Integer.parseInt(yVel.getText());
+			shooterYvel=Integer.parseInt(yVel.getText());
 			shooterWidth=Integer.parseInt(width.getText());
 			shooterHeight=Integer.parseInt(height.getText());
 			shooterSpriteID = spriteTextField.getText();
 			shooterCategory = categoryTextField.getText();
 			shooterEventActionMap = getShooterEventActionMap();
+			shooterInterval=shooterIntervalTextField.getText();
 			setShooter(false);
+			log.info(shooterXvel);
+			log.info(shooterYvel);
+			log.info(shooterWidth);
+			log.info(shooterHeight);
+			log.info(shooterSpriteID);
+			log.info(shooterEventActionMap);
 			return;
 			
 		}
@@ -683,10 +695,5 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		// TODO Auto-generated method stub
 		
 	}
-
-
-	
-	
-
 }
 
