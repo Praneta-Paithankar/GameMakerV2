@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.w3c.dom.css.Counter;
+
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -280,16 +282,23 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			List<ActionLink> eventObservers = eventMap.get(event);
 			for(ActionLink actionObserver: eventObservers) {
 				switch(actionObserver.getAction()) {
-				case "blow": 
-					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
-					removeGameEndSprite(actionObserver.getSprite());
-					break;
-				case "shoot":
-					break;
-				case "move": 
-					macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
-					break;
-				default: break;
+					case "blow": 
+						macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
+						removeGameEndSprite(actionObserver.getSprite());
+						break;
+					case "shoot":
+						break;
+					case "move": 
+						System.out.println("Moving:"+actionObserver.getSprite());
+						SpriteElement currentSpriteElement= actionObserver.getSprite();
+						int counter=currentSpriteElement.getCounter();
+						if(counter==0) {
+							macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
+						}
+						counter=(counter+1)%currentSpriteElement.getCounterInterval();
+						currentSpriteElement.setCounter(counter);
+						break;
+					default: break;
 				}
 			}
 
@@ -371,11 +380,15 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		case KeyEvent.VK_SPACE:
 			//System.out.println("Shooting");
 			CircularSprite circularSprite = (CircularSprite) element.shoot(new CircularSprite("", element.getElementX() + 
-						element.getWidth()/2, element.getElementY()-10, 10, 10, 0, -1, "bullet1", "bullet",
-						Color.black,Constants.GAME_NOT_APPLICABLE_COMPONENT));
+						element.getWidth()/2, element.getElementY(), 10, 10, 0, -1, "bullet1", "bullet",
+						Color.black,Constants.GAME_NOT_APPLICABLE_COMPONENT,5));
+			System.out.println("Before sprites:"+sprites);
 			addSpriteElements(circularSprite);
-			System.out.println("Event map = " + eventMap );
+			System.out.println("After sprites:"+sprites);
+			System.out.println("Before Event map = " + eventMap );
+			eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
 			eventMap.get("OnTick").add(new ActionLink(circularSprite, "move"));
+			System.out.println("After Event map = " + eventMap );
 			break;
 		default:
 			break;

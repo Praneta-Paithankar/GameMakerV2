@@ -469,9 +469,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			HashMap<String, String> eventAction = getEventActionMap();
 			
 			
-			
 			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
-												Color.BLACK, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap());
+												Color.BLACK, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap(),1);
 			
 //			
 			
