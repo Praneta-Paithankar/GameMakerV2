@@ -13,7 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.ArrayDeque;
@@ -42,6 +42,7 @@ import com.commands.SpriteBlowCommand;
 import com.commands.TimerCommand;
 import com.component.CircularSprite;
 import com.component.Clock;
+import com.component.RectangularSprite;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
 import com.helper.SpriteCollision;
@@ -52,7 +53,11 @@ import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
-public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener{
+public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1504747393198580722L;
 	protected static Logger log = Logger.getLogger(GameDriver.class);
 	private ArrayList<SpriteElement> sprites  ;
 	private Map<String, List<ActionLink>> eventMap;
@@ -66,14 +71,16 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
     private boolean isGamePaused ;
     private Deque<Command> commandQueue;
     private TimerCommand timerCommand;
+    private Map<SpriteElement, SpriteElement> bulletElementMap;
 
 
-	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock){
+	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock, Map<SpriteElement, SpriteElement> bulletElementMap){
 		 log.info("Initializing GameDriver");
 		this.sprites = new ArrayList<SpriteElement>();
 		this.eventMap = new HashMap<>();
 		this.gui = gui;
 		this.timer = timer;
+		this.bulletElementMap=bulletElementMap;
 		this.collision = new SpriteCollision();
 		isGamePaused = false;
 		timerCommand = new TimerCommand(clock);	
@@ -151,6 +158,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			op.writeObject(gameWinSet);
 			op.writeObject(gameLoseSet);
 			op.writeObject(sprites);
+			op.writeObject(bulletElementMap);
 //			System.out.println("Sprites = " + sprites);
 
 			//gui.getBoardPanel().setElements(sprites);
@@ -176,11 +184,12 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			eventMap.clear();
 			gameWinSet.clear();
 			gameLoseSet.clear();
-			
+			bulletElementMap.clear();
 			eventMap.putAll((Map<String, List<ActionLink>>) in.readObject());
 			gameWinSet.addAll((HashSet<SpriteElement>)in.readObject());
 			gameLoseSet.addAll((HashSet<SpriteElement>)in.readObject());
 			setSprites((ArrayList<SpriteElement>)in.readObject());
+			bulletElementMap.putAll((Map<SpriteElement,SpriteElement>) in.readObject());
 			gui.getBoardPanel().setElements(sprites);
 			gui.getBoardPanel().revalidate();
 			this.gui.paintView();
@@ -291,9 +300,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					case "move": 
 						SpriteElement currentSpriteElement= actionObserver.getSprite();
 						int counter=currentSpriteElement.getCounter();
-						if(counter==0) {
+						//if(counter==0) {
 							macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
-						}
+						//}
 						counter=(counter+1)%currentSpriteElement.getCounterInterval();
 						currentSpriteElement.setCounter(counter);
 						break;
@@ -377,13 +386,32 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			}
 			break;
 		case KeyEvent.VK_SPACE:
-			CircularSprite circularSprite = (CircularSprite) element.shoot(new CircularSprite("", element.getElementX() + 
-						element.getWidth()/2, element.getElementY(), 10, 10, 0, -1, "bullet1", "bullet",
-						Color.BLACK,Constants.GAME_NOT_APPLICABLE_COMPONENT,5));
-			addSpriteElements(circularSprite);
-			eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
-			eventMap.get("OnTick").add(new ActionLink(circularSprite, "move"));
+			//CircularSprite bullet = (CircularSprite) element.shoot(new CircularSprite("", element.getElementX() + 
+			//			element.getWidth()/2, element.getElementY(), 10, 10, 0, -1, "bullet1", "bullet",
+			//			Color.BLACK,Constants.GAME_NOT_APPLICABLE_COMPONENT,5));
+			//addSpriteElements(bullet);
+			
+			log.error("Before" + sprites);
+			log.error("Before" + eventMap);
+			log.error("Before" + bulletElementMap);
+			if(bulletElementMap.containsKey(element)) {
+
+				SpriteElement bullet=element.shoot(bulletElementMap.get(element));
+				//addSpriteElements(bullet);
+				if(bullet instanceof CircularSprite) {
+					addSpriteElements((CircularSprite) bullet);
+				}
+				else {
+					addSpriteElements((RectangularSprite) bullet);
+				}
+			
+				log.error(sprites);
+				eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
+				eventMap.get("OnTick").add(new ActionLink(bullet, "move"));
+				log.error( eventMap);
+			}
 			break;
+			
 		default:
 			break;
 		}

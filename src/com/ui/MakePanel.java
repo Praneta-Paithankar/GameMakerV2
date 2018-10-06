@@ -123,7 +123,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 
 	private JLabel shooterIntervallabel;
 	private JTextField shooterIntervalTextField;
-	private String shooterInterval;
+	private int shooterInterval;
+	private CreateSpriteRequest shootSprite;
 	
 	
 	public MakePanel() {
@@ -361,12 +362,14 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	
     	spriteTextField = new JTextField(10);
     	subOptionPanel1.add(spriteTextField);
+    	spriteTextField.setText("200");
     	
     	categoryId = new JLabel("Category :");
     	subOptionPanel1.add(categoryId);
     	
     	categoryTextField = new JTextField(10);
     	subOptionPanel1.add(categoryTextField);
+    	spriteTextField.setText("cat");
     	
     	if(!isShooter) {
 	    	xlabel = new JLabel("X :");
@@ -481,6 +484,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private void getFormData(int option,boolean isShooter) {
 		// TODO Auto-generated method stub
 		if(isShooter) {
+			
 			shooterXvel=Integer.parseInt(xVel.getText());
 			shooterYvel=Integer.parseInt(yVel.getText());
 			shooterWidth=Integer.parseInt(width.getText());
@@ -488,7 +492,9 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			shooterSpriteID = spriteTextField.getText();
 			shooterCategory = categoryTextField.getText();
 			shooterEventActionMap = getShooterEventActionMap();
-			shooterInterval=shooterIntervalTextField.getText();
+			shooterInterval=Integer.parseInt(shooterIntervalTextField.getText());
+			shootSprite = new CreateSpriteRequest("Circle", 10, 10, shooterXvel, shooterYvel, shooterWidth, shooterHeight, 
+					spriteColor, "", shooterSpriteID, shooterCategory, shooterEventActionMap,Constants.GAME_NOT_APPLICABLE_COMPONENT,new HashMap(),shooterInterval);
 			setShooter(false);
 			log.info(shooterXvel);
 			log.info(shooterYvel);
@@ -519,12 +525,21 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		}
 		else {
 //			spriteElement = new SpriteElement("", x, y,  )
+			setShootSprite(null);
 		}
 		
 		if(option != JOptionPane.CANCEL_OPTION) {
         	controller.done();
 		}
 		
+	}
+
+	public CreateSpriteRequest getShootSprite() {
+		return shootSprite;
+	}
+
+	public void setShootSprite(CreateSpriteRequest shootSprite) {
+		this.shootSprite = shootSprite;
 	}
 
 	@Override
@@ -594,7 +609,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	}
 	public Color colorChooser() {
 		Color color = JColorChooser.showDialog(this, "Choose color", Color.BLACK);
-		return color;
+		return color==null?Color.BLACK:color;
 	}
 
 	private void createActionPopUp(Boolean isShooter) {
