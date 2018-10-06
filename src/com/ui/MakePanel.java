@@ -52,75 +52,98 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 	private BufferedImage paddleImage;
 	private List<JCheckBox> checkBox = new ArrayList<>();
 	private CreateSpriteRequest newSprite;
-	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
-	private HashMap<String,String> eventActionMap=new HashMap<String, String>();
+	
+	private boolean isShooter;
+	
+	private int shooterXvel;
+	private int shhoterYvel;
+	private int shooterWidth;
+	private int shooterHeight;
+	
+	private String shooterSpriteID;
+	private String shooterCategory;
+	private String imagePath;
 	private String path;
 	
+	private JPanel mainOptionPanel;
 	private JPanel subOptionPanel1;
+	private JPanel subOptionPanel2;
+	
 	private GridLayout gbLayout;
 	private GridBagConstraints gbConstraints;
 	
 	private JTextField x;
+	private JTextField y;
+	private JTextField xVel;
+	private JTextField yVel;
+	private JTextField spriteTextField;
+	private JTextField categoryTextField;
+	private JTextField width;
+	private JTextField height;
+	
 	private JLabel xlabel;
 	private JLabel ylabel;
-	private JTextField y;
-	private JLabel xVellabel;
-	private JTextField xVel;
-	private JLabel yVellabel;
-	private JTextField yVel;
-	private JLabel spriteId;
-	private JTextField spriteTextField;
+	private JLabel xVellabel;	
+	private JLabel yVellabel;	
+	private JLabel spriteId;	
 	private JLabel categoryId;
-	private JTextField categoryTextField;
 	private JLabel colorlabel;
-	private JButton colorButton;
-	private JButton imageButton;
 	private JLabel imagelabel;
 	private JLabel shooterlabel;
-	private JCheckBox shooterCheckbox;
-	private JButton shooterButton;
-	private JRadioButton gameWinRadioButton;
-	private JRadioButton gameLoseRadioButton;
-	private JRadioButton notApplicableRadioButton;
 	private JLabel gameWinlabel;
 	private JLabel gameLooselabel;
 	private JLabel notApplicablelabel;
-	private JPanel mainOptionPanel;
-	private JPanel subOptionPanel2;
-	private JLabel actionlabel;
-	private JButton actionsButton;
 	private JLabel collisionslabel;
-	private JButton collisionsButton;
 	private JLabel actionDropDownlabel;
 	private JLabel eventDropDownlabel;
-	private String imagePath;
-	private Color spriteColor;
-	private HashMap<String,String> collidables;
+	private JLabel actionlabel;
 	private JLabel collisionIDDropDownlabel;
 	private JLabel spriteIDDropDownlabel;
+	private JLabel spriteCategoryDropDownlabel;
+	private JLabel widthLabel;
+	private JLabel heightLabel;
+	private JLabel actionIDDropDownlabel;
+
+	private ButtonGroup group;
+	private JButton colorButton;
+	private JButton imageButton;
+	private JButton shooterButton;
+	private JButton actionsButton;
+	private JButton collisionsButton;
+	
+	private JCheckBox shooterCheckbox;
+	
+	private JRadioButton gameWinRadioButton;
+	private JRadioButton gameLoseRadioButton;
+	private JRadioButton notApplicableRadioButton;
 	
 	private SpriteElement spriteElement;
-
-	private JLabel spriteCategoryDropDownlabel;
-	private HashMap<String,String> collisionMap=new HashMap<>();
-	private ButtonGroup group;
-	private JLabel widthLabel;
-	private JTextField width;
-	private JLabel heightLabel;
-	private JTextField height;
-	private JLabel actionIDDropDownlabel;
+	private Color spriteColor;
+	private HashMap<String,String> collidables;
 	
-	protected int getSelectedRadioButton() {
-		int counter=0;
-		for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
-	        AbstractButton button = buttons.nextElement();
-	        if (button.isSelected()) {	
-	                return counter;
-	        }
-	        counter++;
-	    }
-		return 2;
+	private HashMap<String,String> collisionMap=new HashMap<>();
+	private HashMap<String,String> shooterEventActionMap=new HashMap<>();
+	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
+	private HashMap<String,String> eventActionMap=new HashMap<String, String>();
+	
+	
+	public MakePanel() {
+		setLayoutBehavior(new NullLayoutBehavior());
+		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
+		sprites = new ArrayList<>(Constants.spriteTypes);
+		spriteRequestMap = new HashMap<>();
+		createCheckbox();
+		setShooter(false);
 	}
+	
+	public HashMap<String, String> getShooterEventActionMap() {
+		return shooterEventActionMap;
+	}
+	
+	public void setShooterEventActionMap(HashMap<String, String> shooterEventActionMap) {
+		this.shooterEventActionMap = shooterEventActionMap;
+	}
+	
 	public HashMap getCollisionMap() {
 		return collisionMap;
 	}
@@ -161,17 +184,62 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		this.eventActionMap = eventActionMap;
 	}
 
+	public boolean isShooter() {
+		return isShooter;
+	}
+
+	public void setShooter(boolean isShooter) {
+		this.isShooter = isShooter;
+	}
+
+	public CreateSpriteRequest getNewSprite() {
+		return newSprite;
+	}
+
+	public void setNewSprite(CreateSpriteRequest newSprite) {
+		this.newSprite = newSprite;
+	}
+
+	public HashMap<String, CreateSpriteRequest> getSpriteRequestMap() {
+		return spriteRequestMap;
+	}
+
+	public void setSpriteRequestMap(HashMap<String, CreateSpriteRequest> spriteRequestMap) {
+		this.spriteRequestMap = spriteRequestMap;
+	}
+
+	public List<JCheckBox> getCheckBox() {
+		return checkBox;
+	}
+
+	public void setCheckBox(List<JCheckBox> checkBox) {
+		this.checkBox = checkBox;
+	}
 	
-	public MakePanel() {
-		setLayoutBehavior(new NullLayoutBehavior());
-		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
-		//createButtons();
-		sprites = new ArrayList<>(Constants.spriteTypes);
-		spriteRequestMap = new HashMap<>();
-		//createImage();
-		createCheckbox();
-		//createBallActions();
-		//createBallEvents();
+	public SpriteElement getSpriteElement() {
+		return spriteElement;
+	}
+
+	public void setSpriteElement(SpriteElement spriteElement) {
+		this.spriteElement = spriteElement;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	protected int getSelectedRadioButton() {
+		int counter=0;
+		for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
+	        AbstractButton button = buttons.nextElement();
+	        if (button.isSelected()) {	
+	                return counter;
+	        }
+	        counter++;
+	    }
+		return 2;
 	}
 	
 	public void createButtons(GameMakerController controller) {
@@ -198,19 +266,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		}
 	}
 	
-//	public void createImage() {
-//		try {
-//            ballImage = ImageIO.read(new File(Constants.BALL_IMAGE));
-//            ballImage = resize(ballImage, 80, 70);
-//            brickImage = ImageIO.read(new File(Constants.BRICK_IMAGE));
-//            brickImage = resize(brickImage, 70, 70);
-//            paddleImage = ImageIO.read(new File(Constants.PADDLE_IMAGE));
-//            paddleImage = resize(paddleImage, 80, 50);
-//        } catch (IOException e) {
-//        	log.error(e.getMessage());
-//        }
-//	}
-//	
+
 
 	public PanelButton createMakeButton() {
 		PanelButton make = new PanelButton("Make", "make");
@@ -293,51 +349,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
         return resized;
     }
 
-	@Override
-	public void reset() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addComponent(Element e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeComponent(Element e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void save(ObjectOutputStream op) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public Element load(ObjectInputStream ip) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void draw(Graphics g) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public GridBagConstraints setGridBagConstraints(int fill, int gridx, int gridy) {
-		gbConstraints= new GridBagConstraints();
-		gbConstraints.fill = fill;
-    	gbConstraints.gridx = gridx;
-    	gbConstraints.gridy = gridy;
-    	gbConstraints.insets= new Insets(5, 10 , 10, 10);
-		return gbConstraints;
-	}
-	
-	public void createOptionPopUp() {
+	public int createOptionPopUp(boolean isShooter) {
 		mainOptionPanel= new JPanel();
     	mainOptionPanel.setLayout(new BoxLayout(mainOptionPanel,BoxLayout.PAGE_AXIS));
     	subOptionPanel1=new JPanel();
@@ -346,53 +358,53 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	subOptionPanel1.setLayout(gbLayout);
     	
     	spriteId = new JLabel("Sprite ID :");
-    	subOptionPanel1.add(spriteId);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 0));
+    	subOptionPanel1.add(spriteId);
     	
     	spriteTextField = new JTextField(10);
-    	subOptionPanel1.add(spriteTextField);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 0));
+    	subOptionPanel1.add(spriteTextField);
     	
     	categoryId = new JLabel("Category :");
-    	subOptionPanel1.add(categoryId);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 0));
+    	subOptionPanel1.add(categoryId);
     	
     	categoryTextField = new JTextField(10);
-    	subOptionPanel1.add(categoryTextField);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 0));
+    	subOptionPanel1.add(categoryTextField);
     	
-    	
-    	xlabel = new JLabel("X :");
-    	subOptionPanel1.add(xlabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 1));
-    	
-    	x = new JTextField(10);
-    	subOptionPanel1.add(x);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 1));
-    	
-    	ylabel = new JLabel("Y :");
-    	subOptionPanel1.add(ylabel);//,setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 2));
-    	
-    	y = new JTextField(10);
-    	subOptionPanel1.add(y);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 2));
-    	
+    	if(!isShooter) {
+	    	xlabel = new JLabel("X :");
+	    	subOptionPanel1.add(xlabel);
+	    	
+	    	x = new JTextField(10);
+	    	subOptionPanel1.add(x);
+	    	
+	    	ylabel = new JLabel("Y :");
+	    	subOptionPanel1.add(ylabel);
+	    	
+	    	y = new JTextField(10);
+	    	subOptionPanel1.add(y);
+	    	}
     	widthLabel = new JLabel("Width :");
-    	subOptionPanel1.add(widthLabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 1));
+    	subOptionPanel1.add(widthLabel);
     	
     	width = new JTextField(10);
     	subOptionPanel1.add(width);
     	
     	heightLabel = new JLabel("Height :");
-    	subOptionPanel1.add(heightLabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 1));
+    	subOptionPanel1.add(heightLabel);
     	
     	height = new JTextField(10);
     	subOptionPanel1.add(height);
     	
     	xVellabel = new JLabel("XVelocity :");
-    	subOptionPanel1.add(xVellabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 3));
+    	subOptionPanel1.add(xVellabel);
     	
     	xVel = new JTextField(10);
-    	subOptionPanel1.add(xVel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 3));
+    	subOptionPanel1.add(xVel);
     	
     	yVellabel = new JLabel("YVelocity :");
-    	subOptionPanel1.add(yVellabel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 0, 4));
+    	subOptionPanel1.add(yVellabel);
     	
     	yVel = new JTextField(10);
-    	subOptionPanel1.add(yVel);//, setGridBagConstraints(GridBagConstraints.HORIZONTAL, 1, 4));
+    	subOptionPanel1.add(yVel);
     	
     	colorlabel = new JLabel("Color :");
     	subOptionPanel1.add(colorlabel);
@@ -407,12 +419,16 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	subOptionPanel1.add(imageButton);
     	imageButton.addActionListener(this);
     	
-    	shooterlabel = new JLabel("Shooter :");
-    	subOptionPanel1.add(shooterlabel);
-    	
-    	shooterButton = new JButton("Select Shooter");
-    	subOptionPanel1.add(shooterButton);
-    	
+    	if(!isShooter) {
+	    	shooterlabel = new JLabel("Shooter :");
+	    	subOptionPanel1.add(shooterlabel);
+	    	
+	    	
+	    	shooterButton = new JButton("Shooter");
+	    	shooterButton.addActionListener(this);
+	    	subOptionPanel1.add(shooterButton);
+	    	
+    	}
     	actionlabel = new JLabel("Actions :");
     	subOptionPanel1.add(actionlabel);
     	
@@ -420,28 +436,29 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	subOptionPanel1.add(actionsButton);
     	actionsButton.addActionListener(this);
     	
-    	collisionslabel = new JLabel("Collisions :");
-    	subOptionPanel1.add(collisionslabel);
-    	
-    	
-    	collisionsButton = new JButton("Collisions");
-    	subOptionPanel1.add(collisionsButton);
-    	collisionsButton.addActionListener(this);
-    	
-    	gameWinRadioButton = new JRadioButton("Game Win");
-    	gameLoseRadioButton=new JRadioButton("Game Lose");
-    	notApplicableRadioButton=new JRadioButton("Not Applicable");
-    	
-    	notApplicableRadioButton.setSelected(true);
-    	group = new ButtonGroup();
-    	group.add(gameWinRadioButton);
-    	group.add(gameLoseRadioButton);
-    	group.add(notApplicableRadioButton);
-    	
-    	subOptionPanel2.add(gameWinRadioButton);
-    	subOptionPanel2.add(gameLoseRadioButton);
-    	subOptionPanel2.add(notApplicableRadioButton);
-    
+    	if(!isShooter) {
+	    	collisionslabel = new JLabel("Collisions :");
+	    	subOptionPanel1.add(collisionslabel);
+	    	
+	    	
+	    	collisionsButton = new JButton("Collisions");
+	    	subOptionPanel1.add(collisionsButton);
+	    	collisionsButton.addActionListener(this);
+	    	
+	    	gameWinRadioButton = new JRadioButton("Game Win");
+	    	gameLoseRadioButton=new JRadioButton("Game Lose");
+	    	notApplicableRadioButton=new JRadioButton("Not Applicable");
+	    	
+	    	notApplicableRadioButton.setSelected(true);
+	    	group = new ButtonGroup();
+	    	group.add(gameWinRadioButton);
+	    	group.add(gameLoseRadioButton);
+	    	group.add(notApplicableRadioButton);
+	    	
+	    	subOptionPanel2.add(gameWinRadioButton);
+	    	subOptionPanel2.add(gameLoseRadioButton);
+	    	subOptionPanel2.add(notApplicableRadioButton);
+    	}
     	mainOptionPanel.add(subOptionPanel1);
     	mainOptionPanel.add(subOptionPanel2);
     	
@@ -451,11 +468,22 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	JOptionPane pane = new JOptionPane();
     	int option = pane.showConfirmDialog(null, mainOptionPanel, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
     	
-    	if(option == JOptionPane.YES_OPTION)
-    		getFormData(option);
+    	return option;
 	}
-	private void getFormData(int option) {
+	private void getFormData(int option,boolean isShooter) {
 		// TODO Auto-generated method stub
+		if(isShooter) {
+			shooterXvel=Integer.parseInt(xVel.getText());
+			shhoterYvel=Integer.parseInt(yVel.getText());
+			shooterWidth=Integer.parseInt(width.getText());
+			shooterHeight=Integer.parseInt(height.getText());
+			shooterSpriteID = spriteTextField.getText();
+			shooterCategory = categoryTextField.getText();
+			shooterEventActionMap = getShooterEventActionMap();
+			setShooter(false);
+			return;
+			
+		}
 		if(option == JOptionPane.YES_OPTION) {
 			
 			int tempX = Integer.parseInt(x.getText());
@@ -469,15 +497,12 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			HashMap<String, String> eventAction = getEventActionMap();
 			
 			
-			
 			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
 												Color.BLACK, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap());
-			
-//			
-			
-//			getEventActionMap();// to get event and action mapping
+
+
 			getCollisionMap();	// to get mapping of event and collision
-//			log.error(getSelectedRadioButton());
+
 		}
 		else {
 			
@@ -498,36 +523,16 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		// TODO Auto-generated method stub
 		int sel = e.getStateChange();
         if (sel == ItemEvent.SELECTED) {
-        	createOptionPopUp();
+        	int option=createOptionPopUp(isShooter());
+        	if(option == JOptionPane.YES_OPTION)
+        		getFormData(option,isShooter());
         	//createOptionPopUp();
         } else {
         	
         }
 	}
 
-	public CreateSpriteRequest getNewSprite() {
-		return newSprite;
-	}
-
-	public void setNewSprite(CreateSpriteRequest newSprite) {
-		this.newSprite = newSprite;
-	}
-
-	public HashMap<String, CreateSpriteRequest> getSpriteRequestMap() {
-		return spriteRequestMap;
-	}
-
-	public void setSpriteRequestMap(HashMap<String, CreateSpriteRequest> spriteRequestMap) {
-		this.spriteRequestMap = spriteRequestMap;
-	}
-
-	public List<JCheckBox> getCheckBox() {
-		return checkBox;
-	}
-
-	public void setCheckBox(List<JCheckBox> checkBox) {
-		this.checkBox = checkBox;
-	}
+	
 
 	
 	
@@ -536,12 +541,17 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		// TODO Auto-generated method stub
 		switch(e.getActionCommand()) {
 		case "Actions" :
-						createActionPopUp();
+						createActionPopUp(isShooter);
 						break;
 		case "Collisions":
 						   createCollisionPopUp();
 						   break;
-		case "shooter" :  createActionPopUp();
+		case "Shooter" :  	setShooter(true);
+							int option=createOptionPopUp(isShooter());
+							if(option == JOptionPane.YES_OPTION)
+					    		getFormData(option,isShooter());
+							else
+								setShooter(false);
 							break;
 							
 		case "Image" : 
@@ -572,7 +582,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		return "";
 	}
 
-	private void createActionPopUp() {
+	private void createActionPopUp(Boolean isShooter) {
 		// TODO Auto-generated method stub
 		
 		JOptionPane subActionpane = new JOptionPane();
@@ -592,7 +602,13 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		int option = subActionpane.showConfirmDialog(null, message, "Event Action Mapping", subActionpane.OK_CANCEL_OPTION);
 		
 		if(option== JOptionPane.OK_OPTION) {
+			if(!isShooter) {
 			eventActionMap.put( eventDropDownList.getSelectedItem().toString(),actionDropDownList.getSelectedItem().toString());
+			}
+			else
+			{
+				shooterEventActionMap.put( eventDropDownList.getSelectedItem().toString(),actionDropDownList.getSelectedItem().toString());
+			}
 		}	
 		else {
 			
@@ -633,21 +649,42 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		}
 		
 	}
-
-	public SpriteElement getSpriteElement() {
-		return spriteElement;
+	@Override
+	public void reset() {
+		// TODO Auto-generated method stub
+		
 	}
 
-	public void setSpriteElement(SpriteElement spriteElement) {
-		this.spriteElement = spriteElement;
+	@Override
+	public void addComponent(Element e) {
+		// TODO Auto-generated method stub
+		
 	}
-	public String getPath() {
-		return path;
+
+	@Override
+	public void removeComponent(Element e) {
+		// TODO Auto-generated method stub
+		
 	}
-	public void setPath(String path) {
-		this.path = path;
+
+	@Override
+	public void save(ObjectOutputStream op) {
+		// TODO Auto-generated method stub
 	}
-	
+
+	@Override
+	public Element load(ObjectInputStream ip) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void draw(Graphics g) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	
 	
 
