@@ -33,7 +33,7 @@ public class CircularSprite extends SpriteElement implements Serializable {
 				Graphics2D g2 = (Graphics2D) g;
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 				Ellipse2D.Double ball = new Ellipse2D.Double(getElementX(), getElementY(), getWidth(), getHeight());
-				g2.setPaint(Color.black);
+				g2.setPaint(getColor());
 				g2.fill(ball);
 			}
 			

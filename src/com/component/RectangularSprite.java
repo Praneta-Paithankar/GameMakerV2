@@ -35,7 +35,7 @@ public class RectangularSprite extends SpriteElement implements Serializable{
 				super.draw(g);
 			}else {
 				Graphics2D g2 = (Graphics2D) g;
-				g2.setPaint(Color.BLACK);
+				g2.setPaint(getColor());
 				g2.fill(new Rectangle2D.Double(getElementX(), getElementY(), getWidth(), getHeight()));
 			}
 		}

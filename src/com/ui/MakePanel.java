@@ -26,6 +26,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -408,6 +409,8 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
     	subOptionPanel1.add(colorlabel);
     	
     	colorButton = new JButton("Select Color");
+    	colorButton.setActionCommand("Color");
+    	colorButton.addActionListener(this);
     	subOptionPanel1.add(colorButton);
     	
     	imagelabel = new JLabel("Image :");
@@ -510,9 +513,11 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			
 			
 			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
-												Color.BLACK, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap());
-
-
+												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap());
+			
+//			
+			
+//			getEventActionMap();// to get event and action mapping
 			getCollisionMap();	// to get mapping of event and collision
 
 		}
@@ -570,7 +575,9 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			
 					setPath(fileExplorer());
 						break;
-						
+		case "Color":
+					setSpriteColor(colorChooser());
+					break;
 		default : log.error("switch hitting the default case of makepanel actionlistner");
 						break;
 		}
@@ -592,6 +599,10 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			return path;
 		}
 		return "";
+	}
+	public Color colorChooser() {
+		Color color = JColorChooser.showDialog(this, "Choose color", Color.BLACK);
+		return color;
 	}
 
 	private void createActionPopUp(Boolean isShooter) {
