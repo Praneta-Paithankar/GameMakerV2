@@ -46,9 +46,9 @@ public abstract class SpriteElement implements Serializable{
 	private int imageType;
 	private boolean isShooter;
 	private int gameEndDependency;
-
-	
-	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color, int gameEndDependency) throws IOException {
+	private int counterInterval;
+	private int counter;
+	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color, int gameEndDependency, int counterInterval) throws IOException {
 		this.imagePath = image;
 //		this.imageIcon = ImageIO.read(new File(image));
 		this.imageIcon = null;
@@ -64,10 +64,23 @@ public abstract class SpriteElement implements Serializable{
 		this.category = category;
 		this.color = color;
 		this.gameEndDependency=gameEndDependency;
-
+		this.counterInterval=counterInterval;
+		this.counter=0;
+	}
+	public int getCounter() {
+		return counter;
+	}
+	public void setCounter(int counter) {
+		this.counter = counter;
 	}
 	public SpriteElement(SpriteElement element) throws IOException {
-		this(element.imagePath,element.elementX,element.elementY,element.width,element.height, element.XVel, element.YVel, element.spriteId,element.category,element.color,element.gameEndDependency);
+		this(element.imagePath,element.elementX,element.elementY,element.width,element.height, element.XVel, element.YVel, element.spriteId,element.category,element.color,element.gameEndDependency,element.getCounterInterval());
+	}
+	public int getCounterInterval() {
+		return counterInterval;
+	}
+	public void setCounterInterval(int counterInterval) {
+		this.counterInterval = counterInterval;
 	}
 	public int getGameEndDependency() {
 		return gameEndDependency;
@@ -272,5 +285,11 @@ public abstract class SpriteElement implements Serializable{
 	public void setColor(Color color) {
 		this.color = color;
 	}
+	public String toString() {
+//		String explanation= (sprite.getSpriteId() instanceof CircularSprite)?"Circle:":"Rectangle";
+		return getSpriteId() + getCategory();
+		
+	}
+
 	
 }

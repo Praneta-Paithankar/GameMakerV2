@@ -513,27 +513,19 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			
 			
 			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
-												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap());
-			
-//			
-			
+												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap(),1);
 //			getEventActionMap();// to get event and action mapping
 			getCollisionMap();	// to get mapping of event and collision
-
 		}
 		else {
-			
 //			spriteElement = new SpriteElement("", x, y,  )
-			
 		}
 		
 		if(option != JOptionPane.CANCEL_OPTION) {
         	controller.done();
-           
 		}
 		
 	}
-
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {

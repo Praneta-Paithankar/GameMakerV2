@@ -19,8 +19,9 @@ public class CreateSpriteRequest {
 	private int gameEndDependency;
 	private Map<String, String> eventAction;
 	HashMap<String,String> collisionMap;
+	private int counterInterval;
 	public CreateSpriteRequest(String name, int x, int y, int velX, int velY, int width, int height, Color color, 
-								String imageFilePath, String spriteId, String category, Map<String, String> eventAction, int gameEndDependency, HashMap<String,String> collisionMap) {
+								String imageFilePath, String spriteId, String category, Map<String, String> eventAction, int gameEndDependency, HashMap<String,String> collisionMap, int counterInterval) {
 		this.elementName = name;
 		this.xlocation = x;
 		this.ylocation = y;
@@ -35,9 +36,18 @@ public class CreateSpriteRequest {
 		this.eventAction = eventAction;
 		this.gameEndDependency=gameEndDependency;
 		this.collisionMap=collisionMap;
+		this.counterInterval=counterInterval;
 //		eventAction = new HashMap<>(); 
 	}
 	
+	public int getCounterInterval() {
+		return counterInterval;
+	}
+
+	public void setCounterInterval(int counterInterval) {
+		this.counterInterval = counterInterval;
+	}
+
 	public HashMap<String, String> getCollisionMap() {
 		return collisionMap;
 	}
