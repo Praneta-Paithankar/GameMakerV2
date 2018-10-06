@@ -95,6 +95,15 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		gameLoseSet.add(element);
 	}
 	
+	public boolean containsGameLoseSprite(SpriteElement element)
+	{
+		return gameLoseSet.contains(element);
+	}
+	
+	public boolean containsGameWinSprite(SpriteElement element)
+	{
+		return gameWinSet.contains(element);
+	}
 	
 	public void removeGameEndSprite(SpriteElement element) {
 		if (gameWinSet.contains(element)) {
@@ -140,6 +149,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			op.writeObject(gameWinSet);
 			op.writeObject(gameLoseSet);
 			op.writeObject(sprites);
+//			System.out.println("Sprites = " + sprites);
 
 			//gui.getBoardPanel().setElements(sprites);
 			op.close();

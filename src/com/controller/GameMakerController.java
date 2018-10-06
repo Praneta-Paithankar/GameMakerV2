@@ -4,7 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowStateListener;
 import java.io.IOException;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -140,12 +142,12 @@ public class GameMakerController implements  ActionListener, MouseListener {
 
 		// TODO Auto-generated method stub
 		SpriteElement spriteElement = null;
-		SpriteElement gamePanelSelected = gui.getBoardPanel().getSpriteElement();
-		if(gamePanelSelected != null)
+		SpriteElement oldElement = gui.getBoardPanel().getSpriteElement();
+		if(oldElement != null)
 		{
-			if(gamePanelSelected instanceof CircularSprite) {
+			if(oldElement instanceof CircularSprite) {
 				try {
-					spriteElement = new  CircularSprite((CircularSprite)gamePanelSelected);
+					spriteElement = new  CircularSprite((CircularSprite)oldElement);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -154,7 +156,7 @@ public class GameMakerController implements  ActionListener, MouseListener {
 
 			} else {
 				try {
-					spriteElement = new  RectangularSprite((RectangularSprite)gamePanelSelected);
+					spriteElement = new  RectangularSprite((RectangularSprite)oldElement);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -165,6 +167,32 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			spriteElement.setElementY(e.getY());
 //			System.out.println("Mouse clicked on = " + spriteElement.getElementX() + " " + spriteElement.getElementY());
 			gui.getBoardPanel().addComponent(spriteElement);
+			gameDriver.addSpriteElements(spriteElement);
+			
+			for(List <ActionLink> actionList : eventMap.values())
+			{
+				List <ActionLink> tempList = new ArrayList<>();
+				for(ActionLink actionLink : actionList)
+				{
+					if(actionLink.getSprite()==oldElement) {
+						tempList.add(new ActionLink(spriteElement, actionLink.getSpriteElement2IdOrCategory(), actionLink.getAction()));
+					}
+				}
+				actionList.addAll(tempList);
+			}
+			
+			if(gameDriver.containsGameLoseSprite(oldElement))
+			{
+				gameDriver.addGameLoseSprite(spriteElement);
+			}
+			
+			if(gameDriver.containsGameWinSprite(oldElement))
+			{
+				gameDriver.addGameWinSprite(spriteElement);
+			}
+			
+			
+//			System.out.println("Event map = " + eventMap);
 			gui.draw(null);
 			
 			

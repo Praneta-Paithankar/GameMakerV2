@@ -95,7 +95,7 @@ public abstract class SpriteElement implements Serializable{
 	}
 	
 	public void draw(Graphics g) {
-		if (imageIcon == null) {
+		if (imageIcon == null && imagePath != null && imagePath.length()>0 ) {
 			try {
 				this.imageIcon = ImageIO.read(new File(imagePath));
 			} catch (IOException e) {
