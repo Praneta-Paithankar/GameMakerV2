@@ -289,7 +289,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					case "shoot":
 						break;
 					case "move": 
-						System.out.println("Moving:"+actionObserver.getSprite());
 						SpriteElement currentSpriteElement= actionObserver.getSprite();
 						int counter=currentSpriteElement.getCounter();
 						if(counter==0) {
@@ -378,17 +377,12 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			}
 			break;
 		case KeyEvent.VK_SPACE:
-			//System.out.println("Shooting");
 			CircularSprite circularSprite = (CircularSprite) element.shoot(new CircularSprite("", element.getElementX() + 
 						element.getWidth()/2, element.getElementY(), 10, 10, 0, -1, "bullet1", "bullet",
-						Color.black,Constants.GAME_NOT_APPLICABLE_COMPONENT,5));
-			System.out.println("Before sprites:"+sprites);
+						Color.BLACK,Constants.GAME_NOT_APPLICABLE_COMPONENT,5));
 			addSpriteElements(circularSprite);
-			System.out.println("After sprites:"+sprites);
-			System.out.println("Before Event map = " + eventMap );
 			eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
 			eventMap.get("OnTick").add(new ActionLink(circularSprite, "move"));
-			System.out.println("After Event map = " + eventMap );
 			break;
 		default:
 			break;
