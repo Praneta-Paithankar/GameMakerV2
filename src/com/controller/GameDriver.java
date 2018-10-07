@@ -1,4 +1,5 @@
 package com.controller;
+
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -53,9 +54,9 @@ import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
-public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener{
+public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener {
 	protected static Logger log = Logger.getLogger(GameDriver.class);
-	private ArrayList<SpriteElement> sprites  ;
+	private ArrayList<SpriteElement> sprites;
 	private Map<String, List<ActionLink>> eventMap;
 	private GUI gui;
 	private BreakoutTimer timer;
@@ -63,49 +64,49 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	private HashSet<SpriteElement> gameWinSet;
 	private HashSet<SpriteElement> gameLoseSet;
 	private MouseEvent e;
-	Boolean Projectileflag ;
-    private boolean isGamePaused ;
-    private Deque<Command> commandQueue;
-    private TimerCommand timerCommand;
+	Boolean Projectileflag;
+	private boolean isGamePaused;
+	private Deque<Command> commandQueue;
+	private TimerCommand timerCommand;
 
-	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock){
-		 log.info("Initializing GameDriver");
+	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock) {
+		log.info("Initializing GameDriver");
 		this.sprites = new ArrayList<SpriteElement>();
 		this.eventMap = new HashMap<>();
 		this.gui = gui;
 		this.timer = timer;
 		this.collision = new SpriteCollision();
 		isGamePaused = false;
-		timerCommand = new TimerCommand(clock);	
+		timerCommand = new TimerCommand(clock);
 		commandQueue = new ArrayDeque<Command>();
-		this.gameWinSet = new HashSet<>();	
-		this.gameLoseSet = new HashSet<>();	
+		this.gameWinSet = new HashSet<>();
+		this.gameLoseSet = new HashSet<>();
 	}
-	
+
 	public void addGameEndSprite(SpriteElement element) {
 //		gameEndSet.add(element);
 //		addGameWinSprite(element);
 //		addGameLoseSprite(element);
 	}
+
 	public void addGameWinSprite(SpriteElement element) {
-		
+
 		gameWinSet.add(element);
 	}
+
 	public void addGameLoseSprite(SpriteElement element) {
-		
+
 		gameLoseSet.add(element);
 	}
-	
-	public boolean containsGameLoseSprite(SpriteElement element)
-	{
+
+	public boolean containsGameLoseSprite(SpriteElement element) {
 		return gameLoseSet.contains(element);
 	}
-	
-	public boolean containsGameWinSprite(SpriteElement element)
-	{
+
+	public boolean containsGameWinSprite(SpriteElement element) {
 		return gameWinSet.contains(element);
 	}
-	
+
 	public void removeGameEndSprite(SpriteElement element) {
 		if (gameWinSet.contains(element)) {
 			gameWinSet.remove(element);
@@ -138,21 +139,21 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	public void setEventMap(Map<String, List<ActionLink>> eventMap) {
 		this.eventMap = eventMap;
 	}
-	
+
 	public void save() {
 		FileOutputStream fileOut;
 		try {
 			String fileName = gui.showSaveDialog();
 			fileOut = new FileOutputStream(fileName);
 			ObjectOutputStream op = new ObjectOutputStream(fileOut);
-			
+
 			op.writeObject(eventMap);
 			op.writeObject(gameWinSet);
 			op.writeObject(gameLoseSet);
 			op.writeObject(sprites);
 			ImageIO.write(gui.getBoardPanel().getImage(), "png", op);
 
-			//gui.getBoardPanel().setElements(sprites);
+			// gui.getBoardPanel().setElements(sprites);
 			op.close();
 			fileOut.close();
 		} catch (FileNotFoundException e) {
@@ -160,32 +161,32 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		} catch (IOException e) {
 			log.error(e.getMessage());
 		}
-		
+
 	}
-	
+
 	public void load() {
-		
+
 		FileInputStream fileIn;
 		try {
 			String fileName = gui.showOpenDialog();
 			fileIn = new FileInputStream(fileName);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-			
+
 			sprites.clear();
 			eventMap.clear();
 			gameWinSet.clear();
 			gameLoseSet.clear();
-			
+
 			eventMap.putAll((Map<String, List<ActionLink>>) in.readObject());
-			gameWinSet.addAll((HashSet<SpriteElement>)in.readObject());
-			gameLoseSet.addAll((HashSet<SpriteElement>)in.readObject());
-			setSprites((ArrayList<SpriteElement>)in.readObject());
+			gameWinSet.addAll((HashSet<SpriteElement>) in.readObject());
+			gameLoseSet.addAll((HashSet<SpriteElement>) in.readObject());
+			setSprites((ArrayList<SpriteElement>) in.readObject());
 			gui.getBoardPanel().setElements(sprites);
 			gui.getBoardPanel().setImage((ImageIO.read(in)));
-			
+
 			gui.getBoardPanel().revalidate();
 			this.gui.paintView();
-			
+
 			in.close();
 			fileIn.close();
 		} catch (FileNotFoundException e) {
@@ -209,7 +210,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		timerCommand.execute();
 		commandQueue.addLast(timerCommand);
 		checkCollision();
-		
+
 		eventHandler("OnTick");
 		checkIfGameEnd();
 		gui.paintView();
@@ -219,91 +220,93 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
 			timer.removeObserver(this);
 			gui.paintView();
-			String gameMsg = gameWinSet.isEmpty() ? "You Win :)" : "You Lose! :( " ;
-			int option = JOptionPane.showConfirmDialog(null, 
-					gameMsg, "Game Status", JOptionPane.DEFAULT_OPTION);
-			if (option==JOptionPane.OK_OPTION) {
+			String gameMsg = gameWinSet.isEmpty() ? "You Win :)" : "You Lose! :( ";
+			int option = JOptionPane.showConfirmDialog(null, gameMsg, "Game Status", JOptionPane.DEFAULT_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
 				System.exit(0);
 			}
 		}
-		
+
 	}
 
 	public void checkCollision() {
 		MacroCommand macroCommand = new MacroCommand();
 		Direction d;
-		
+
 		Set<SpriteElement> visited = new HashSet();
 		if (eventMap.containsKey("OnCollision")) {
 			List<ActionLink> eventObservers = eventMap.get("OnCollision");
-			for(ActionLink actionObserver: eventObservers) {
-				if(!visited.contains(actionObserver.getSprite())) {
+			for (ActionLink actionObserver : eventObservers) {
+				if (!visited.contains(actionObserver.getSprite())) {
 					visited.add(actionObserver.getSprite());
 					d = collision.checkCollisionOfSpriteWithWall(actionObserver.getSprite());
 					actionForCollision(actionObserver, d, macroCommand);
 				}
-					for(SpriteElement element: sprites) {
-						SpriteElement currentSprite=actionObserver.getSprite();
-						if (!(element.getCategory().equals(currentSprite.getCategory()))) { 
+				for (SpriteElement element : sprites) {
+					if (element.isVisible()) {
+						SpriteElement currentSprite = actionObserver.getSprite();
+						if (!(element.getCategory().equals(currentSprite.getCategory()))) {
 //								(actionObserver.getSpriteElement2IdOrCategory().isEmpty() || 
-								
-							if(element.getCategory().equals(actionObserver.getSpriteElement2IdOrCategory()) ||
-								element.getSpriteId().equals(actionObserver.getSpriteElement2IdOrCategory())) {
-							d = collision.checkCollisionOfSprites(currentSprite,element);
-							actionForCollision(actionObserver, d, macroCommand);
-							if(d!=Direction.NONE)
-								break;
+
+							if (element.getCategory().equals(actionObserver.getSpriteElement2IdOrCategory())
+									|| element.getSpriteId().equals(actionObserver.getSpriteElement2IdOrCategory())) {
+								d = collision.checkCollisionOfSprites(currentSprite, element);
+								actionForCollision(actionObserver, d, macroCommand);
+								if (d != Direction.NONE)
+									break;
+							}
 						}
-					}					
 					}
-				
+				}
 			}
 			macroCommand.execute();
 			commandQueue.addLast(macroCommand);
 		}
 	}
-	
+
 	public void actionForCollision(ActionLink action, Direction d, MacroCommand macroCommand) {
-		if(d != Direction.NONE) {
-			switch(action.getAction()) {
-			case "blow": 
+		if (d != Direction.NONE) {
+			switch (action.getAction()) {
+			case "blow":
 				macroCommand.addCommand(new SpriteBlowCommand(action.getSprite()));
 				removeGameEndSprite(action.getSprite());
 				break;
 			case "bounce":
 				macroCommand.addCommand(new BounceCommand(action.getSprite(), d));
 				break;
-			case "move": 
+			case "move":
 				macroCommand.addCommand(new MoveCommand(action.getSprite()));
 				break;
-			default: break;
+			default:
+				break;
 			}
 		}
 	}
 
 	public void eventHandler(String event) {
-		
+
 		MacroCommand macroCommand = new MacroCommand();
 		if (eventMap.containsKey(event)) {
 			List<ActionLink> eventObservers = eventMap.get(event);
-			for(ActionLink actionObserver: eventObservers) {
-				switch(actionObserver.getAction()) {
-					case "blow": 
-						macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
-						removeGameEndSprite(actionObserver.getSprite());
-						break;
-					case "shoot":
-						break;
-					case "move": 
-						SpriteElement currentSpriteElement= actionObserver.getSprite();
-						int counter=currentSpriteElement.getCounter();
-						if(counter==0) {
-							macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
-						}
-						counter=(counter+1)%currentSpriteElement.getCounterInterval();
-						currentSpriteElement.setCounter(counter);
-						break;
-					default: break;
+			for (ActionLink actionObserver : eventObservers) {
+				switch (actionObserver.getAction()) {
+				case "blow":
+					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
+					removeGameEndSprite(actionObserver.getSprite());
+					break;
+				case "shoot":
+					break;
+				case "move":
+					SpriteElement currentSpriteElement = actionObserver.getSprite();
+					int counter = currentSpriteElement.getCounter();
+					if (counter == 0) {
+						macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
+					}
+					counter = (counter + 1) % currentSpriteElement.getCounterInterval();
+					currentSpriteElement.setCounter(counter);
+					break;
+				default:
+					break;
 				}
 			}
 
@@ -320,21 +323,21 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-				
+
 		MacroCommand macroCommand = new MacroCommand();
-		
+
 		if (eventMap.containsKey("keyPressed")) {
 			List<ActionLink> eventObservers = eventMap.get("keyPressed");
-			for(ActionLink actionObserver: eventObservers) {
-				switch(actionObserver.getAction()) {
-				case "blow": 
+			for (ActionLink actionObserver : eventObservers) {
+				switch (actionObserver.getAction()) {
+				case "blow":
 					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
 					removeGameEndSprite(actionObserver.getSprite());
 					break;
-				case "shoot": 
-					//macroCommand.addCommand(shoot);
+				case "shoot":
+					// macroCommand.addCommand(shoot);
 					break;
-				case "move": 
+				case "move":
 					try {
 						setSpriteDirection(e, actionObserver.getSprite());
 					} catch (IOException e1) {
@@ -343,7 +346,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					}
 //					macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
 					break;
-				default: break;
+				default:
+					break;
 				}
 			}
 
@@ -351,12 +355,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			commandQueue.addLast(macroCommand);
 		}
 	}
-	
-	
-	
 
 	public void setSpriteDirection(KeyEvent e, SpriteElement element) throws IOException {
-		switch(e.getKeyCode()) {
+		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
 			if (element.getElementX() - element.getXVel() > 0) {
 //				element.setYVel(0);
@@ -364,7 +365,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			}
 			break;
 		case KeyEvent.VK_RIGHT:
-			if (element.getElementX() + element.getWidth() + element.getXVel() <  Constants.BOARD_PANEL_WIDTH) {
+			if (element.getElementX() + element.getWidth() + element.getXVel() < Constants.BOARD_PANEL_WIDTH) {
 //				element.setYVel(0);
 				element.setElementX(element.getElementX() + element.getXVel());
 			}
@@ -376,15 +377,15 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			}
 			break;
 		case KeyEvent.VK_DOWN:
-			if (element.getElementY() + element.getHeight() + element.getYVel() <  Constants.BOARD_PANEL_HEIGHT) {
+			if (element.getElementY() + element.getHeight() + element.getYVel() < Constants.BOARD_PANEL_HEIGHT) {
 //				element.setXVel(0);
 				element.setElementY(element.getElementY() + element.getYVel());
 			}
 			break;
 		case KeyEvent.VK_SPACE:
-			CircularSprite circularSprite = (CircularSprite) element.shoot(new CircularSprite("", element.getElementX() + 
-						element.getWidth()/2, element.getElementY(), 10, 10, 0, -1, "bullet1", "bullet",
-						Color.BLACK,Constants.GAME_NOT_APPLICABLE_COMPONENT,5));
+			CircularSprite circularSprite = (CircularSprite) element.shoot(
+					new CircularSprite("", element.getElementX() + element.getWidth() / 2, element.getElementY(), 10,
+							10, 0, -1, "bullet1", "bullet", Color.BLACK, Constants.GAME_NOT_APPLICABLE_COMPONENT, 5));
 			addSpriteElements(circularSprite);
 			eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
 			eventMap.get("OnTick").add(new ActionLink(circularSprite, "move"));
@@ -393,6 +394,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			break;
 		}
 	}
+
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -401,9 +403,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String commandText= e.getActionCommand();
-		if(commandText.equals("undo")) {
-			if(!isGamePaused) {
+		String commandText = e.getActionCommand();
+		if (commandText.equals("undo")) {
+			if (!isGamePaused) {
 				pause();
 				undoAction();
 				unPause();
@@ -413,24 +415,23 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			gui.changeFocus();
 			gui.paintView();
 
-		}else if(commandText.equals("start")) {
-			if(isGamePaused) {
+		} else if (commandText.equals("start")) {
+			if (isGamePaused) {
 				unPause();
 				gui.changeFocus();
 				gui.paintView();
 
-			}else {
+			} else {
 				InitPlay();
 			}
-		}else if(commandText.equals("pause")) {
+		} else if (commandText.equals("pause")) {
 			pause();
 			gui.changeFocus();
 			gui.paintView();
-		}else if(commandText.equals("replay")) {
+		} else if (commandText.equals("replay")) {
 			replay();
 			gui.changeFocus();
-		}
-		else if(commandText.equals("layout")) {
+		} else if (commandText.equals("layout")) {
 			pause();
 			gui.modifyLayout();
 			gui.changeFocus();
@@ -438,7 +439,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			unPause();
 		}
 	}
-	
+
 	public boolean isGamePaused() {
 		return isGamePaused;
 	}
@@ -453,21 +454,22 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		replayAction();
 		gui.changeFocus();
 	}
-	
+
 	public void gameReset() {
-		for(SpriteElement element: sprites) {
+		for (SpriteElement element : sprites) {
 			element.reset();
 		}
 	}
-	
+
 	private void replayAction() {
 		Iterator<Command> itr = commandQueue.iterator();
-		new Thread(){
-			public void run(){
-				while(itr.hasNext()){
+		new Thread() {
+			public void run() {
+				while (itr.hasNext()) {
 					try {
-						SwingUtilities.invokeAndWait(new Runnable(){
+						SwingUtilities.invokeAndWait(new Runnable() {
 							Command val = (Command) itr.next();
+
 							@Override
 							public void run() {
 								// TODO Auto-generated method stub
@@ -477,24 +479,24 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 									currentThread();
 									Thread.sleep(5);
 								} catch (InterruptedException e) {
-									 log.error(e.getMessage());
-									 Thread.currentThread().interrupt();
-									  throw new RuntimeException(e);
+									log.error(e.getMessage());
+									Thread.currentThread().interrupt();
+									throw new RuntimeException(e);
 								}
 							}
 						});
 					} catch (InvocationTargetException | InterruptedException e) {
-						 log.error(e.getMessage());
-						 Thread.currentThread().interrupt();
-						  throw new RuntimeException(e);
-					} 
+						log.error(e.getMessage());
+						Thread.currentThread().interrupt();
+						throw new RuntimeException(e);
+					}
 				}
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-					 log.error(e.getMessage());
-					 Thread.currentThread().interrupt();
-					  throw new RuntimeException(e);
+					log.error(e.getMessage());
+					Thread.currentThread().interrupt();
+					throw new RuntimeException(e);
 				}
 			}
 		}.start();
@@ -503,45 +505,44 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	public void undoAction() {
 
 		int count = 0;
-		while(count != Constants.TIMER_COUNT) {
-			Command val=commandQueue.pollLast();
-			if(val == null)
+		while (count != Constants.TIMER_COUNT) {
+			Command val = commandQueue.pollLast();
+			if (val == null)
 				break;
-			if(val instanceof TimerCommand)
-			{
+			if (val instanceof TimerCommand) {
 				count++;
 			}
 			val.undo();
 		}
-		
+
 	}
-	
+
 	public void pause() {
 //		if(isGamePaused)
 //			unPause();
 //		else{
 		isGamePaused = true;
 
-		if(!timer.isObserverListEmpty()) {
+		if (!timer.isObserverListEmpty()) {
 			timer.removeObserver(this);
 		}
 //		}
 	}
-	
+
 	public void unPause() {
 		isGamePaused = false;
 		timer.registerObserver(this);
 	}
-	
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+
 		// TODO Auto-generated method stub
 		MacroCommand macroCommand = new MacroCommand();
-		
+
 		if (eventMap.containsKey("OnClick")) {
 			List<ActionLink> eventObservers = eventMap.get("OnClick");
-			for(ActionLink actionObserver: eventObservers) {
+			for (ActionLink actionObserver : eventObservers) {
 				if (actionObserver.getAction() == "shoot") {
 					macroCommand.addCommand(new ProjectileCommand(actionObserver.getSprite(), e.getX(), e.getY()));
 				}
@@ -554,25 +555,25 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
