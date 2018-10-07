@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +46,8 @@ public class GameDriverTest {
 		clock = mock(Clock.class);
 		timer = mock(BreakoutTimer.class);
 		gui = mock(GUI.class);
-		gameDriver = new GameDriver(gui, timer, clock);
+		
+		gameDriver = new GameDriver(gui, timer, clock,null);
 		
 		ball = mock(CircularSprite.class);
 		gameDriver.addSpriteElements(ball);

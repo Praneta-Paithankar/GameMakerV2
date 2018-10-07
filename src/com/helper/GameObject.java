@@ -17,11 +17,7 @@ import com.infrastruture.Constants;
 import com.ui.CreateSpriteRequest;
 
 public class GameObject {
-
-	CreateSpriteRequest createSpriteRequest;
 	
-	
-//	TODO: Add image path as parameter to constructor
 	public SpriteElement spriteDecoder(CreateSpriteRequest createSpriteRequest) throws IOException { 
 		
 		switch(createSpriteRequest.getElementName()) {

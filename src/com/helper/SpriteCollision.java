@@ -2,8 +2,6 @@ package com.helper;
 
 import org.apache.log4j.Logger;
 
-import com.component.CircularSprite;
-import com.component.RectangularSprite;
 import com.component.SpriteElement;
 import com.infrastruture.Constants;
 import com.infrastruture.Direction;
@@ -39,7 +37,6 @@ public class SpriteCollision {
 
 	private boolean topCollision(SpriteElement c1, SpriteElement c2) {
 		int oneTop = c1.getElementY();
-		int oneBot = c1.getElementY() + c1.getHeight();
 		int twoTop = c2.getElementY();
 		int twoBot = c2.getElementY() + c2.getHeight();
 

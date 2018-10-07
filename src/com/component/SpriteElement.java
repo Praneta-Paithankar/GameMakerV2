@@ -50,11 +50,9 @@ public abstract class SpriteElement implements Serializable{
 	private int counter;
 	public SpriteElement(String image, int elementX, int elementY,int width,int height,int velX, int velY, String spriteId, String category,Color color, int gameEndDependency, int counterInterval) throws IOException {
 		this.imagePath = image;
-//		this.imageIcon = ImageIO.read(new File(image));
 		this.imageIcon = null;
 		this.width = width;
 		this.height = height;
-//		this.imageIcon  = resize(imageIcon, width, height);
 		this.firstInstanceOfVelX =this.XVel =velX;
 		this.firstInstanceOfVelY = this.YVel = velY;
 		this.visible = true;
@@ -130,7 +128,6 @@ public abstract class SpriteElement implements Serializable{
 			circularSprite.setElementX(this.getElementX()+this.getWidth()/2);
 			circularSprite.setElementY(this.getElementY());
 			return circularSprite;
-//			return new CircularSprite(shootingObject.imagePath,shootingObject.elementX,shootingObject.elementY,shootingObject.imageWidth, shootingObject.imageHeight,shootingObject.XVel, shootingObject.YVel,((CircularSprite) shootingObject).getRadius());
 
 		} else {
 			RectangularSprite rectangularSprite=new RectangularSprite((RectangularSprite)shootingObject);
@@ -293,7 +290,6 @@ public abstract class SpriteElement implements Serializable{
 		this.color = color;
 	}
 	public String toString() {
-//		String explanation= (sprite.getSpriteId() instanceof CircularSprite)?"Circle:":"Rectangle";
 		return getSpriteId() + getCategory();
 		
 	}
