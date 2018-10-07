@@ -235,15 +235,15 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 
 	public void checkIfGameEnd() {
 
-//		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
-//			timer.removeObserver(this);
-//			gui.paintView();
-//			String gameMsg = gameWinSet.isEmpty() ? "You Win :)" : "You Lose! :( ";
-//			int option = JOptionPane.showConfirmDialog(null, gameMsg, "Game Status", JOptionPane.DEFAULT_OPTION);
-//			if (option == JOptionPane.OK_OPTION) {
-//				System.exit(0);
-//			}
-//		}
+		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
+			timer.removeObserver(this);
+			gui.paintView();
+			String gameMsg = gameWinSet.isEmpty() ? "You Win :-)" : "You Lose! :-( ";
+			int option = JOptionPane.showConfirmDialog(null, gameMsg, "Game Status", JOptionPane.DEFAULT_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				System.exit(0);
+			}
+		}
 
 	}
 
