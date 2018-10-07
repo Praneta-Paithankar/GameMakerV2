@@ -514,12 +514,13 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			int tempHeight = Integer.parseInt(height.getText());
 			String spriteID = spriteTextField.getText();
 			String category = categoryTextField.getText();
+			int spriteInterval=Integer.parseInt(IntervalTextField.getText());
 			HashMap<String, String> eventAction = getEventActionMap();
 			
 			
 			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
-												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap(),60);
-//			getEventActionMap();// to get event and action mapping
+												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap(),spriteInterval);
+
 			getCollisionMap();	// to get mapping of event and collision
 		}
 		else {
