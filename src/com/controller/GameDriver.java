@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -67,7 +67,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
     private Deque<Command> commandQueue;
     private TimerCommand timerCommand;
 
-
 	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock){
 		 log.info("Initializing GameDriver");
 		this.sprites = new ArrayList<SpriteElement>();
@@ -83,7 +82,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	}
 	
 	public void addGameEndSprite(SpriteElement element) {
-		System.out.println("addGameEndSprite called");
 //		gameEndSet.add(element);
 //		addGameWinSprite(element);
 //		addGameLoseSprite(element);
@@ -151,7 +149,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			op.writeObject(gameWinSet);
 			op.writeObject(gameLoseSet);
 			op.writeObject(sprites);
-//			System.out.println("Sprites = " + sprites);
+//			op.writeObject(gui.getBoardPanel().getImage());
 
 			//gui.getBoardPanel().setElements(sprites);
 			op.close();
@@ -182,6 +180,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			gameLoseSet.addAll((HashSet<SpriteElement>)in.readObject());
 			setSprites((ArrayList<SpriteElement>)in.readObject());
 			gui.getBoardPanel().setElements(sprites);
+//			gui.getBoardPanel().setImage((BufferedImage) in.readObject());
 			gui.getBoardPanel().revalidate();
 			this.gui.paintView();
 			
@@ -218,8 +217,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
 			timer.removeObserver(this);
 			gui.paintView();
+			String gameMsg = gameWinSet.isEmpty() ? "You Win :)" : "You Lose! :( " ;
 			int option = JOptionPane.showConfirmDialog(null, 
-	                "Game Over!!", "Game Status", JOptionPane.DEFAULT_OPTION);
+					gameMsg, "Game Status", JOptionPane.DEFAULT_OPTION);
 			if (option==JOptionPane.OK_OPTION) {
 				System.exit(0);
 			}
@@ -242,14 +242,18 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 				}
 					for(SpriteElement element: sprites) {
 						SpriteElement currentSprite=actionObserver.getSprite();
-						if (element!=currentSprite && 
-								(actionObserver.getSpriteElement2IdOrCategory().isEmpty() || 
-								element.getCategory().equals(actionObserver.getSpriteElement2IdOrCategory()) ||
-								element.getSpriteId().equals(actionObserver.getSpriteElement2IdOrCategory()))) {
+						if (!(element.getCategory().equals(currentSprite.getCategory()))) { 
+//								(actionObserver.getSpriteElement2IdOrCategory().isEmpty() || 
+								
+							if(element.getCategory().equals(actionObserver.getSpriteElement2IdOrCategory()) ||
+								element.getSpriteId().equals(actionObserver.getSpriteElement2IdOrCategory())) {
 							d = collision.checkCollisionOfSprites(currentSprite,element);
 							actionForCollision(actionObserver, d, macroCommand);
+							if(d!=Direction.NONE)
+								break;
 						}
 					}					
+					}
 				
 			}
 			macroCommand.execute();
@@ -329,7 +333,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 					//macroCommand.addCommand(shoot);
 					break;
 				case "move": 
-					System.out.println("in move");
 					try {
 						setSpriteDirection(e, actionObserver.getSprite());
 					} catch (IOException e1) {

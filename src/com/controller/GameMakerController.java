@@ -75,6 +75,7 @@ public class GameMakerController implements  ActionListener, MouseListener {
 			for (Map.Entry<String,String> entry:sprite.getCollisionMap().entrySet()) {			 
 				eventMap.putIfAbsent("OnCollision", new ArrayList<>());
 				eventMap.get("OnCollision").add(new ActionLink(newSprite,entry.getKey(),entry.getValue()));
+//				eventMap.get("OnCollision").add(new ActionLink(newSprite, entry.getValue(), entry.getKey()));
 			}
 			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {			 
 				eventMap.putIfAbsent(entry.getKey(), new ArrayList<>());

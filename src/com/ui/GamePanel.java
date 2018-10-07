@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -25,7 +26,7 @@ import com.infrastruture.Element;
 
 
 @SuppressWarnings("serial")
-public class GamePanel extends AbstractPanel implements Element {
+public class GamePanel extends AbstractPanel implements Element, Serializable {
 	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private BufferedImage image;
 	private ArrayList<SpriteElement> elements;
@@ -156,9 +157,18 @@ public class GamePanel extends AbstractPanel implements Element {
 		return spriteElement;
 	}
 
-
-
 	public void setSpriteElement(SpriteElement spriteElement) {
 		this.spriteElement = spriteElement;
 	}
+
+
+
+	public BufferedImage getImage() {
+		return image;
+	}
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+	
 }
