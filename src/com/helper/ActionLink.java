@@ -59,7 +59,6 @@ public class ActionLink implements Serializable{
 	}
 	public String toString() {
 //		String explanation= (sprite.getSpriteId() instanceof CircularSprite)?"Circle:":"Rectangle";
-		return sprite.getSpriteId()+" " + action;
-		
+		return sprite+" Action:" + action + " Element2IdOrCategory " + spriteElement2IdOrCategory;		
 	}
 }

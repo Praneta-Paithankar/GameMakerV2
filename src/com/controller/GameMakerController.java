@@ -46,6 +46,8 @@ public class GameMakerController implements  ActionListener, MouseListener,Seria
 	private Clock clock;
 	private CreateSpriteRequest bulletSprite;
 	private SpriteElement newBulletSprite;
+	private Map<SpriteElement, Integer> shooterSpriteBulletCountMap;
+	
 	
 	public GameMakerController(GUI gui, Clock clock) {
 		log.info("Initializing game-maker-controller");
@@ -54,7 +56,9 @@ public class GameMakerController implements  ActionListener, MouseListener,Seria
 		this.timer = new BreakoutTimer();
 		this.bulletElementMap=new HashMap<>();
 		this.clock = clock; 
-		this.gameDriver = new GameDriver(this.gui, timer, clock,bulletElementMap);
+		this.shooterSpriteBulletCountMap=new HashMap<>();
+		this.gameDriver = new GameDriver(this.gui, timer, clock,bulletElementMap,shooterSpriteBulletCountMap);
+		
 		gui.addDriver(gameDriver);
 	}
 	
@@ -74,6 +78,8 @@ public class GameMakerController implements  ActionListener, MouseListener,Seria
 				this.newBulletSprite.setElementX(newSprite.getElementX()+newSprite.getWidth()/2);
 				this.newBulletSprite.setElementY(newSprite.getElementY());
 				bulletElementMap.put(newSprite,newBulletSprite);
+				shooterSpriteBulletCountMap.put(newSprite, gui.getMakePanel().getNumberOfBullets());
+				log.info("shooterSpriteBulletCountMap" + shooterSpriteBulletCountMap);
 			}
 			gui.getMakePanel().setShootSprite(null);
 			this.gameDriver.addSpriteElements(newSprite);

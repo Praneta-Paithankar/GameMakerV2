@@ -48,7 +48,7 @@ public class GameDriverTest {
 		timer = mock(BreakoutTimer.class);
 		gui = mock(GUI.class);
 		
-		gameDriver = new GameDriver(gui, timer, clock,new HashMap<>());
+		gameDriver = new GameDriver(gui, timer, clock,new HashMap<>(),new HashMap<>());
 		
 		ball = mock(CircularSprite.class);
 		gameDriver.addSpriteElements(ball);
@@ -144,6 +144,9 @@ public class GameDriverTest {
 		
 		Map<SpriteElement, SpriteElement> bulletElementMap = gameDriver.getBulletElementMap();
 		bulletElementMap.put(ball, ball1);
+		
+		Map<SpriteElement, Integer> shooterMap =gameDriver.getShooterSpriteBulletCountMap();
+		shooterMap.put(ball, 1);
 		
 		try {
 			when(ball.shoot(any())).thenReturn(ball1);
@@ -292,8 +295,12 @@ public class GameDriverTest {
 		CircularSprite ball1 = mock(CircularSprite.class);;
 		gameDriver.addSpriteElements(ball1);
 		
+		
 		Map<SpriteElement, SpriteElement> bulletElementMap = gameDriver.getBulletElementMap();
 		bulletElementMap.put(ball, ball1);
+		
+		Map<SpriteElement, Integer> shooterMap =gameDriver.getShooterSpriteBulletCountMap();
+		shooterMap.put(ball, 1);
 		GamePanel gamePanel = mock(GamePanel.class);
 		
 		try {

@@ -57,7 +57,15 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private int shooterYvel;
 	private int shooterWidth;
 	private int shooterHeight;
+	private int numberOfBullets;
 	
+	
+	
+	public int getNumberOfBullets() {
+		int bulletCount=Integer.parseInt(shooterNumberOfBullets.getText());
+		return (bulletCount==-1?Integer.MAX_VALUE:bulletCount);
+	}
+
 	private String shooterSpriteID;
 	private String shooterCategory;
 	private String imagePath;
@@ -154,6 +162,8 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private JPanel shooterSubOptionPanel1;
 	private JLabel shooterImageLabel;
 	private JButton shooterImageButton;
+	private JLabel shooterNumberOfBulletsLabel;
+	private JTextField shooterNumberOfBullets;
 
 	
 	
@@ -512,6 +522,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 			log.info(shooterWidth);
 			log.info(shooterHeight);
 			log.info(shooterEventActionMap);
+			log.info(getNumberOfBullets());
 			return;
 			
 		}
@@ -560,20 +571,6 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		this.shootSprite = shootSprite;
 	}
 
-//	@Override
-//	public void itemStateChanged(ItemEvent e) {
-//		// TODO Auto-generated method stub
-//		int sel = e.getStateChange();
-//        if (sel == ItemEvent.SELECTED) {
-//        	int option=createOptionPopUp(isShooter());
-//        	if(option == JOptionPane.YES_OPTION)
-//        		getFormData(option,isShooter());
-//        	//createOptionPopUp();
-//        } else {
-//        	
-//        }
-//	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -619,6 +616,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		shooterIntervallabel = new JLabel("Time Interval in MilliSeconds :");
 		shooterActionLabel=new JLabel("Actions :");
 		shooterImageLabel = new JLabel("Image :");
+		shooterNumberOfBulletsLabel=new JLabel("<html>Number of Bullets :<br>(-1 for infinite bullets)</html>");
 		
 		shooterSpriteId=new JTextField(10);
 		shooterSpriteCategory=new JTextField(10);
@@ -627,6 +625,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		shooterXVelField=new JTextField(10);
 		shooterYVelField=new JTextField(10);
 		shooterIntervalTextField = new JTextField(10);
+		shooterNumberOfBullets=new JTextField(10);
 		
 		shooterActionsButton = new JButton("Actions");
 		shooterColorButton=new JButton("Select Color");
@@ -651,7 +650,9 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		shooterSubOptionPanel1.add(shooterYVel);
 		shooterSubOptionPanel1.add(shooterYVelField);		
 		shooterSubOptionPanel1.add(shooterIntervallabel);
-		shooterSubOptionPanel1.add(shooterIntervalTextField);
+		shooterSubOptionPanel1.add(shooterIntervalTextField);	
+		shooterSubOptionPanel1.add(shooterNumberOfBulletsLabel);
+		shooterSubOptionPanel1.add(shooterNumberOfBullets);
 		shooterSubOptionPanel1.add(shooterColorLabel);
 		shooterSubOptionPanel1.add(shooterColorButton);
 		shooterSubOptionPanel1.add(shooterImageLabel);

@@ -126,13 +126,13 @@ public abstract class SpriteElement implements Serializable{
 		if(shootingObject instanceof CircularSprite) {
 			CircularSprite circularSprite= new CircularSprite((CircularSprite)shootingObject);
 			circularSprite.setElementX(this.getElementX()+this.getWidth()/2);
-			circularSprite.setElementY(this.getElementY());
+			circularSprite.setElementY(this.getElementY()-this.getHeight());
 			return circularSprite;
 
 		} else {
 			RectangularSprite rectangularSprite=new RectangularSprite((RectangularSprite)shootingObject);
 			rectangularSprite.setElementX(this.getElementX()+this.getWidth()/2);
-			rectangularSprite.setElementY(this.getElementY());
+			rectangularSprite.setElementY(this.getElementY()- this.getHeight());
 			return rectangularSprite;
 		}
 		
@@ -290,8 +290,7 @@ public abstract class SpriteElement implements Serializable{
 		this.color = color;
 	}
 	public String toString() {
-		return getSpriteId() + getCategory();
-		
+		return "ID:"+getSpriteId() + " Category: "+getCategory();
 	}
 
 	

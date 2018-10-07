@@ -12,11 +12,14 @@ public class SpriteCollision {
 	public Direction checkCollisionOfSpriteWithWall(SpriteElement c) {
 		Direction currentDirection = Direction.NONE;
 		if (c.getElementX() <= 0 || c.getElementX() + c.getWidth() >= Constants.BOARD_PANEL_WIDTH) {
+			//log.error(Direction.X);
 			currentDirection = Direction.X;
 		}
 		if (c.getElementY() <= 0 || c.getElementY() + c.getHeight() >= Constants.BOARD_PANEL_HEIGHT) {
+			//log.error(Direction.Y);
 			currentDirection = currentDirection == Direction.NONE ? Direction.Y : Direction.BOTH;
 		}
+		//log.error(currentDirection);
 		return currentDirection;
 	}
 
