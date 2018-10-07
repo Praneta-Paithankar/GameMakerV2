@@ -31,6 +31,7 @@ import org.w3c.dom.css.Counter;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.xml.crypto.dsig.spec.HMACParameterSpec;
 
 import org.apache.log4j.Logger;
 
@@ -224,15 +225,15 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	}
 
 	public void checkIfGameEnd() {
-		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
-			timer.removeObserver(this);
-			gui.paintView();
-			int option = JOptionPane.showConfirmDialog(null, 
-	                "Game Over!!", "Game Status", JOptionPane.DEFAULT_OPTION);
-			if (option==JOptionPane.OK_OPTION) {
-				System.exit(0);
-			}
-		}
+//		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
+//			timer.removeObserver(this);
+//			gui.paintView();
+//			int option = JOptionPane.showConfirmDialog(null, 
+//	                "Game Over!!", "Game Status", JOptionPane.DEFAULT_OPTION);
+//			if (option==JOptionPane.OK_OPTION) {
+//				System.exit(0);
+//			}
+//		}
 		
 	}
 
@@ -289,22 +290,37 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		MacroCommand macroCommand = new MacroCommand();
 		if (eventMap.containsKey(event)) {
 			List<ActionLink> eventObservers = eventMap.get(event);
-			for(ActionLink actionObserver: eventObservers) {
+			List<ActionLink> tempEventObservers = new ArrayList<>(eventObservers);
+			for(ActionLink actionObserver: tempEventObservers) {
 				switch(actionObserver.getAction()) {
 					case "blow": 
 						macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
 						removeGameEndSprite(actionObserver.getSprite());
 						break;
-					case "shoot":
-						break;
 					case "move": 
 						SpriteElement currentSpriteElement= actionObserver.getSprite();
 						int counter=currentSpriteElement.getCounter();
-						//if(counter==0) {
+						if(counter==0) {
 							macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
-						//}
+						}
 						counter=(counter+1)%currentSpriteElement.getCounterInterval();
 						currentSpriteElement.setCounter(counter);
+						break;
+					case "shoot":
+						try {
+							currentSpriteElement = actionObserver.getSprite();
+							if(bulletElementMap.containsKey(currentSpriteElement)) {
+								counter=currentSpriteElement.getCounter();
+								if(counter==0) {
+										shoot(currentSpriteElement);
+								}
+								counter=(counter+1)%currentSpriteElement.getCounterInterval();
+								currentSpriteElement.setCounter(counter);
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
 						break;
 					default: break;
 				}
@@ -395,20 +411,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			log.error("Before" + eventMap);
 			log.error("Before" + bulletElementMap);
 			if(bulletElementMap.containsKey(element)) {
-
-				SpriteElement bullet=element.shoot(bulletElementMap.get(element));
-				//addSpriteElements(bullet);
-				if(bullet instanceof CircularSprite) {
-					addSpriteElements((CircularSprite) bullet);
-				}
-				else {
-					addSpriteElements((RectangularSprite) bullet);
-				}
-			
-				log.error(sprites);
-				eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
-				eventMap.get("OnTick").add(new ActionLink(bullet, "move"));
-				log.error( eventMap);
+				shoot(element);
 			}
 			break;
 			
@@ -419,6 +422,26 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
+
+	}
+	
+	private void shoot(SpriteElement element) throws IOException {
+		SpriteElement bullet=element.shoot(bulletElementMap.get(element));
+		//addSpriteElements(bullet);
+		if(bullet instanceof CircularSprite) {
+			addSpriteElements((CircularSprite) bullet);
+		}
+		else {
+			addSpriteElements((RectangularSprite) bullet);
+		}
+	
+		log.error(sprites);
+		eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
+		eventMap.get("OnTick").add(new ActionLink(bullet, "move"));
+		log.error( eventMap);
+		gui.getBoardPanel().setElements(sprites);
+		gui.getBoardPanel().revalidate();
+		this.gui.paintView();
 
 	}
 

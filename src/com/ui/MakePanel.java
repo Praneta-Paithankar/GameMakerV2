@@ -519,7 +519,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 			
 			
 			newSprite = new CreateSpriteRequest("Circle", tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
-												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap(),1);
+												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap(),60);
 //			getEventActionMap();// to get event and action mapping
 			getCollisionMap();	// to get mapping of event and collision
 		}
@@ -633,7 +633,7 @@ public class MakePanel extends AbstractPanel implements Element, ItemListener, A
 		
 		if(option== JOptionPane.OK_OPTION) {
 			if(!isShooter) {
-			eventActionMap.put( eventDropDownList.getSelectedItem().toString(),actionDropDownList.getSelectedItem().toString());
+				eventActionMap.put( eventDropDownList.getSelectedItem().toString(),actionDropDownList.getSelectedItem().toString());
 			}
 			else
 			{
