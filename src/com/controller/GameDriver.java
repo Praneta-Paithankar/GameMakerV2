@@ -29,6 +29,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.w3c.dom.css.Counter;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -149,7 +150,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			op.writeObject(gameWinSet);
 			op.writeObject(gameLoseSet);
 			op.writeObject(sprites);
-//			op.writeObject(gui.getBoardPanel().getImage());
+			ImageIO.write(gui.getBoardPanel().getImage(), "png", op);
 
 			//gui.getBoardPanel().setElements(sprites);
 			op.close();
@@ -180,7 +181,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			gameLoseSet.addAll((HashSet<SpriteElement>)in.readObject());
 			setSprites((ArrayList<SpriteElement>)in.readObject());
 			gui.getBoardPanel().setElements(sprites);
-//			gui.getBoardPanel().setImage((BufferedImage) in.readObject());
+			gui.getBoardPanel().setImage((ImageIO.read(in)));
+			
 			gui.getBoardPanel().revalidate();
 			this.gui.paintView();
 			
