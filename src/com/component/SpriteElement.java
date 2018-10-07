@@ -120,6 +120,7 @@ public abstract class SpriteElement implements Serializable{
 
 		if(isVisible()) {
 			g.drawImage(this.imageIcon, getElementX(), getElementY(), null);
+			
 		}
 	}
 	

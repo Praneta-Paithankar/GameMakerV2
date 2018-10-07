@@ -36,11 +36,12 @@ protected static Logger log = Logger.getLogger(SpriteCollision.class);
 			currentDirection = Direction.X;
 		}
 		if (c1.intersects(c2) && topCollision(c1, c2)) { // c1: top c2: bot
-			currentDirection = currentDirection==Direction.NONE? Direction.Y:Direction.BOTH;
+			currentDirection = Direction.Y;
+			
 		} else if (c1.intersects(c2) && botCollision(c1, c2)) { // c1: bot c2: top
-			currentDirection = currentDirection==Direction.NONE? Direction.Y:Direction.BOTH;
+			currentDirection = Direction.Y;
 		} else if (c1.intersects(c2)) {
-			currentDirection = Direction.BOTH;
+			currentDirection = Direction.Y;
 		}
 		return currentDirection;
 	}
