@@ -9,39 +9,30 @@ import com.infrastruture.Constants;
 import com.infrastruture.Direction;
 
 public class SpriteCollision {
-protected static Logger log = Logger.getLogger(SpriteCollision.class);
-	
+	protected static Logger log = Logger.getLogger(SpriteCollision.class);
 
 	public Direction checkCollisionOfSpriteWithWall(SpriteElement c) {
 		Direction currentDirection = Direction.NONE;
-		if (c.getElementX() <= 0 || c.getElementX() + c.getWidth() >=  Constants.BOARD_PANEL_WIDTH) {
+		if (c.getElementX() <= 0 || c.getElementX() + c.getWidth() >= Constants.BOARD_PANEL_WIDTH) {
 			currentDirection = Direction.X;
 		}
 		if (c.getElementY() <= 0 || c.getElementY() + c.getHeight() >= Constants.BOARD_PANEL_HEIGHT) {
-			currentDirection = currentDirection==Direction.NONE? Direction.Y:Direction.BOTH;
+			currentDirection = currentDirection == Direction.NONE ? Direction.Y : Direction.BOTH;
 		}
 		return currentDirection;
 	}
-	public Direction checkCollisionOfSprites(SpriteElement c1,SpriteElement c2) {
+
+	public Direction checkCollisionOfSprites(SpriteElement c1, SpriteElement c2) {
 		Direction currentDirection = Direction.NONE;
-//		if (c1.intersects(c2) && (topCollision(c1, c2) || botCollision(c1, c2))) { // c1: top/bot c2: bot/top
-//			currentDirection = Direction.Y;
-//		} 
-//		if (c1.intersects(c2) && (rightCollision(c1, c2) ||  leftCollision(c1, c2))) { // c1: right/left c2: left/right
-//			currentDirection = currentDirection==Direction.NONE? Direction.X:Direction.X;
-//		}
 		if (c1.intersects(c2) && rightCollision(c1, c2)) { // c1: right c2: left
 			currentDirection = Direction.X;
 		} else if (c1.intersects(c2) && leftCollision(c1, c2)) { // c1: left c2: right
 			currentDirection = Direction.X;
 		}
 		if (c1.intersects(c2) && topCollision(c1, c2)) { // c1: top c2: bot
-			currentDirection = Direction.Y;
-			
+			currentDirection = currentDirection == Direction.NONE ? Direction.Y : Direction.BOTH;
 		} else if (c1.intersects(c2) && botCollision(c1, c2)) { // c1: bot c2: top
-			currentDirection = Direction.Y;
-		} else if (c1.intersects(c2)) {
-			currentDirection = Direction.Y;
+			currentDirection = currentDirection == Direction.NONE ? Direction.Y : Direction.BOTH;
 		}
 		return currentDirection;
 	}
