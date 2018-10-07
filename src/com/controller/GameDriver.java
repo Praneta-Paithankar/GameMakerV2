@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.ArrayDeque;
@@ -33,6 +33,7 @@ import org.w3c.dom.css.Counter;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import javax.xml.crypto.dsig.spec.HMACParameterSpec;
 
 import org.apache.log4j.Logger;
 
@@ -44,6 +45,7 @@ import com.commands.SpriteBlowCommand;
 import com.commands.TimerCommand;
 import com.component.CircularSprite;
 import com.component.Clock;
+import com.component.RectangularSprite;
 import com.component.SpriteElement;
 import com.helper.ActionLink;
 import com.helper.SpriteCollision;
@@ -54,7 +56,13 @@ import com.infrastruture.Observer;
 import com.timer.BreakoutTimer;
 import com.ui.GUI;
 
-public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener {
+
+public class GameDriver implements Observer, KeyListener, ActionListener, MouseListener, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1504747393198580722L;
+
 	protected static Logger log = Logger.getLogger(GameDriver.class);
 	private ArrayList<SpriteElement> sprites;
 	private Map<String, List<ActionLink>> eventMap;
@@ -64,17 +72,22 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	private HashSet<SpriteElement> gameWinSet;
 	private HashSet<SpriteElement> gameLoseSet;
 	private MouseEvent e;
-	Boolean Projectileflag;
-	private boolean isGamePaused;
-	private Deque<Command> commandQueue;
-	private TimerCommand timerCommand;
 
-	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock) {
-		log.info("Initializing GameDriver");
+	Boolean Projectileflag ;
+    private boolean isGamePaused ;
+    private Deque<Command> commandQueue;
+    private TimerCommand timerCommand;
+    private Map<SpriteElement, SpriteElement> bulletElementMap;
+
+
+	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock, Map<SpriteElement, SpriteElement> bulletElementMap){
+		 log.info("Initializing GameDriver");
+
 		this.sprites = new ArrayList<SpriteElement>();
 		this.eventMap = new HashMap<>();
 		this.gui = gui;
 		this.timer = timer;
+		this.bulletElementMap=bulletElementMap;
 		this.collision = new SpriteCollision();
 		isGamePaused = false;
 		timerCommand = new TimerCommand(clock);
@@ -151,7 +164,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			op.writeObject(gameWinSet);
 			op.writeObject(gameLoseSet);
 			op.writeObject(sprites);
+			op.writeObject(bulletElementMap);
 			ImageIO.write(gui.getBoardPanel().getImage(), "png", op);
+
 
 			// gui.getBoardPanel().setElements(sprites);
 			op.close();
@@ -176,11 +191,13 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			eventMap.clear();
 			gameWinSet.clear();
 			gameLoseSet.clear();
-
+			bulletElementMap.clear();
 			eventMap.putAll((Map<String, List<ActionLink>>) in.readObject());
-			gameWinSet.addAll((HashSet<SpriteElement>) in.readObject());
-			gameLoseSet.addAll((HashSet<SpriteElement>) in.readObject());
-			setSprites((ArrayList<SpriteElement>) in.readObject());
+			gameWinSet.addAll((HashSet<SpriteElement>)in.readObject());
+			gameLoseSet.addAll((HashSet<SpriteElement>)in.readObject());
+			setSprites((ArrayList<SpriteElement>)in.readObject());
+			bulletElementMap.putAll((Map<SpriteElement,SpriteElement>) in.readObject());
+
 			gui.getBoardPanel().setElements(sprites);
 			gui.getBoardPanel().setImage((ImageIO.read(in)));
 
@@ -217,15 +234,16 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	}
 
 	public void checkIfGameEnd() {
-		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
-			timer.removeObserver(this);
-			gui.paintView();
-			String gameMsg = gameWinSet.isEmpty() ? "You Win :)" : "You Lose! :( ";
-			int option = JOptionPane.showConfirmDialog(null, gameMsg, "Game Status", JOptionPane.DEFAULT_OPTION);
-			if (option == JOptionPane.OK_OPTION) {
-				System.exit(0);
-			}
-		}
+
+//		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
+//			timer.removeObserver(this);
+//			gui.paintView();
+//			String gameMsg = gameWinSet.isEmpty() ? "You Win :)" : "You Lose! :( ";
+//			int option = JOptionPane.showConfirmDialog(null, gameMsg, "Game Status", JOptionPane.DEFAULT_OPTION);
+//			if (option == JOptionPane.OK_OPTION) {
+//				System.exit(0);
+//			}
+//		}
 
 	}
 
@@ -288,25 +306,40 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		MacroCommand macroCommand = new MacroCommand();
 		if (eventMap.containsKey(event)) {
 			List<ActionLink> eventObservers = eventMap.get(event);
-			for (ActionLink actionObserver : eventObservers) {
-				switch (actionObserver.getAction()) {
-				case "blow":
-					macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
-					removeGameEndSprite(actionObserver.getSprite());
-					break;
-				case "shoot":
-					break;
-				case "move":
-					SpriteElement currentSpriteElement = actionObserver.getSprite();
-					int counter = currentSpriteElement.getCounter();
-					if (counter == 0) {
-						macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
-					}
-					counter = (counter + 1) % currentSpriteElement.getCounterInterval();
-					currentSpriteElement.setCounter(counter);
-					break;
-				default:
-					break;
+
+			List<ActionLink> tempEventObservers = new ArrayList<>(eventObservers);
+			for(ActionLink actionObserver: tempEventObservers) {
+				switch(actionObserver.getAction()) {
+					case "blow": 
+						macroCommand.addCommand(new SpriteBlowCommand(actionObserver.getSprite()));
+						removeGameEndSprite(actionObserver.getSprite());
+						break;
+					case "move": 
+						SpriteElement currentSpriteElement= actionObserver.getSprite();
+						int counter=currentSpriteElement.getCounter();
+						if(counter==0) {
+							macroCommand.addCommand(new MoveCommand(actionObserver.getSprite()));
+						}
+						counter=(counter+1)%currentSpriteElement.getCounterInterval();
+						currentSpriteElement.setCounter(counter);
+						break;
+					case "shoot":
+						try {
+							currentSpriteElement = actionObserver.getSprite();
+							if(bulletElementMap.containsKey(currentSpriteElement)) {
+								counter=currentSpriteElement.getCounter();
+								if(counter==0) {
+										shoot(currentSpriteElement);
+								}
+								counter=(counter+1)%currentSpriteElement.getCounterInterval();
+								currentSpriteElement.setCounter(counter);
+							}
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+
+						break;
+					default: break;
 				}
 			}
 
@@ -383,13 +416,20 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			}
 			break;
 		case KeyEvent.VK_SPACE:
-			CircularSprite circularSprite = (CircularSprite) element.shoot(
-					new CircularSprite("", element.getElementX() + element.getWidth() / 2, element.getElementY(), 10,
-							10, 0, -1, "bullet1", "bullet", Color.BLACK, Constants.GAME_NOT_APPLICABLE_COMPONENT, 5));
-			addSpriteElements(circularSprite);
-			eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
-			eventMap.get("OnTick").add(new ActionLink(circularSprite, "move"));
+
+			//CircularSprite bullet = (CircularSprite) element.shoot(new CircularSprite("", element.getElementX() + 
+			//			element.getWidth()/2, element.getElementY(), 10, 10, 0, -1, "bullet1", "bullet",
+			//			Color.BLACK,Constants.GAME_NOT_APPLICABLE_COMPONENT,5));
+			//addSpriteElements(bullet);
+			
+			log.error("Before" + sprites);
+			log.error("Before" + eventMap);
+			log.error("Before" + bulletElementMap);
+			if(bulletElementMap.containsKey(element)) {
+				shoot(element);
+			}
 			break;
+			
 		default:
 			break;
 		}
@@ -398,6 +438,26 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
+
+	}
+	
+	private void shoot(SpriteElement element) throws IOException {
+		SpriteElement bullet=element.shoot(bulletElementMap.get(element));
+		//addSpriteElements(bullet);
+		if(bullet instanceof CircularSprite) {
+			addSpriteElements((CircularSprite) bullet);
+		}
+		else {
+			addSpriteElements((RectangularSprite) bullet);
+		}
+	
+		log.error(sprites);
+		eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
+		eventMap.get("OnTick").add(new ActionLink(bullet, "move"));
+		log.error( eventMap);
+		gui.getBoardPanel().setElements(sprites);
+		gui.getBoardPanel().revalidate();
+		this.gui.paintView();
 
 	}
 

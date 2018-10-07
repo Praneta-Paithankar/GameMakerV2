@@ -7,9 +7,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -17,7 +17,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -50,7 +49,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private BufferedImage paddleImage;
 	private List<JCheckBox> checkBox = new ArrayList<>();
 	private CreateSpriteRequest newSprite;
-	
+	private String objectType;
 	private boolean isShooter;
 	
 	private int shooterXvel;
@@ -97,7 +96,30 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private JLabel widthLabel;
 	private JLabel heightLabel;
 	private JLabel actionIDDropDownlabel;
-
+	
+	private JLabel shooterXLabel;
+	private JLabel shooterYLabel;
+	private JLabel shooterXVel;
+	private JLabel shooterYVel;
+	private JLabel shooterColorLabel;
+	private JLabel shooterWidthLabel;
+	
+	private JLabel shooterHeightLabel;
+	private JLabel shooterSpriteIdLabel;
+	private JLabel shooterCategoryLabel;
+	private JLabel Intervallabel;
+	private JLabel shooterActionLabel;
+	private JLabel shooterIntervallabel;
+	
+	private JTextField IntervalTextField;
+	private JTextField shooterWidthField;
+	private JTextField shooterHeightField;
+	private JTextField shooterSpriteCategory;
+	private JTextField shooterSpriteId;
+	private JTextField shooterYVelField;
+	private JTextField shooterXVelField;
+	private JTextField shooterIntervalTextField;
+	
 	private ButtonGroup group;
 	private JButton colorButton;
 	private JButton imageButton;
@@ -119,11 +141,17 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private HashMap<String,String> shooterEventActionMap=new HashMap<>();
 	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
 	private HashMap<String,String> eventActionMap=new HashMap<String, String>();
-
-	private JLabel shooterIntervallabel;
-	private JTextField shooterIntervalTextField;
-	private String shooterInterval;
+	
+//	private int shooterInterval;
+	private CreateSpriteRequest shootSprite;
+//	private JLabel shooterIntervallabel;
+//	private JTextField shooterIntervalTextField;
+	private int shooterInterval;
 	private BufferedImage image;
+	private JButton shooterActionsButton;
+	private JButton shooterColorButton;
+	private JPanel shooterSubOptionPanel1;
+
 	
 	
 	public MakePanel() {
@@ -349,152 +377,134 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
     }
 
 	public int createOptionPopUp(boolean isShooter) {
+		
 		mainOptionPanel= new JPanel();
+		JOptionPane pane = new JOptionPane();
     	mainOptionPanel.setLayout(new BoxLayout(mainOptionPanel,BoxLayout.PAGE_AXIS));
     	subOptionPanel1=new JPanel();
     	subOptionPanel2=new JPanel();
     	gbLayout=new GridLayout(0,2,10,10);
     	subOptionPanel1.setLayout(gbLayout);
     	
+    	
     	spriteId = new JLabel("Sprite ID :");
-    	subOptionPanel1.add(spriteId);
-    	
-    	spriteTextField = new JTextField(10);
-    	subOptionPanel1.add(spriteTextField);
-    	
     	categoryId = new JLabel("Category :");
-    	subOptionPanel1.add(categoryId);
-    	
-    	categoryTextField = new JTextField(10);
-    	subOptionPanel1.add(categoryTextField);
-    	
-    	if(!isShooter) {
-	    	xlabel = new JLabel("X :");
-	    	subOptionPanel1.add(xlabel);
-	    	
-	    	x = new JTextField(10);
-	    	subOptionPanel1.add(x);
-	    	
-	    	ylabel = new JLabel("Y :");
-	    	subOptionPanel1.add(ylabel);
-	    	
-	    	y = new JTextField(10);
-	    	subOptionPanel1.add(y);
-	    	}
+    	xlabel = new JLabel("X :");
+    	ylabel = new JLabel("Y :");
     	widthLabel = new JLabel("Width :");
-    	subOptionPanel1.add(widthLabel);
-    	
-    	width = new JTextField(10);
-    	subOptionPanel1.add(width);
-    	
     	heightLabel = new JLabel("Height :");
-    	subOptionPanel1.add(heightLabel);
-    	
-    	height = new JTextField(10);
-    	subOptionPanel1.add(height);
-    	
     	xVellabel = new JLabel("XVelocity :");
-    	subOptionPanel1.add(xVellabel);
-    	
-    	xVel = new JTextField(10);
-    	subOptionPanel1.add(xVel);
-    	
     	yVellabel = new JLabel("YVelocity :");
-    	subOptionPanel1.add(yVellabel);
-    	
-    	yVel = new JTextField(10);
-    	subOptionPanel1.add(yVel);
-    	
+    	Intervallabel = new JLabel("Time Interval in MilliSeconds :");
+    	imagelabel = new JLabel("Image :");
+    	shooterlabel = new JLabel("Shooter :");
+    	actionlabel = new JLabel("Actions :");
     	colorlabel = new JLabel("Color :");
-    	subOptionPanel1.add(colorlabel);
+    	collisionslabel = new JLabel("Collisions :");
+    	
+ 
+    	spriteTextField = new JTextField(10);
+    	categoryTextField = new JTextField(10);
+    	x = new JTextField(10);
+    	y = new JTextField(10);
+    	width = new JTextField(10);
+    	height = new JTextField(10);
+    	xVel = new JTextField(10);
+    	yVel = new JTextField(10);
+    	IntervalTextField = new JTextField(10);
     	
     	colorButton = new JButton("Select Color");
     	colorButton.setActionCommand("Color");
     	colorButton.addActionListener(this);
-    	subOptionPanel1.add(colorButton);
-    	
-    	imagelabel = new JLabel("Image :");
-    	subOptionPanel1.add(imagelabel);
     	
     	imageButton = new JButton("Image");
-    	subOptionPanel1.add(imageButton);
-    	imageButton.addActionListener(this);
-    	
-    	if(!isShooter) {
-	    	shooterlabel = new JLabel("Shooter :");
-	    	subOptionPanel1.add(shooterlabel);
-	    	
-	    	
-	    	shooterButton = new JButton("Shooter");
-	    	shooterButton.addActionListener(this);
-	    	subOptionPanel1.add(shooterButton);
-	    	
-    	}
-    	else {
-    		shooterIntervallabel = new JLabel("Time in MilliSeconds :");
-	    	subOptionPanel1.add(shooterIntervallabel);
-	    	
-	    	shooterIntervalTextField = new JTextField(10);
-	    	subOptionPanel1.add(shooterIntervalTextField);
-    	}
-    	actionlabel = new JLabel("Actions :");
-    	subOptionPanel1.add(actionlabel);
-    	
+    	shooterButton = new JButton("Shooter");
     	actionsButton = new JButton("Actions");
-    	subOptionPanel1.add(actionsButton);
-    	actionsButton.addActionListener(this);
+    	collisionsButton = new JButton("Collisions");
     	
-    	if(!isShooter) {
-	    	collisionslabel = new JLabel("Collisions :");
-	    	subOptionPanel1.add(collisionslabel);
+    	
+    	imageButton.addActionListener(this);
+    	shooterButton.addActionListener(this);
+	    actionsButton.addActionListener(this);
+    	collisionsButton.addActionListener(this);
+    	
+    	subOptionPanel1.add(spriteId);
+    	subOptionPanel1.add(spriteTextField);
+    	subOptionPanel1.add(categoryId);
+    	subOptionPanel1.add(categoryTextField);
+    	subOptionPanel1.add(xlabel);
+    	subOptionPanel1.add(x);
+	    subOptionPanel1.add(ylabel);
+	    subOptionPanel1.add(y);
+	    subOptionPanel1.add(widthLabel);
+    	subOptionPanel1.add(width);
+    	subOptionPanel1.add(heightLabel);
+    	subOptionPanel1.add(height);
+    	subOptionPanel1.add(xVellabel);
+    	subOptionPanel1.add(xVel);
+    	subOptionPanel1.add(yVellabel);
+    	subOptionPanel1.add(yVel);
+    	subOptionPanel1.add(Intervallabel);
+	    subOptionPanel1.add(IntervalTextField);
+    	subOptionPanel1.add(colorlabel);
+    	subOptionPanel1.add(colorButton);
+    	subOptionPanel1.add(imagelabel);
+    	subOptionPanel1.add(imageButton);
+    	subOptionPanel1.add(shooterlabel);
+    	subOptionPanel1.add(shooterButton);
+	    subOptionPanel1.add(actionlabel);
+	    subOptionPanel1.add(actionsButton);
+    	subOptionPanel1.add(collisionslabel);
+    	subOptionPanel1.add(collisionsButton);   	
+	    
+	    gameWinRadioButton = new JRadioButton("Game Win");
+	    gameLoseRadioButton=new JRadioButton("Game Lose");
+	    notApplicableRadioButton=new JRadioButton("Not Applicable");
 	    	
+	    notApplicableRadioButton.setSelected(true);
+	    group = new ButtonGroup();
+	    group.add(gameWinRadioButton);
+	    group.add(gameLoseRadioButton);
+	    group.add(notApplicableRadioButton);
 	    	
-	    	collisionsButton = new JButton("Collisions");
-	    	subOptionPanel1.add(collisionsButton);
-	    	collisionsButton.addActionListener(this);
-	    	
-	    	gameWinRadioButton = new JRadioButton("Game Win");
-	    	gameLoseRadioButton=new JRadioButton("Game Lose");
-	    	notApplicableRadioButton=new JRadioButton("Not Applicable");
-	    	
-	    	notApplicableRadioButton.setSelected(true);
-	    	group = new ButtonGroup();
-	    	group.add(gameWinRadioButton);
-	    	group.add(gameLoseRadioButton);
-	    	group.add(notApplicableRadioButton);
-	    	
-	    	subOptionPanel2.add(gameWinRadioButton);
-	    	subOptionPanel2.add(gameLoseRadioButton);
-	    	subOptionPanel2.add(notApplicableRadioButton);
-    	}
+	    subOptionPanel2.add(gameWinRadioButton);
+	    subOptionPanel2.add(gameLoseRadioButton);
+	    subOptionPanel2.add(notApplicableRadioButton);
+
     	mainOptionPanel.add(subOptionPanel1);
     	mainOptionPanel.add(subOptionPanel2);
     	
     	eventActionMap=new HashMap();
     	collisionMap=new HashMap();
     	
-    	JOptionPane pane = new JOptionPane();
     	int option = pane.showConfirmDialog(null, mainOptionPanel, "Sprite Details", pane.YES_NO_CANCEL_OPTION);
+    	
     	
     	return option;
 	}
 	private void getFormData(int option,boolean isShooter, String objectType) {
 		// TODO Auto-generated method stub
 		if(isShooter) {
-			shooterXvel=Integer.parseInt(xVel.getText());
-			shooterYvel=Integer.parseInt(yVel.getText());
-			shooterWidth=Integer.parseInt(width.getText());
-			shooterHeight=Integer.parseInt(height.getText());
-			shooterSpriteID = spriteTextField.getText();
-			shooterCategory = categoryTextField.getText();
+			
+			shooterXvel=Integer.parseInt(shooterXVelField.getText());
+			shooterYvel=Integer.parseInt(shooterYVelField.getText());
+			shooterWidth=Integer.parseInt(shooterWidthField.getText());
+			shooterHeight=Integer.parseInt(shooterHeightField.getText());
+			shooterSpriteID = shooterSpriteId.getText();
+			shooterCategory = shooterSpriteCategory.getText();
 			shooterEventActionMap = getShooterEventActionMap();
-			shooterInterval=shooterIntervalTextField.getText();
+			shooterInterval=Integer.parseInt(shooterIntervalTextField.getText());
+			
+			shootSprite = new CreateSpriteRequest("Circle", -1, -1, shooterXvel, shooterYvel, shooterWidth, shooterHeight, 
+					Color.BLACK, "", shooterSpriteID, shooterCategory, shooterEventActionMap,Constants.GAME_NOT_APPLICABLE_COMPONENT,new HashMap(),shooterInterval);
+			
 			setShooter(false);
+			log.info(shooterSpriteID);
+			log.info(shooterCategory);
 			log.info(shooterXvel);
 			log.info(shooterYvel);
 			log.info(shooterWidth);
 			log.info(shooterHeight);
-			log.info(shooterSpriteID);
 			log.info(shooterEventActionMap);
 			return;
 			
@@ -509,16 +519,17 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 			int tempHeight = Integer.parseInt(height.getText());
 			String spriteID = spriteTextField.getText();
 			String category = categoryTextField.getText();
+			int spriteInterval=Integer.parseInt(IntervalTextField.getText());
 			HashMap<String, String> eventAction = getEventActionMap();
 			
-			
 			newSprite = new CreateSpriteRequest(objectType, tempX, tempY, tempXVel, tempYVel, tempWidth, tempHeight, 
-												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap(),1);
-//			getEventActionMap();// to get event and action mapping
+												spriteColor, getPath(), spriteID, category, eventAction,getSelectedRadioButton(),getCollisionMap(),spriteInterval);
+
 			getCollisionMap();	// to get mapping of event and collision
 		}
 		else {
 //			spriteElement = new SpriteElement("", x, y,  )
+			setShootSprite(null);
 		}
 		
 		if(option != JOptionPane.CANCEL_OPTION) {
@@ -528,10 +539,34 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	}
 	
 	public void createSpriteElement(String objectType) {
+		setObjectType(objectType);
 		int option=createOptionPopUp(isShooter());
     	if(option == JOptionPane.YES_OPTION)
     		getFormData(option,isShooter(),objectType);
 	}
+
+
+	public CreateSpriteRequest getShootSprite() {
+		return shootSprite;
+	}
+
+	public void setShootSprite(CreateSpriteRequest shootSprite) {
+		this.shootSprite = shootSprite;
+	}
+
+//	@Override
+//	public void itemStateChanged(ItemEvent e) {
+//		// TODO Auto-generated method stub
+//		int sel = e.getStateChange();
+//        if (sel == ItemEvent.SELECTED) {
+//        	int option=createOptionPopUp(isShooter());
+//        	if(option == JOptionPane.YES_OPTION)
+//        		getFormData(option,isShooter());
+//        	//createOptionPopUp();
+//        } else {
+//        	
+//        }
+//	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -543,15 +578,11 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		case "Collisions":
 						   createCollisionPopUp();
 						   break;
-		case "Shooter" :  	setShooter(true);
-							int option=createOptionPopUp(isShooter());
-							if(option == JOptionPane.YES_OPTION)
-					    		getFormData(option,isShooter(),"Circle");
-							else
-								setShooter(false);
-							break;			
+		case "Shooter" :  
+							createShooterPopUp();
+							break;
+							
 		case "Image" : 
-			
 					setPath(fileExplorer());
 						break;
 		case "Color":
@@ -561,6 +592,71 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 						break;
 		}
 		//createOptionPopUp();
+		
+	}
+
+	private void createShooterPopUp() {
+		// TODO Auto-generated method stub
+		JOptionPane subActionpane = new JOptionPane();
+		shooterSubOptionPanel1=new JPanel();
+		gbLayout=new GridLayout(0,2,10,10);
+		shooterSubOptionPanel1.setLayout(gbLayout);
+		setShooter(true);
+		
+		shooterXVel=new JLabel("Xvel :");
+		shooterYVel=new JLabel("YVel :");
+		shooterColorLabel=new JLabel("Color :");
+		shooterWidthLabel= new JLabel("Width :");
+		shooterHeightLabel=new JLabel("Height :");
+		shooterSpriteIdLabel=new JLabel("Sprite Id :");
+		shooterCategoryLabel=new JLabel("Category :");
+		shooterIntervallabel = new JLabel("Time Interval in MilliSeconds :");
+		shooterActionLabel=new JLabel("Actions :");
+		
+		shooterSpriteId=new JTextField(10);
+		shooterSpriteCategory=new JTextField(10);
+		shooterWidthField=new JTextField(10);
+		shooterHeightField=new JTextField(10);
+		shooterXVelField=new JTextField(10);
+		shooterYVelField=new JTextField(10);
+		shooterIntervalTextField = new JTextField(10);
+		
+		shooterActionsButton = new JButton("Actions");
+		shooterColorButton=new JButton("Select Color");
+		shooterColorButton.setActionCommand("Color");
+		
+		shooterActionsButton.addActionListener(this);
+		shooterColorButton.addActionListener(this);
+		
+		shooterSubOptionPanel1.add(shooterSpriteIdLabel);
+		shooterSubOptionPanel1.add(shooterSpriteId);
+		shooterSubOptionPanel1.add(shooterCategoryLabel);
+		shooterSubOptionPanel1.add(shooterSpriteCategory);
+		shooterSubOptionPanel1.add(shooterWidthLabel);
+		shooterSubOptionPanel1.add(shooterWidthField);
+		shooterSubOptionPanel1.add(shooterHeightLabel);
+		shooterSubOptionPanel1.add(shooterHeightField);
+		shooterSubOptionPanel1.add(shooterXVel);
+		shooterSubOptionPanel1.add(shooterXVelField);
+		shooterSubOptionPanel1.add(shooterYVel);
+		shooterSubOptionPanel1.add(shooterYVelField);		
+		shooterSubOptionPanel1.add(shooterIntervallabel);
+		shooterSubOptionPanel1.add(shooterIntervalTextField);
+		shooterSubOptionPanel1.add(shooterColorLabel);
+		shooterSubOptionPanel1.add(shooterColorButton);
+		shooterSubOptionPanel1.add(shooterActionLabel);
+		shooterSubOptionPanel1.add(shooterActionsButton);
+		
+		
+		int option = subActionpane.showConfirmDialog(null, shooterSubOptionPanel1, "Shooter Attributes", subActionpane.OK_CANCEL_OPTION);
+		
+		if(option== JOptionPane.OK_OPTION) {
+			getFormData(option, isShooter(), getObjectType() );
+		}	
+		else {
+			setShooter(false);
+		}
+		
 		
 	}
 
@@ -587,7 +683,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	
 	public Color colorChooser() {
 		Color color = JColorChooser.showDialog(this, "Choose color", Color.BLACK);
-		return color;
+		return color==null?Color.BLACK:color;
 	}
 
 	private void createActionPopUp(Boolean isShooter) {
@@ -611,7 +707,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		
 		if(option== JOptionPane.OK_OPTION) {
 			if(!isShooter) {
-			eventActionMap.put( eventDropDownList.getSelectedItem().toString(),actionDropDownList.getSelectedItem().toString());
+				eventActionMap.put( eventDropDownList.getSelectedItem().toString(),actionDropDownList.getSelectedItem().toString());
 			}
 			else
 			{
@@ -691,5 +787,14 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
+
+	public String getObjectType() {
+		return objectType;
+	}
+
+	public void setObjectType(String objectType) {
+		this.objectType = objectType;
+	}
+	
 }
 

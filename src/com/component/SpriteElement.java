@@ -126,13 +126,19 @@ public abstract class SpriteElement implements Serializable{
 	
 	public SpriteElement shoot(SpriteElement shootingObject) throws IOException {
 		if(shootingObject instanceof CircularSprite) {
-			
-			return new CircularSprite((CircularSprite)shootingObject);
+			CircularSprite circularSprite= new CircularSprite((CircularSprite)shootingObject);
+			circularSprite.setElementX(this.getElementX()+this.getWidth()/2);
+			circularSprite.setElementY(this.getElementY());
+			return circularSprite;
 //			return new CircularSprite(shootingObject.imagePath,shootingObject.elementX,shootingObject.elementY,shootingObject.imageWidth, shootingObject.imageHeight,shootingObject.XVel, shootingObject.YVel,((CircularSprite) shootingObject).getRadius());
 
 		} else {
-			return new RectangularSprite((RectangularSprite)shootingObject);
+			RectangularSprite rectangularSprite=new RectangularSprite((RectangularSprite)shootingObject);
+			rectangularSprite.setElementX(this.getElementX()+this.getWidth()/2);
+			rectangularSprite.setElementY(this.getElementY());
+			return rectangularSprite;
 		}
+		
 	}
 		
 	public boolean intersects(SpriteElement c) {

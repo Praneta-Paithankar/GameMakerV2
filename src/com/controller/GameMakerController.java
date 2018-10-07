@@ -6,8 +6,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowStateListener;
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.Driver;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,24 +29,32 @@ import com.timer.BreakoutTimer;
 import com.ui.CreateSpriteRequest;
 import com.ui.GUI;
 
-public class GameMakerController implements  ActionListener, MouseListener {
+public class GameMakerController implements  ActionListener, MouseListener,Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5964800676330256965L;
 	protected static Logger log = Logger.getLogger(GameMakerController.class);
     private GUI gui;
 	private CreateSpriteRequest sprite;
 	private GameObject gameObject;
 	private SpriteElement newSprite;
 	private Map<String, List<ActionLink>> eventMap;
+	private Map<SpriteElement,SpriteElement> bulletElementMap;
 	private GameDriver gameDriver;
 	private BreakoutTimer timer;
 	private Clock clock;
+	private CreateSpriteRequest bulletSprite;
+	private SpriteElement newBulletSprite;
 	
 	public GameMakerController(GUI gui, Clock clock) {
 		log.info("Initializing game-maker-controller");
 		this.gui = gui;
 		this.gameObject = new GameObject();
 		this.timer = new BreakoutTimer();
+		this.bulletElementMap=new HashMap<>();
 		this.clock = clock; 
-		this.gameDriver = new GameDriver(this.gui, timer, clock);
+		this.gameDriver = new GameDriver(this.gui, timer, clock,bulletElementMap);
 		gui.addDriver(gameDriver);
 	}
 	
@@ -57,6 +67,15 @@ public class GameMakerController implements  ActionListener, MouseListener {
 		try {
 			this.sprite = gui.getMakePanel().getNewSprite();
 			this.newSprite = gameObject.spriteDecoder(sprite);
+			
+			this.bulletSprite=gui.getMakePanel().getShootSprite();
+			if(this.bulletSprite !=null) {
+				this.newBulletSprite = gameObject.spriteDecoder(bulletSprite);
+				this.newBulletSprite.setElementX(newSprite.getElementX()+newSprite.getWidth()/2);
+				this.newBulletSprite.setElementY(newSprite.getElementY());
+				bulletElementMap.put(newSprite,newBulletSprite);
+			}
+			gui.getMakePanel().setShootSprite(null);
 			this.gameDriver.addSpriteElements(newSprite);
 			gui.getBoardPanel().setSpriteElement(newSprite);
 			this.gui.addSpriteToPanel(newSprite);
@@ -77,6 +96,7 @@ public class GameMakerController implements  ActionListener, MouseListener {
 				eventMap.get("OnCollision").add(new ActionLink(newSprite,entry.getKey(),entry.getValue()));
 //				eventMap.get("OnCollision").add(new ActionLink(newSprite, entry.getValue(), entry.getKey()));
 			}
+			System.out.println("sprite.getEventAction(): "+sprite.getEventAction());
 			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {			 
 				eventMap.putIfAbsent(entry.getKey(), new ArrayList<>());
 				eventMap.get(entry.getKey()).add(new ActionLink(newSprite, entry.getValue()));
