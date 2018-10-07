@@ -51,6 +51,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private CreateSpriteRequest newSprite;
 	private String objectType;
 	private boolean isShooter;
+	private String shooterImagePath;
 	
 	private int shooterXvel;
 	private int shooterYvel;
@@ -151,6 +152,8 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private JButton shooterActionsButton;
 	private JButton shooterColorButton;
 	private JPanel shooterSubOptionPanel1;
+	private JLabel shooterImageLabel;
+	private JButton shooterImageButton;
 
 	
 	
@@ -252,8 +255,11 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	public String getPath() {
 		return path;
 	}
-	public void setPath(String path) {
-		this.path = path;
+	public void setPath(String path, boolean isShooter) {
+		if(isShooter)
+			setShooterImagePath(path);
+		else
+			this.path = path;
 	}
 
 	protected int getSelectedRadioButton() {
@@ -496,7 +502,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 			shooterInterval=Integer.parseInt(shooterIntervalTextField.getText());
 			
 			shootSprite = new CreateSpriteRequest("Circle", -1, -1, shooterXvel, shooterYvel, shooterWidth, shooterHeight, 
-					Color.BLACK, "", shooterSpriteID, shooterCategory, shooterEventActionMap,Constants.GAME_NOT_APPLICABLE_COMPONENT,new HashMap(),shooterInterval);
+					Color.BLACK, getShooterImagePath(), shooterSpriteID, shooterCategory, shooterEventActionMap,Constants.GAME_NOT_APPLICABLE_COMPONENT,new HashMap(),shooterInterval);
 			
 			setShooter(false);
 			log.info(shooterSpriteID);
@@ -583,7 +589,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 							break;
 							
 		case "Image" : 
-					setPath(fileExplorer());
+					setPath(fileExplorer(), isShooter());
 						break;
 		case "Color":
 					setSpriteColor(colorChooser());
@@ -612,6 +618,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		shooterCategoryLabel=new JLabel("Category :");
 		shooterIntervallabel = new JLabel("Time Interval in MilliSeconds :");
 		shooterActionLabel=new JLabel("Actions :");
+		shooterImageLabel = new JLabel("Image :");
 		
 		shooterSpriteId=new JTextField(10);
 		shooterSpriteCategory=new JTextField(10);
@@ -624,6 +631,9 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		shooterActionsButton = new JButton("Actions");
 		shooterColorButton=new JButton("Select Color");
 		shooterColorButton.setActionCommand("Color");
+		shooterImageButton = new JButton("Image");
+		shooterImageButton.setActionCommand("Image");
+		shooterImageButton.addActionListener(this);
 		
 		shooterActionsButton.addActionListener(this);
 		shooterColorButton.addActionListener(this);
@@ -644,6 +654,8 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		shooterSubOptionPanel1.add(shooterIntervalTextField);
 		shooterSubOptionPanel1.add(shooterColorLabel);
 		shooterSubOptionPanel1.add(shooterColorButton);
+		shooterSubOptionPanel1.add(shooterImageLabel);
+		shooterSubOptionPanel1.add(shooterImageButton);
 		shooterSubOptionPanel1.add(shooterActionLabel);
 		shooterSubOptionPanel1.add(shooterActionsButton);
 		
@@ -794,6 +806,14 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 
 	public void setObjectType(String objectType) {
 		this.objectType = objectType;
+	}
+
+	public String getShooterImagePath() {
+		return shooterImagePath;
+	}
+
+	public void setShooterImagePath(String shooterImagePath) {
+		this.shooterImagePath = shooterImagePath;
 	}
 	
 }
