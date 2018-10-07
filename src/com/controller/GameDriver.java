@@ -75,7 +75,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 
 	Boolean Projectileflag ;
     private boolean isGamePaused ;
-    private Deque<Command> commandQueue;
+    
+	private Deque<Command> commandQueue;
     private TimerCommand timerCommand;
     private Map<SpriteElement, SpriteElement> bulletElementMap;
     private Map<SpriteElement,Integer> shooterSpriteBulletCountMap;
@@ -648,4 +649,25 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 
 	}
 
+	public Map<SpriteElement, SpriteElement> getBulletElementMap() {
+		return bulletElementMap;
+	}
+
+	public void setBulletElementMap(Map<SpriteElement, SpriteElement> bulletElementMap) {
+		this.bulletElementMap = bulletElementMap;
+	}
+	
+	public void setGamePaused(boolean isGamePaused) {
+		this.isGamePaused = isGamePaused;
+	}
+
+	public Map<SpriteElement, Integer> getShooterSpriteBulletCountMap() {
+		return shooterSpriteBulletCountMap;
+	}
+
+	public void setShooterSpriteBulletCountMap(Map<SpriteElement, Integer> shooterSpriteBulletCountMap) {
+		this.shooterSpriteBulletCountMap = shooterSpriteBulletCountMap;
+	}
+
+	
 }

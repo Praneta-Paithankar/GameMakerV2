@@ -25,28 +25,26 @@ public class SpriteCollisionTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		spriteCollision= new SpriteCollision();
-		sprite = mock(CircularSprite.class);
-		destinationSprite = mock(CircularSprite.class);
+		sprite = mock(SpriteElement.class);
+		destinationSprite = mock(SpriteElement.class);
 	}
 	
 	@Test
 	void checkCollisionWithSpriteElementShouldReturnXIfCollisionOccursWithLeftWall() {
-		
 		when(sprite.getElementX()).thenReturn(0);
 		when(sprite.getElementY()).thenReturn(20);
-//		when(sprite.get)
-		//Direction result = spriteCollision.checkCollisionOfSprites(sprite);
-		//assertEquals(Direction.X, result);
+		Direction result =spriteCollision.checkCollisionOfSpriteWithWall(sprite);
+		assertEquals(Direction.X, result);		
 	}
 	
 	@Test
 	void checkCollisionWithSpriteElementShouldReturnXIfCollisionOccursWithRightWall() {
 		
-		when(sprite.getElementX()).thenReturn(Constants.BOARD_PANEL_WIDTH);
+		when(sprite.getElementX()).thenReturn(700);
 		when(sprite.getElementY()).thenReturn(20);
-		
-		//Direction result = spriteCollision.checkCollisionOfSprites(sprite);
-		//assertEquals(Direction.X, result);
+		when(sprite.getWidth()).thenReturn(50);
+		Direction result = spriteCollision.checkCollisionOfSpriteWithWall(sprite);
+		assertEquals(Direction.X, result);	
 	}
 	
 	@Test
@@ -55,8 +53,8 @@ public class SpriteCollisionTest {
 		when(sprite.getElementX()).thenReturn(20);
 		when(sprite.getElementY()).thenReturn(Constants.BOARD_PANEL_HEIGHT);
 		
-		//Direction result = spriteCollision.checkCollisionOfSprites(sprite);
-		//assertEquals(Direction.Y, result);
+		Direction result = spriteCollision.checkCollisionOfSpriteWithWall(sprite);
+		assertEquals(Direction.Y, result);
 	}
 	
 	@Test
@@ -64,27 +62,61 @@ public class SpriteCollisionTest {
 		
 		when(sprite.getElementX()).thenReturn(20);
 		when(sprite.getElementY()).thenReturn(0);
-		
-		//Direction result = spriteCollision.checkCollisionOfSprites(sprite);
-		//assertEquals(Direction.Y, result);
+		Direction result = spriteCollision.checkCollisionOfSpriteWithWall(sprite);
+		assertEquals(Direction.Y, result);
 	}
 
 	@Test 
-	void checkCollisionWithRectangularElementShouldReturnXIfCollisionOccursWithRectangularElement() {
+	void checkCollisionOfSpritesShouldReturnYifCollidesVertically() {
 		when(sprite.getElementX()).thenReturn(50);
-		when(sprite.getWidth()).thenReturn(5);
-		when(sprite.getElementY()).thenReturn(20);
-		when(sprite.getHeight()).thenReturn(5);
-		when(destinationSprite.getElementX()).thenReturn(50);
+		when(sprite.getWidth()).thenReturn(50);
+		when(sprite.getElementY()).thenReturn(50);
+		when(sprite.getHeight()).thenReturn(50);
+		
+		when(destinationSprite.getElementX()).thenReturn(60);
 		when(destinationSprite.getWidth()).thenReturn(10);
-		when(destinationSprite.getElementY()).thenReturn(25);
+		when(destinationSprite.getElementY()).thenReturn(40);
 		when(destinationSprite.getHeight()).thenReturn(10);
 		
-		//Direction result = spriteCollision.checkCollisionBetweenTwoRectangles((RectangularSprite)sprite, (RectangularSprite)destinationSprite);
-		//assertEquals(Direction.X, result);
-		
-	
+		when(sprite.intersects(destinationSprite)).thenReturn(true);
+		Direction result = spriteCollision.checkCollisionOfSprites(sprite, destinationSprite);
+		assertEquals(Direction.Y, result);
 	}
+
+	
+	@Test 
+	void checkCollisionOfSpritesShouldReturnXifCollidesHorizontally() {
+		when(sprite.getElementX()).thenReturn(50);
+		when(sprite.getWidth()).thenReturn(50);
+		when(sprite.getElementY()).thenReturn(50);
+		when(sprite.getHeight()).thenReturn(50);
 		
+		when(destinationSprite.getElementX()).thenReturn(20);
+		when(destinationSprite.getWidth()).thenReturn(30);
+		when(destinationSprite.getElementY()).thenReturn(70);
+		when(destinationSprite.getHeight()).thenReturn(10);
 		
+		when(sprite.intersects(destinationSprite)).thenReturn(true);
+		
+		Direction result = spriteCollision.checkCollisionOfSprites(sprite, destinationSprite);
+		assertEquals(Direction.X, result);
+	}
+	
+	@Test 
+	void checkCollisionOfSpritesShouldReturnNoneifNoCollisinOccured() {
+		when(sprite.getElementX()).thenReturn(50);
+		when(sprite.getWidth()).thenReturn(50);
+		when(sprite.getElementY()).thenReturn(50);
+		when(sprite.getHeight()).thenReturn(50);
+		
+		when(destinationSprite.getElementX()).thenReturn(200);
+		when(destinationSprite.getWidth()).thenReturn(30);
+		when(destinationSprite.getElementY()).thenReturn(700);
+		when(destinationSprite.getHeight()).thenReturn(10);
+		
+		when(sprite.intersects(destinationSprite)).thenReturn(false);
+		
+		Direction result = spriteCollision.checkCollisionOfSprites(sprite, destinationSprite);
+		assertEquals(Direction.NONE, result);
+	}
 }

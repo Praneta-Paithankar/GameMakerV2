@@ -42,13 +42,11 @@ public class ProjectileCommand implements Command{
 		double startX = (double) sprite.getElementX();
 		
 		double tan = (startY- heightY)/(startX-heightX);
-		double Height = startY-heightY;
+		double Height = startY - heightY;
 		double Range = heightX - startX;
-		System.out.println("Height is "+ Height);
 		double gravity = Constants.PROJECTILE_GRAVITY;
 		double deltaY = Math.sqrt((Height) * 2* gravity);
 		double deltaX = deltaY/tan;
-		System.out.println(Range);
 
 		sprite.setXVel((int) (-1* deltaX)); 
 		sprite.setYVel((int) deltaY);
