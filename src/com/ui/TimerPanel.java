@@ -46,7 +46,6 @@ public class TimerPanel extends AbstractPanel implements Element {
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
 		for(Element component : components) {
 			component.reset();
 		}

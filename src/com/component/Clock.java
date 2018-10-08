@@ -34,7 +34,6 @@ public class Clock extends JComponent implements Element,Serializable{
 	}
 	
 	public void draw(Graphics g) {
-		// TODO center box around the time 
 		g.drawRect(0, 150, 250, 100);
 		g.setFont(new Font("Arial", Font.BOLD, 40));
 		String time = getTime();
@@ -66,14 +65,12 @@ public class Clock extends JComponent implements Element,Serializable{
 
 	@Override
 	public void addComponent(Element e) {
-		// TODO Auto-generated method stub
-		
+		//throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void removeComponent(Element e) {
-		// TODO Auto-generated method stub
-		
+		//throw new UnsupportedOperationException();
 	}
 	@Override
 	public void save(ObjectOutputStream op) {
@@ -87,8 +84,7 @@ public class Clock extends JComponent implements Element,Serializable{
 	@Override
 	public Element load(ObjectInputStream ip){
 		try {
-			Clock obj = (Clock)ip.readObject();
-			return obj;
+			return (Clock)ip.readObject();
 		} catch (ClassNotFoundException | IOException e) {
 			log.error(e.getMessage());
 		}

@@ -10,7 +10,6 @@ public class BounceCommand implements Command{
 	private Direction d;
 	
 	public BounceCommand(SpriteElement element, Direction d) {
-		// TODO Auto-generated constructor stub
 		this.element = element;
 		this.d = d;
 	}
@@ -30,7 +29,6 @@ public class BounceCommand implements Command{
 
 	@Override
 	public void undo() {
-		// TODO Auto-generated method stub
 		if (d == Direction.X) {
 			element.setXVel(-1 * element.getXVel());
 		} else if (d == Direction.Y) {
