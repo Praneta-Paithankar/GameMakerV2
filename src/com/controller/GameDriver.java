@@ -223,7 +223,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		timerCommand.execute();
 		commandQueue.addLast(timerCommand);
 		checkCollision();
-		log.error( eventMap);
+//		log.error( eventMap);
 		eventHandler("OnTick");
 		checkIfGameEnd();
 		gui.paintView();
@@ -231,15 +231,15 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 
 	public void checkIfGameEnd() {
 
-//		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
-//			timer.removeObserver(this);
-//			gui.paintView();
-//			String gameMsg = gameWinSet.isEmpty() ? "You Win :)" : "You Lose! :( ";
-//			int option = JOptionPane.showConfirmDialog(null, gameMsg, "Game Status", JOptionPane.DEFAULT_OPTION);
-//			if (option == JOptionPane.OK_OPTION) {
-//				System.exit(0);
-//			}
-//		}
+		if (gameWinSet.isEmpty() || gameLoseSet.isEmpty()) {
+			timer.removeObserver(this);
+			gui.paintView();
+			String gameMsg = gameWinSet.isEmpty() ? "You Win :)" : "You Lose! :( ";
+			int option = JOptionPane.showConfirmDialog(null, gameMsg, "Game Status", JOptionPane.DEFAULT_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				System.exit(0);
+			}
+		}
 
 	}
 
@@ -415,9 +415,9 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			//			Color.BLACK,Constants.GAME_NOT_APPLICABLE_COMPONENT,5));
 			//addSpriteElements(bullet);
 			
-			log.error("Before" + sprites);
-			log.error("Before" + eventMap);
-			log.error("Before" + bulletElementMap);
+//			log.error("Before" + sprites);
+//			log.error("Before" + eventMap);
+//			log.error("Before" + bulletElementMap);
 			if(bulletElementMap.containsKey(element)) {
 				shoot(element);
 			}
@@ -445,13 +445,13 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			else {
 				addSpriteElements((RectangularSprite) bullet);
 			}		
-			log.error(sprites);
+//			log.error(sprites);
 			eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
 			eventMap.get("OnTick").add(new ActionLink(bullet, "move"));
 			eventMap.putIfAbsent("OnCollision", new ArrayList<ActionLink>());
 			eventMap.get("OnCollision").add(new ActionLink(bullet, "blow"));
 			gui.getBoardPanel().setElements(sprites);
-			log.error( eventMap);
+//			log.error( eventMap);
 			gui.getBoardPanel().revalidate();
 			this.gui.paintView();			
 			shooterSpriteBulletCountMap.put(element, bulletCount-1);
