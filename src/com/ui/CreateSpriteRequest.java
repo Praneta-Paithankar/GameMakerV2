@@ -8,8 +8,8 @@ public class CreateSpriteRequest {
 	private String elementName;
 	private int xlocation;
 	private int ylocation;
-	private int XVel;
-	private int YVel;
+	private int xVel;
+	private int yVel;
 	private String spriteId;
 	private String category;
 	private Color color;
@@ -25,8 +25,8 @@ public class CreateSpriteRequest {
 		this.elementName = name;
 		this.xlocation = x;
 		this.ylocation = y;
-		this.XVel = velX;
-		this.YVel = velY;
+		this.xVel = velX;
+		this.yVel = velY;
 		this.width = width;
 		this.height = height;
 		this.color = color;
@@ -37,7 +37,6 @@ public class CreateSpriteRequest {
 		this.gameEndDependency=gameEndDependency;
 		this.collisionMap=collisionMap;
 		this.counterInterval=counterInterval;
-//		eventAction = new HashMap<>(); 
 	}
 	
 	public int getCounterInterval() {
@@ -101,19 +100,19 @@ public class CreateSpriteRequest {
 	}
 
 	public int getXVel() {
-		return XVel;
+		return xVel;
 	}
 
 	public void setXVel(int xVel) {
-		XVel = xVel;
+		this.xVel = xVel;
 	}
 
 	public int getYVel() {
-		return YVel;
+		return yVel;
 	}
 
 	public void setYVel(int yVel) {
-		YVel = yVel;
+		this.yVel = yVel;
 	}
 
 	public String getSpriteId() {

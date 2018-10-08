@@ -31,14 +31,11 @@ public class BreakoutTimer implements Observable{
 	
 	@Override
 	public void registerObserver(Observer o) {
-		
-		// TODO Auto-generated method stub
 		observers.add(o);
 	}
 
 	@Override
 	public void removeObserver(Observer o) {
-		// TODO Auto-generated method stub
 		observers.remove(observers.indexOf(o));
 	}
 
@@ -50,7 +47,8 @@ public class BreakoutTimer implements Observable{
 	}
 	
 	public boolean isObserverListEmpty() {
-		if(this.observers.isEmpty()) return true;
+		if(this.observers.isEmpty()) 
+			return true;
 		return false;
 	}
 	

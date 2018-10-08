@@ -151,10 +151,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	private HashMap<String, CreateSpriteRequest> spriteRequestMap;
 	private HashMap<String,String> eventActionMap=new HashMap<String, String>();
 	
-//	private int shooterInterval;
 	private CreateSpriteRequest shootSprite;
-//	private JLabel shooterIntervallabel;
-//	private JTextField shooterIntervalTextField;
 	private int shooterInterval;
 	private BufferedImage image;
 	private JButton shooterActionsButton;
@@ -170,7 +167,7 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	public MakePanel() {
 		setLayoutBehavior(new NullLayoutBehavior());
 		performUpdateLayout(this, Constants.MAKE_PANEL_WIDTH,Constants.MAKE_PANEL_HEIGHT);
-		sprites = new ArrayList<>(Constants.spriteTypes);
+		sprites = new ArrayList<>(Constants.SPRITETYPES);
 		spriteRequestMap = new HashMap<>();
 		setShooter(false);
 	}
@@ -545,7 +542,6 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 			getCollisionMap();	// to get mapping of event and collision
 		}
 		else {
-//			spriteElement = new SpriteElement("", x, y,  )
 			setShootSprite(null);
 		}
 		
@@ -573,7 +569,6 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		switch(e.getActionCommand()) {
 		case "Actions" :
 						createActionPopUp(isShooter);
@@ -594,12 +589,10 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		default : log.error("switch hitting the default case of makepanel actionlistner");
 						break;
 		}
-		//createOptionPopUp();
 		
 	}
 
 	private void createShooterPopUp() {
-		// TODO Auto-generated method stub
 		JOptionPane subActionpane = new JOptionPane();
 		shooterSubOptionPanel1=new JPanel();
 		gbLayout=new GridLayout(0,2,10,10);
@@ -682,7 +675,6 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			File file = chooser.getSelectedFile();
 			String path = file.getAbsolutePath();
-			System.out.println("path = " + path);
 			return path;
 		}
 		return "";
@@ -691,7 +683,6 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	public String getBackgroundImagePath()
 	{
 		return fileExplorer();
-//		windowFrame.getGamePanel().setImage(imagePath);
 	}
 	
 	public Color colorChooser() {
@@ -700,8 +691,6 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	}
 
 	private void createActionPopUp(Boolean isShooter) {
-		// TODO Auto-generated method stub
-		
 		JOptionPane subActionpane = new JOptionPane();
 		subActionpane.setLayout(new BoxLayout(mainOptionPanel,BoxLayout.PAGE_AXIS));
 		
@@ -734,14 +723,12 @@ public class MakePanel extends AbstractPanel implements Element, ActionListener{
 	}
 	
 	private void createCollisionPopUp() {
-		// TODO Auto-generated method stub
 		
 		JOptionPane subCollisionpane = new JOptionPane();
 		subCollisionpane.setLayout(new BoxLayout(mainOptionPanel,BoxLayout.PAGE_AXIS));
 		
 		String [] spriteIds= {"b1","b2", "b3"};
 		String[] categoryIds= {"category1"};
-//		String[] categoryandsprite.add
 		
 		actionIDDropDownlabel = new JLabel("Actions :");
 		
