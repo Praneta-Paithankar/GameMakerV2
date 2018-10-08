@@ -128,14 +128,14 @@ public abstract class SpriteElement implements Serializable{
 		if(shootingObject instanceof CircularSprite) {
 			CircularSprite circularSprite= new CircularSprite((CircularSprite)shootingObject);
 			circularSprite.setElementX(this.getElementX()+this.getWidth()/2);
-			circularSprite.setElementY(this.getElementY());
+			circularSprite.setElementY(this.getElementY()-this.getHeight());
 			return circularSprite;
 //			return new CircularSprite(shootingObject.imagePath,shootingObject.elementX,shootingObject.elementY,shootingObject.imageWidth, shootingObject.imageHeight,shootingObject.XVel, shootingObject.YVel,((CircularSprite) shootingObject).getRadius());
 
 		} else {
 			RectangularSprite rectangularSprite=new RectangularSprite((RectangularSprite)shootingObject);
 			rectangularSprite.setElementX(this.getElementX()+this.getWidth()/2);
-			rectangularSprite.setElementY(this.getElementY());
+			rectangularSprite.setElementY(this.getElementY()- this.getHeight());
 			return rectangularSprite;
 		}
 		

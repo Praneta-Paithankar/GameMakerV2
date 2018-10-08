@@ -78,9 +78,10 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
     private Deque<Command> commandQueue;
     private TimerCommand timerCommand;
     private Map<SpriteElement, SpriteElement> bulletElementMap;
+    private Map<SpriteElement,Integer> shooterSpriteBulletCountMap;
 
 
-	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock, Map<SpriteElement, SpriteElement> bulletElementMap){
+	public GameDriver(GUI gui, BreakoutTimer timer, Clock clock, Map<SpriteElement, SpriteElement> bulletElementMap,Map<SpriteElement,Integer>shooterSpriteBulletCountMap){
 		 log.info("Initializing GameDriver");
 
 		this.sprites = new ArrayList<SpriteElement>();
@@ -88,6 +89,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		this.gui = gui;
 		this.timer = timer;
 		this.bulletElementMap=bulletElementMap;
+		this.shooterSpriteBulletCountMap=shooterSpriteBulletCountMap;
 		this.collision = new SpriteCollision();
 		isGamePaused = false;
 		timerCommand = new TimerCommand(clock);
@@ -165,6 +167,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			op.writeObject(gameLoseSet);
 			op.writeObject(sprites);
 			op.writeObject(bulletElementMap);
+			op.writeObject(shooterSpriteBulletCountMap);
 			ImageIO.write(gui.getBoardPanel().getImage(), "png", op);
 
 
@@ -192,12 +195,13 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			gameWinSet.clear();
 			gameLoseSet.clear();
 			bulletElementMap.clear();
+			shooterSpriteBulletCountMap.clear();
 			eventMap.putAll((Map<String, List<ActionLink>>) in.readObject());
 			gameWinSet.addAll((HashSet<SpriteElement>)in.readObject());
 			gameLoseSet.addAll((HashSet<SpriteElement>)in.readObject());
 			setSprites((ArrayList<SpriteElement>)in.readObject());
 			bulletElementMap.putAll((Map<SpriteElement,SpriteElement>) in.readObject());
-
+			shooterSpriteBulletCountMap.putAll((Map<SpriteElement,Integer>) in.readObject());
 			gui.getBoardPanel().setElements(sprites);
 			gui.getBoardPanel().setImage((ImageIO.read(in)));
 
@@ -267,7 +271,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 //								(actionObserver.getSpriteElement2IdOrCategory().isEmpty() || 
 
 							if (element.getCategory().equals(actionObserver.getSpriteElement2IdOrCategory())
-									|| element.getSpriteId().equals(actionObserver.getSpriteElement2IdOrCategory())) {
+									|| element.getSpriteId().equals(actionObserver.getSpriteElement2IdOrCategory())
+									|| actionObserver.getSpriteElement2IdOrCategory().isEmpty()) {
 								d = collision.checkCollisionOfSprites(currentSprite, element);
 								actionForCollision(actionObserver, d, macroCommand);
 								if (d != Direction.NONE)
@@ -444,20 +449,26 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	private void shoot(SpriteElement element) throws IOException {
 		SpriteElement bullet=element.shoot(bulletElementMap.get(element));
 		//addSpriteElements(bullet);
-		if(bullet instanceof CircularSprite) {
-			addSpriteElements((CircularSprite) bullet);
+		log.info(shooterSpriteBulletCountMap);
+		int bulletCount=shooterSpriteBulletCountMap.get(element);
+		if(bulletCount>0) { 
+			if(bullet instanceof CircularSprite) {
+				addSpriteElements((CircularSprite) bullet);
+			}
+			else {
+				addSpriteElements((RectangularSprite) bullet);
+			}		
+			log.error(sprites);
+			eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
+			eventMap.get("OnTick").add(new ActionLink(bullet, "move"));
+			eventMap.putIfAbsent("OnCollision", new ArrayList<ActionLink>());
+			eventMap.get("OnCollision").add(new ActionLink(bullet, "blow"));
+			log.error( eventMap);
+			gui.getBoardPanel().setElements(sprites);
+			gui.getBoardPanel().revalidate();
+			this.gui.paintView();			
+			shooterSpriteBulletCountMap.put(element, bulletCount-1);
 		}
-		else {
-			addSpriteElements((RectangularSprite) bullet);
-		}
-	
-		log.error(sprites);
-		eventMap.putIfAbsent("OnTick", new ArrayList<ActionLink>());
-		eventMap.get("OnTick").add(new ActionLink(bullet, "move"));
-		log.error( eventMap);
-		gui.getBoardPanel().setElements(sprites);
-		gui.getBoardPanel().revalidate();
-		this.gui.paintView();
 
 	}
 
