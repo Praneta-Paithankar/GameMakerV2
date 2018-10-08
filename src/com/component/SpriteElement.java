@@ -294,7 +294,7 @@ public abstract class SpriteElement implements Serializable{
 	}
 	public String toString() {
 //		String explanation= (sprite.getSpriteId() instanceof CircularSprite)?"Circle:":"Rectangle";
-		return getSpriteId() + getCategory();
+		return "ID:"+getSpriteId() + " Category: "+getCategory();
 		
 	}
 

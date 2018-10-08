@@ -231,7 +231,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		timerCommand.execute();
 		commandQueue.addLast(timerCommand);
 		checkCollision();
-
+		log.error( eventMap);
 		eventHandler("OnTick");
 		checkIfGameEnd();
 		gui.paintView();
@@ -259,7 +259,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		if (eventMap.containsKey("OnCollision")) {
 			List<ActionLink> eventObservers = eventMap.get("OnCollision");
 			for (ActionLink actionObserver : eventObservers) {
-				if (!visited.contains(actionObserver.getSprite())) {
+				if (!visited.contains(actionObserver.getSprite()) && actionObserver.getSpriteElement2IdOrCategory().isEmpty()) {
 					visited.add(actionObserver.getSprite());
 					d = collision.checkCollisionOfSpriteWithWall(actionObserver.getSprite());
 					actionForCollision(actionObserver, d, macroCommand);
@@ -448,6 +448,7 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 	
 	private void shoot(SpriteElement element) throws IOException {
 		SpriteElement bullet=element.shoot(bulletElementMap.get(element));
+		log.error(sprites);
 		//addSpriteElements(bullet);
 		log.info(shooterSpriteBulletCountMap);
 		int bulletCount=shooterSpriteBulletCountMap.get(element);
@@ -463,8 +464,8 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			eventMap.get("OnTick").add(new ActionLink(bullet, "move"));
 			eventMap.putIfAbsent("OnCollision", new ArrayList<ActionLink>());
 			eventMap.get("OnCollision").add(new ActionLink(bullet, "blow"));
-			log.error( eventMap);
 			gui.getBoardPanel().setElements(sprites);
+			log.error( eventMap);
 			gui.getBoardPanel().revalidate();
 			this.gui.paintView();			
 			shooterSpriteBulletCountMap.put(element, bulletCount-1);
