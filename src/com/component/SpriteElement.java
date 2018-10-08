@@ -125,17 +125,20 @@ public abstract class SpriteElement implements Serializable{
 	}
 	
 	public SpriteElement shoot(SpriteElement shootingObject) throws IOException {
+		int signYVel = shootingObject.getYVel() >= 0 ? 1 : -1;
+		
+//		System.out.println(toString() + " Sign y = " + signYVel);
 		if(shootingObject instanceof CircularSprite) {
 			CircularSprite circularSprite= new CircularSprite((CircularSprite)shootingObject);
-			circularSprite.setElementX(this.getElementX()+this.getWidth()/2);
-			circularSprite.setElementY(this.getElementY()-this.getHeight());
+			circularSprite.setElementX(this.getElementX() + this.getWidth()/2 - 5);
+			circularSprite.setElementY(this.getElementY() + (signYVel* this.getHeight()));
 			return circularSprite;
 //			return new CircularSprite(shootingObject.imagePath,shootingObject.elementX,shootingObject.elementY,shootingObject.imageWidth, shootingObject.imageHeight,shootingObject.XVel, shootingObject.YVel,((CircularSprite) shootingObject).getRadius());
 
 		} else {
 			RectangularSprite rectangularSprite=new RectangularSprite((RectangularSprite)shootingObject);
-			rectangularSprite.setElementX(this.getElementX()+this.getWidth()/2);
-			rectangularSprite.setElementY(this.getElementY()- this.getHeight());
+			rectangularSprite.setElementX(this.getElementX()+this.getWidth()/2 - 5);
+			rectangularSprite.setElementY(this.getElementY() + (signYVel* this.getHeight()));
 			return rectangularSprite;
 		}
 		
