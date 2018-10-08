@@ -2,18 +2,11 @@
  *This is our main application class which creates and initializes all the game components*/
 package com.gamemaker;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.util.ArrayList;
-
-import javax.swing.Box;
-import javax.swing.SwingUtilities;
-
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.log4j.Logger;import com.behavior.FlowLayoutBehavior;
+
 import com.component.Clock;
 import com.controller.GameMakerController;
-import com.infrastruture.*;
 import com.timer.BreakoutTimer;
 import com.ui.ControlPanel;
 import com.ui.GUI;
@@ -65,5 +58,6 @@ public class GameMaker {
 
 		gui.draw(null);
 		gui.pack();
+		
 	}
 }

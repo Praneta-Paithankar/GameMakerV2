@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -25,22 +26,17 @@ import com.infrastruture.Element;
 
 
 @SuppressWarnings("serial")
-public class GamePanel extends AbstractPanel implements Element {
+public class GamePanel extends AbstractPanel implements Element, Serializable {
 	protected static Logger log = Logger.getLogger(GamePanel.class);
 	private BufferedImage image;
 	private ArrayList<SpriteElement> elements;
 	private GameDriver driver;
+	private SpriteElement spriteElement;
 	
 	public GamePanel()
 	{
-		 log.info("Initializing GamePanel");
+		log.info("Initializing GamePanel");
 	    elements = new ArrayList<>();
-        try {
-            image = ImageIO.read(new File("./src/com/image/nature.jpg"));
-            image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
-        } catch (IOException e) {
-        	log.error(e.getMessage());
-        }
         setLayout();
 	}
 
@@ -107,7 +103,6 @@ public class GamePanel extends AbstractPanel implements Element {
 
 	@Override
 	public void save(ObjectOutputStream op) {
-		// TODO Auto-generated method stub
 		for(SpriteElement element:elements) {
 			element.save(op);
 		}
@@ -115,7 +110,6 @@ public class GamePanel extends AbstractPanel implements Element {
 
 	@Override
 	public Element load(ObjectInputStream ip) {
-		// TODO Auto-generated method stub
 		ArrayList<SpriteElement> loadComponents = new ArrayList<>();
 		for(SpriteElement element:elements) {
 			loadComponents.add(element.load(ip));
@@ -133,7 +127,38 @@ public class GamePanel extends AbstractPanel implements Element {
 
 	@Override
 	public void addComponent(Element e) {
-		// TODO Auto-generated method stub
 		
 	}
+
+	public void setImage(String path)
+	{
+		try {
+			image = ImageIO.read(new File(path));
+			image = resize(image, Constants.BOARD_PANEL_WIDTH, Constants.BOARD_PANEL_HEIGHT);
+			draw(null);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public SpriteElement getSpriteElement() {
+		return spriteElement;
+	}
+
+	public void setSpriteElement(SpriteElement spriteElement) {
+		this.spriteElement = spriteElement;
+	}
+
+
+
+	public BufferedImage getImage() {
+		return image;
+	}
+
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+	
 }
