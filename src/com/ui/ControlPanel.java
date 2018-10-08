@@ -72,26 +72,22 @@ public class ControlPanel  extends AbstractPanel implements Element {
 	}
 	@Override
 	public void draw(Graphics g) {
-		// TODO Auto-generated method stub
 		revalidate();
 	}
 
 	@Override
 	public void reset() {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void addComponent(Element e) {
-		// TODO Auto-generated method stub
 		
 
 	}
 
 	@Override
 	public void removeComponent(Element e) {
-		// TODO Auto-generated method stub
 		
 	}
 

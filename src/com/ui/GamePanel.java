@@ -35,15 +35,8 @@ public class GamePanel extends AbstractPanel implements Element, Serializable {
 	
 	public GamePanel()
 	{
-		 log.info("Initializing GamePanel");
+		log.info("Initializing GamePanel");
 	    elements = new ArrayList<>();
-//        try {
-//            image = ImageIO.read(new File("./src/com/image/nature.jpg"));
-//            image = resize(image, Constants.BOARD_PANEL_HEIGHT, Constants.BOARD_PANEL_WIDTH);
-////        	  image = ImageIO.read(new File());
-//        } catch (IOException e) {
-//        	log.error(e.getMessage());
-//        }
         setLayout();
 	}
 
@@ -110,7 +103,6 @@ public class GamePanel extends AbstractPanel implements Element, Serializable {
 
 	@Override
 	public void save(ObjectOutputStream op) {
-		// TODO Auto-generated method stub
 		for(SpriteElement element:elements) {
 			element.save(op);
 		}
@@ -118,7 +110,6 @@ public class GamePanel extends AbstractPanel implements Element, Serializable {
 
 	@Override
 	public Element load(ObjectInputStream ip) {
-		// TODO Auto-generated method stub
 		ArrayList<SpriteElement> loadComponents = new ArrayList<>();
 		for(SpriteElement element:elements) {
 			loadComponents.add(element.load(ip));
@@ -136,7 +127,6 @@ public class GamePanel extends AbstractPanel implements Element, Serializable {
 
 	@Override
 	public void addComponent(Element e) {
-		// TODO Auto-generated method stub
 		
 	}
 

@@ -56,7 +56,6 @@ public class GUI extends JFrame implements Element{
 		toggleLayout = false;
 		initializeUI();
 		elementList = new ArrayList<>();
-//		addComponent(mainPanel);
 	}
 
 	private void initializeUI() {
@@ -77,7 +76,6 @@ public class GUI extends JFrame implements Element{
 		mainPanel.setFocusable(true);
 		boardPanel.addMouseEvent(driver);
  
-        //makePanel.createButtons();
 	}
 	
 	public void addGameMakerDriver(GameMakerController controller) {
@@ -208,7 +206,6 @@ public class GUI extends JFrame implements Element{
 	
 	@Override
 	public void save(ObjectOutputStream op) {
-		// TODO Auto-generated method stub
 		for (Element element : elementList) {
 			element.save(op);
 		}

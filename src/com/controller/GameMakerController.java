@@ -102,7 +102,6 @@ public class GameMakerController implements  ActionListener, MouseListener,Seria
 				eventMap.get("OnCollision").add(new ActionLink(newSprite,entry.getKey(),entry.getValue()));
 //				eventMap.get("OnCollision").add(new ActionLink(newSprite, entry.getValue(), entry.getKey()));
 			}
-			System.out.println("sprite.getEventAction(): "+sprite.getEventAction());
 			for (Map.Entry<String,String> entry:sprite.getEventAction().entrySet()) {			 
 				eventMap.putIfAbsent(entry.getKey(), new ArrayList<>());
 				eventMap.get(entry.getKey()).add(new ActionLink(newSprite, entry.getValue()));
@@ -177,7 +176,6 @@ public class GameMakerController implements  ActionListener, MouseListener,Seria
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
-		// TODO Auto-generated method stub
 		SpriteElement spriteElement = null;
 		SpriteElement oldElement = gui.getBoardPanel().getSpriteElement();
 		if(oldElement != null)
@@ -186,23 +184,19 @@ public class GameMakerController implements  ActionListener, MouseListener,Seria
 				try {
 					spriteElement = new  CircularSprite((CircularSprite)oldElement);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-//				return new CircularSprite(shootingObject.imagePath,shootingObject.elementX,shootingObject.elementY,shootingObject.imageWidth, shootingObject.imageHeight,shootingObject.XVel, shootingObject.YVel,((CircularSprite) shootingObject).getRadius());
 
 			} else {
 				try {
 					spriteElement = new  RectangularSprite((RectangularSprite)oldElement);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
 			
 			spriteElement.setElementX(e.getX());
 			spriteElement.setElementY(e.getY());
-//			System.out.println("Mouse clicked on = " + spriteElement.getElementX() + " " + spriteElement.getElementY());
 			gui.getBoardPanel().addComponent(spriteElement);
 			gameDriver.addSpriteElements(spriteElement);
 			
@@ -227,9 +221,6 @@ public class GameMakerController implements  ActionListener, MouseListener,Seria
 			{
 				gameDriver.addGameWinSprite(spriteElement);
 			}
-			
-			
-//			System.out.println("Event map = " + eventMap);
 			gui.draw(null);
 			
 			
@@ -270,4 +261,13 @@ public class GameMakerController implements  ActionListener, MouseListener,Seria
 		this.gui = gui;
 	}
 
+	public Map<String, List<ActionLink>> getEventMap() {
+		return eventMap;
+	}
+
+	public void setEventMap(Map<String, List<ActionLink>> eventMap) {
+		this.eventMap = eventMap;
+	}
+
+	
 }

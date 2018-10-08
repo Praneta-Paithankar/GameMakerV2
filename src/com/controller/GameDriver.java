@@ -1,13 +1,11 @@
 package com.controller;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -16,7 +14,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -27,13 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
-import org.w3c.dom.css.Counter;
-
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-import javax.xml.crypto.dsig.spec.HMACParameterSpec;
 
 import org.apache.log4j.Logger;
 
@@ -172,7 +164,6 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 			ImageIO.write(gui.getBoardPanel().getImage(), "png", op);
 
 
-			// gui.getBoardPanel().setElements(sprites);
 			op.close();
 			fileOut.close();
 		} catch (FileNotFoundException e) {
@@ -399,25 +390,21 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
 			if (element.getElementX() - element.getXVel() > 0) {
-//				element.setYVel(0);
 				element.setElementX(element.getElementX() - element.getXVel());
 			}
 			break;
 		case KeyEvent.VK_RIGHT:
 			if (element.getElementX() + element.getWidth() + element.getXVel() < Constants.BOARD_PANEL_WIDTH) {
-//				element.setYVel(0);
 				element.setElementX(element.getElementX() + element.getXVel());
 			}
 			break;
 		case KeyEvent.VK_UP:
 			if (element.getElementY() - element.getYVel() > 0) {
-//				element.setXVel(0);
 				element.setElementY(element.getElementY() - element.getYVel());
 			}
 			break;
 		case KeyEvent.VK_DOWN:
 			if (element.getElementY() + element.getHeight() + element.getYVel() < Constants.BOARD_PANEL_HEIGHT) {
-//				element.setXVel(0);
 				element.setElementY(element.getElementY() + element.getYVel());
 			}
 			break;
@@ -443,14 +430,12 @@ public class GameDriver implements Observer, KeyListener, ActionListener, MouseL
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 	
 	private void shoot(SpriteElement element) throws IOException {
 		SpriteElement bullet=element.shoot(bulletElementMap.get(element));
 		log.error(sprites);
-		//addSpriteElements(bullet);
 		log.info(shooterSpriteBulletCountMap);
 		int bulletCount=shooterSpriteBulletCountMap.get(element);
 		if(bulletCount>0) { 

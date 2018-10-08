@@ -5,13 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-
-import javax.imageio.ImageIO;
 
 public class CircularSprite extends SpriteElement implements Serializable {
 	
@@ -25,7 +20,6 @@ public class CircularSprite extends SpriteElement implements Serializable {
 		
 	}
 	public void draw(Graphics g) {
-		//logger.trace("Drawing a circle");
 
 			if (isVisible()) {
 				if(getImagePath()!= null && getImagePath().length()!=0) {

@@ -10,7 +10,6 @@ public class BounceCommand implements Command{
 	private Direction d;
 	
 	public BounceCommand(SpriteElement element, Direction d) {
-		// TODO Auto-generated constructor stub
 		this.element = element;
 		this.d = d;
 	}
@@ -20,9 +19,7 @@ public class BounceCommand implements Command{
 		if (d == Direction.X) {
 			element.setXVel(-1 * element.getXVel());
 		} else if (d == Direction.Y) {
-			System.out.println(element + " before "+element.getYVel());
 			element.setYVel(-1 * element.getYVel());
-			System.out.println(element + " after "+element.getYVel());
 		} else if (d == Direction.BOTH) {
 			element.setXVel(-1 * element.getXVel());
 			element.setYVel(-1 * element.getYVel());
@@ -32,7 +29,6 @@ public class BounceCommand implements Command{
 
 	@Override
 	public void undo() {
-		// TODO Auto-generated method stub
 		if (d == Direction.X) {
 			element.setXVel(-1 * element.getXVel());
 		} else if (d == Direction.Y) {
